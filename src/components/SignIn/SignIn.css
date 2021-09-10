@@ -1,0 +1,115 @@
+.home-so {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-in {
+  width: 350px;
+  height: 358px;
+  background-color: rgb(255, 255, 255);
+  margin: 0 0 10px;
+  padding: 10px 0;
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 1px;
+}
+
+.sign-in h1 {
+  margin: 22px auto 12px;
+  width: fit-content;
+  height: 51px;
+  font-size: 42px;
+}
+
+.sign-in form input {
+  font-size: 14px;
+  padding: 9px 0 7px 8px;
+  background-color: rgb(250, 250, 250);
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 3px;
+  margin: 0 40px 6px;
+}
+
+.sign-in .log-in-btn {
+  cursor: pointer;
+  height: 30px;
+  margin: 8px 40px;
+  border: 1px solid transparent;
+  color: white;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: rgb(0, 149, 246);
+}
+
+.sign-in-method {
+  display: flex;
+  flex-direction: column;
+  height: 213px;
+  margin-top: 24px;
+}
+
+.or {
+  display: flex;
+  margin: 10px 40px 18px;
+}
+
+.or p {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 18px;
+  color: rgb(142, 142, 142);
+}
+
+.or-line {
+  position: relative;
+  top: 0.45em;
+  flex-grow: 1;
+  height: 1px;
+  background-color: rgb(219, 219, 219);
+}
+
+.guest-btn {
+  margin: 8px 40px;
+  border: 0;
+  color: #385185;
+  padding: 0;
+  background: 0 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.guest-btn img {
+  width: 16px;
+  margin-right: 8px;
+  position: relative;
+  top: 3px;
+}
+
+.reset-password {
+  display: block;
+  color: rgb(0, 55, 107);
+  font-size: 12px;
+  line-height: 14px;
+  margin-top: 12px;
+  text-decoration: none;
+}
+
+.create-account {
+  font-size: 14px;
+  color: rgb(38, 38, 38);
+  width: 350px;
+  background-color: rgb(255, 255, 255);
+  margin: 0 0 10px;
+  padding: 10px 0;
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 1px;
+}
+
+.create-account a {
+  color: rgb(0, 149, 246);
+  text-decoration: none;
+  font-weight: 600;
+}
