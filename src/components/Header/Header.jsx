@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import home from '../img/home_black_24dp.svg';
-import chat from '../img/forum_black_24dp.svg';
-import add from '../img/add_a_photo_black_24dp.svg';
-import heart from '../img/favorite_border_black_24dp.svg';
+import home from '../../img/home_black_24dp.svg';
+import chat from '../../img/forum_black_24dp.svg';
+import add from '../../img/add_a_photo_black_24dp.svg';
+import heart from '../../img/favorite_border_black_24dp.svg';
+import './header.css';
 
 const Header = () => (
   <header>
