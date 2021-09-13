@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import astronaut from '../../img/user-astronaut-solid.svg';
+import astronaut from '../../img/misc/astronaut.svg';
 import './SignIn.css';
 
 const SignIn = ({ handleSignIn }) => {
@@ -20,6 +20,7 @@ const SignIn = ({ handleSignIn }) => {
               placeholder='Phone number, username, or email'
               aria-required='true'
               autoCorrect='off'
+              value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
             <input

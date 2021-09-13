@@ -1,4 +1,4 @@
-import logo from '../../img/octopus-small.png';
+import logo from '../../img/misc/octopus-small.png';
 import './Loading.css';
 
 const Loading = () => {
