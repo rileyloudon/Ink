@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
-import home from '../../img/home_black_24dp.svg';
-import chat from '../../img/forum_black_24dp.svg';
-import add from '../../img/add_a_photo_black_24dp.svg';
-import heart from '../../img/favorite_border_black_24dp.svg';
+import PropTypes from 'prop-types';
+import { home, chat, add, favorite } from '../../img/index';
+import octopus from '../../img/misc/octopus-small.png';
 import './header.css';
 
-const Header = () => (
+const Header = ({ active }) => (
   <header>
     <div className='header-container'>
       <p className='ink title'>Ink</p>
@@ -18,22 +17,46 @@ const Header = () => (
       />
       <div className='nav'>
         <Link to='/'>
-          <img src={home} alt='Home' />
+          <img
+            src={active === 'home' ? home.homeActive : home.homeNotActive}
+            alt='Home'
+          />
         </Link>
-        <Link to='/inbox'>
-          <img src={chat} alt='Chat' />
+        <Link to='/chat'>
+          <img
+            src={active === 'chat' ? chat.chatActive : chat.chatNotActive}
+            alt='Chat'
+          />
         </Link>
 
         {/* onClick -> Pop up modal */}
-        <img src={add} alt='Add' />
+        <img
+          src={active === 'add' ? add.addActive : add.addNotActive}
+          alt='Add'
+        />
 
-        {/* onClick -> Display follow requests */}
-        <img src={heart} alt='Heart' />
+        {/* onClick -> Display follow requests, likes */}
+        <img
+          src={
+            active === 'favorite'
+              ? favorite.favoriteActive
+              : favorite.favoriteNotActive
+          }
+          alt='Heart'
+        />
+
+        {/* Change src to users profile picture */}
+        <div className='profile-border'>
+          <img className='profile-picture' src={octopus} alt='' />
+        </div>
       </div>
-
-      {/* <img src={FIREBASE USER PROFILE PICTURE} alt='' /> */}
     </div>
   </header>
 );
+
+Header.propTypes = {
+  active: PropTypes.string.isRequired,
+  // profile-picture: PropTypes.string.isRequired
+};
 
 export default Header;
