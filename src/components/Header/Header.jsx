@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { home, chat, add, favorite } from '../../img/index';
-import octopus from '../../img/misc/octopus-small.png';
 import './header.css';
 
-const Header = ({ active }) => (
+const Header = ({ profilePicture, active }) => (
   <header>
     <div className='header-container'>
       <p className='ink title'>Ink</p>
@@ -45,9 +44,9 @@ const Header = ({ active }) => (
           alt='Heart'
         />
 
-        {/* Change src to users profile picture */}
+        {/* onClick => Display Profile, Saved Pictures (?), Settings, Log Out */}
         <div className='profile-border'>
-          <img className='profile-picture' src={octopus} alt='' />
+          <img className='profile-picture' src={profilePicture} alt='' />
         </div>
       </div>
     </div>
@@ -56,7 +55,7 @@ const Header = ({ active }) => (
 
 Header.propTypes = {
   active: PropTypes.string.isRequired,
-  // profile-picture: PropTypes.string.isRequired
+  profilePicture: PropTypes.string.isRequired,
 };
 
 export default Header;
