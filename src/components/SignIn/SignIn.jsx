@@ -5,34 +5,40 @@ import astronaut from '../../img/misc/astronaut.svg';
 import './SignIn.css';
 
 const SignIn = ({ handleSignIn }) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
-    <div className='home-so'>
+    <div className='sign-in-container'>
       <div className='sign-in'>
         <h1 className='ink'>Ink</h1>
         <form>
           <div className='sign-in-method'>
             <input
               className='username'
-              type='text'
-              aria-label='Phone number, username, or email'
-              placeholder='Phone number, username, or email'
-              aria-required='true'
+              type='email'
+              aria-label='Email'
+              placeholder='Email'
               autoCorrect='off'
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              aria-required='true'
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type='password'
               aria-label='Password'
               placeholder='Password'
+              autoCorrect='off'
               aria-required='true'
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button
               className='log-in-btn'
               type='submit'
-              onClick={() => handleSignIn(username)}
+              onClick={() => handleSignIn(email, password)}
             >
               Log In
             </button>
