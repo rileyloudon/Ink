@@ -1,10 +1,14 @@
 import PropTypes from 'prop-types';
 import Feed from './Feed/Feed';
 import SignIn from './SignIn/SignIn';
+import Loading from './Loading/Loading';
 
-const Home = ({ user, handleSignIn }) => {
+const Home = ({ user, handleSignIn, loading }) => {
   return (
-    <>{!user ? <SignIn handleSignIn={handleSignIn} /> : <Feed user={user} />}</>
+    <>
+      {loading && <Loading />}
+      {!user ? <SignIn handleSignIn={handleSignIn} /> : <Feed user={user} />}
+    </>
   );
 };
 
@@ -14,9 +18,10 @@ Home.defaultProps = {
 
 Home.propTypes = {
   user: PropTypes.shape({
-    name: PropTypes.string,
+    displayName: PropTypes.string.isRequired,
   }),
   handleSignIn: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default Home;
