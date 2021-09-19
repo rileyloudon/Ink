@@ -1,4 +1,4 @@
-.home-so {
+.sign-in-container {
   height: 80vh;
   display: flex;
   flex-direction: column;
@@ -43,26 +43,26 @@
   background-color: rgb(0, 149, 246);
 }
 
-.sign-in-method {
+.sign-in .sign-in-method {
   display: flex;
   flex-direction: column;
   height: 213px;
   margin-top: 24px;
 }
 
-.or {
+.sign-in .or {
   display: flex;
   margin: 10px 40px 18px;
 }
 
-.or p {
+.sign-in .or p {
   font-size: 13px;
   font-weight: 600;
   margin: 0 18px;
   color: rgb(142, 142, 142);
 }
 
-.or-line {
+.sign-in .or-line {
   position: relative;
   top: 0.45em;
   flex-grow: 1;
@@ -70,7 +70,7 @@
   background-color: rgb(219, 219, 219);
 }
 
-.guest-btn {
+.sign-in .guest-btn {
   margin: 8px 40px;
   border: 0;
   color: #385185;
@@ -81,14 +81,15 @@
   font-size: 14px;
 }
 
-.guest-btn img {
+.sign-in .guest-btn img {
   width: 16px;
   margin-right: 8px;
   position: relative;
   top: 3px;
 }
 
-.reset-password {
+.sign-in .reset-password {
+  text-align: center;
   display: block;
   color: rgb(0, 55, 107);
   font-size: 12px;
@@ -97,7 +98,8 @@
   text-decoration: none;
 }
 
-.create-account {
+.sign-in-container .create-account {
+  text-align: center;
   font-size: 14px;
   color: rgb(38, 38, 38);
   width: 350px;
@@ -108,7 +110,7 @@
   border-radius: 1px;
 }
 
-.create-account a {
+.sign-in-container .create-account a {
   color: rgb(0, 149, 246);
   text-decoration: none;
   font-weight: 600;
