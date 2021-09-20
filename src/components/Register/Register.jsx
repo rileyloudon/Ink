@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import astronaut from '../../img/misc/astronaut.svg';
@@ -5,8 +6,14 @@ import './Register.css';
 
 // if user redirect to different page -> prevent registering then back button
 
-const Register = ({ handleSignIn }) => {
+const Register = ({ handleSignIn, handleRegister }) => {
   const history = useHistory();
+
+  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
     <div className='register-container'>
       <div className='register'>
@@ -19,8 +26,8 @@ const Register = ({ handleSignIn }) => {
             className='guest-btn'
             type='button'
             onClick={() => {
-              history.replace('/');
               handleSignIn('Guest');
+              history.replace('/');
             }}
           >
             <img src={astronaut} alt='' />
@@ -36,13 +43,8 @@ const Register = ({ handleSignIn }) => {
             placeholder='Email'
             aria-label='Email'
             aria-required='true'
-            required
-          />
-          <input
-            type='text'
-            placeholder='Full Name'
-            aria-label='Full Name'
-            aria-required='true'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
@@ -50,6 +52,17 @@ const Register = ({ handleSignIn }) => {
             placeholder='Username'
             aria-label='Username'
             aria-required='true'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type='text'
+            placeholder='Full Name'
+            aria-label='Full Name'
+            aria-required='true'
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             required
           />
           <input
@@ -57,9 +70,18 @@ const Register = ({ handleSignIn }) => {
             placeholder='Password'
             aria-label='Password'
             aria-required='true'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button className='register-btn' type='button'>
+          <button
+            className='register-btn'
+            type='button'
+            onClick={() => {
+              history.replace('/');
+              handleRegister(email, password, username, fullName);
+            }}
+          >
             Sign Up
           </button>
         </form>
@@ -76,6 +98,7 @@ const Register = ({ handleSignIn }) => {
 
 Register.propTypes = {
   handleSignIn: PropTypes.func.isRequired,
+  handleRegister: PropTypes.func.isRequired,
 };
 
 export default Register;
