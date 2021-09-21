@@ -31,19 +31,40 @@ export const registerUser = (email, password, username, fullName) => {
         return userCredential;
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      // Add an error if username is taken
+      switch (err.code) {
+        case 'auth/email-already-in-use':
+          return `Another account is using ${email}.`;
+        case 'auth/invalid-email':
+          return 'Enter a valid email address.';
+        case 'auth/weak-password':
+          return 'Please enter a stonger password.';
+        default:
+          return 'Error';
+      }
+    });
 };
 
 export const signInUser = (email, password) => {
   const auth = getAuth();
   return signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => userCredential)
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      switch (err.code) {
+        case 'auth/invalid-email':
+          return 'Enter a valid email address.';
+        case 'auth/user-not-found':
+          return "The email you entered doesn't belong to an account.";
+        case 'auth/wrong-password':
+          return 'Sorry, your password was incorrect. Please double-check your password.';
+        default:
+          return 'Error';
+      }
+    });
 };
 
 export const signOutUser = () => {
   const auth = getAuth();
-  signOut(auth)
-    .then()
-    .catch((err) => console.log(err));
+  signOut(auth);
 };
