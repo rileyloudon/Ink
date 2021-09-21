@@ -8,7 +8,7 @@
 
 .sign-in {
   width: 350px;
-  height: 358px;
+  height: max-content;
   background-color: rgb(255, 255, 255);
   margin: 0 0 10px;
   padding: 10px 0;
@@ -88,6 +88,14 @@
   top: 3px;
 }
 
+.sign-in .sign-in-error {
+  text-align: center;
+  color: rgb(237, 73, 86);
+  margin: 0 40px;
+  font-size: 14px;
+  padding: 8px 0;
+}
+
 .sign-in .reset-password {
   text-align: center;
   display: block;
@@ -95,6 +103,7 @@
   font-size: 12px;
   line-height: 14px;
   margin-top: 12px;
+  margin-bottom: 18px;
   text-decoration: none;
 }
 
