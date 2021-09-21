@@ -1,27 +1,33 @@
 import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import Feed from './Feed/Feed';
 import SignIn from './SignIn/SignIn';
 import Loading from './Loading/Loading';
+import UserContext from '../Context/UserContext';
 
-const Home = ({ user, handleSignIn, loading }) => {
+const Home = ({ handleSignIn, loading, signInError }) => {
+  const { user } = useContext(UserContext);
+
   return (
     <>
       {loading && <Loading />}
-      {!user ? <SignIn handleSignIn={handleSignIn} /> : <Feed user={user} />}
+      {!user ? (
+        <SignIn handleSignIn={handleSignIn} signInError={signInError} />
+      ) : (
+        <Feed />
+      )}
     </>
   );
 };
 
 Home.defaultProps = {
-  user: undefined,
+  signInError: '',
 };
 
 Home.propTypes = {
-  user: PropTypes.shape({
-    displayName: PropTypes.string.isRequired,
-  }),
   handleSignIn: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  signInError: PropTypes.string,
 };
 
 export default Home;
