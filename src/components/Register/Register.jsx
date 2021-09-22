@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
+import UserContext from '../../Context/UserContext';
 import astronaut from '../../img/misc/astronaut.svg';
 import './Register.css';
 
-// if user redirect to different page -> prevent registering then back button
-
-const Register = ({ handleSignIn, handleRegister }) => {
+const Register = ({ handleSignIn, handleRegister, registerError }) => {
+  const { user } = useContext(UserContext);
   const history = useHistory();
 
   const [email, setEmail] = useState('');
@@ -78,12 +78,15 @@ const Register = ({ handleSignIn, handleRegister }) => {
             className='register-btn'
             type='button'
             onClick={() => {
-              history.replace('/');
+              if (user) history.replace('/');
               handleRegister(email, password, username, fullName);
             }}
           >
             Sign Up
           </button>
+          <p className='register-error' role='alert'>
+            {registerError}
+          </p>
         </form>
       </div>
 
@@ -96,9 +99,14 @@ const Register = ({ handleSignIn, handleRegister }) => {
   );
 };
 
+Register.defaultProps = {
+  registerError: '',
+};
+
 Register.propTypes = {
   handleSignIn: PropTypes.func.isRequired,
   handleRegister: PropTypes.func.isRequired,
+  registerError: PropTypes.string,
 };
 
 export default Register;
