@@ -4,9 +4,13 @@ import { Link } from 'react-router-dom';
 import astronaut from '../../img/misc/astronaut.svg';
 import './SignIn.css';
 
-const SignIn = ({ handleSignIn }) => {
+const SignIn = ({ handleSignIn, signInError }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const isFormValid =
+    /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g.test(email) &&
+    password.length > 6;
 
   return (
     <div className='sign-in-container'>
@@ -36,8 +40,9 @@ const SignIn = ({ handleSignIn }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <button
-              className='log-in-btn'
+              className={isFormValid ? 'log-in-btn active' : 'log-in-btn'}
               type='submit'
+              disabled={!isFormValid}
               onClick={() => handleSignIn(email, password)}
             >
               Log In
@@ -56,6 +61,9 @@ const SignIn = ({ handleSignIn }) => {
               Log In as Guest
             </button>
           </div>
+          <p className='sign-in-error' role='alert'>
+            {signInError}
+          </p>
           <a href='/' className='reset-password'>
             Forgot password?
           </a>
@@ -72,8 +80,13 @@ const SignIn = ({ handleSignIn }) => {
   );
 };
 
+SignIn.defaultProps = {
+  signInError: '',
+};
+
 SignIn.propTypes = {
   handleSignIn: PropTypes.func.isRequired,
+  signInError: PropTypes.string,
 };
 
 export default SignIn;
