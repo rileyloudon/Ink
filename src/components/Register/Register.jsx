@@ -1,18 +1,22 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
-import UserContext from '../../Context/UserContext';
 import astronaut from '../../img/misc/astronaut.svg';
 import './Register.css';
 
 const Register = ({ handleSignIn, handleRegister, registerError }) => {
-  const { user } = useContext(UserContext);
   const history = useHistory();
 
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const isFormValid =
+    /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g.test(email) &&
+    fullName.length >= 1 &&
+    username.length >= 1 &&
+    password.length >= 6;
 
   return (
     <div className='register-container'>
@@ -43,6 +47,8 @@ const Register = ({ handleSignIn, handleRegister, registerError }) => {
             placeholder='Email'
             aria-label='Email'
             aria-required='true'
+            // name='username' is so password managers save and use email
+            name='username'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -70,16 +76,20 @@ const Register = ({ handleSignIn, handleRegister, registerError }) => {
             placeholder='Password'
             aria-label='Password'
             aria-required='true'
+            name='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <button
-            className='register-btn'
+            className={isFormValid ? 'register-btn active' : 'register-btn'}
             type='button'
+            disabled={!isFormValid}
             onClick={() => {
-              if (user) history.replace('/');
-              handleRegister(email, password, username, fullName);
+              if (isFormValid) {
+                history.replace('/');
+                handleRegister(email, password, username, fullName);
+              }
             }}
           >
             Sign Up
