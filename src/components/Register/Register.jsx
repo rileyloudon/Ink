@@ -1,22 +1,32 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
+import { registerUser } from '../../firebase';
 import astronaut from '../../img/misc/astronaut.svg';
 import './Register.css';
 
-const Register = ({ handleSignIn, handleRegister, registerError }) => {
+const Register = ({ updateLoading, signInGuest }) => {
   const history = useHistory();
 
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [registerError, setRegisterError] = useState('');
 
   const isFormValid =
     /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g.test(email) &&
     fullName.length >= 1 &&
     username.length >= 1 &&
     password.length >= 6;
+
+  const handleRegister = () => {
+    updateLoading(true);
+    registerUser(email, password, username, fullName).then((res) => {
+      if (typeof res === 'string') setRegisterError(res);
+      updateLoading(false);
+    });
+  };
 
   return (
     <div className='register-container'>
@@ -30,7 +40,7 @@ const Register = ({ handleSignIn, handleRegister, registerError }) => {
             className='guest-btn'
             type='button'
             onClick={() => {
-              handleSignIn('Guest');
+              signInGuest();
               history.replace('/');
             }}
           >
@@ -109,14 +119,9 @@ const Register = ({ handleSignIn, handleRegister, registerError }) => {
   );
 };
 
-Register.defaultProps = {
-  registerError: '',
-};
-
 Register.propTypes = {
-  handleSignIn: PropTypes.func.isRequired,
-  handleRegister: PropTypes.func.isRequired,
-  registerError: PropTypes.string,
+  updateLoading: PropTypes.func.isRequired,
+  signInGuest: PropTypes.func.isRequired,
 };
 
 export default Register;
