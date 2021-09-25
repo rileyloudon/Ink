@@ -5,14 +5,14 @@ import SignIn from './SignIn/SignIn';
 import Loading from './Loading/Loading';
 import UserContext from '../Context/UserContext';
 
-const Home = ({ handleSignIn, loading, signInError }) => {
+const Home = ({ loading, updateLoading, signInGuest }) => {
   const { user } = useContext(UserContext);
 
   return (
     <>
       {loading && <Loading />}
       {!user ? (
-        <SignIn handleSignIn={handleSignIn} signInError={signInError} />
+        <SignIn updateLoading={updateLoading} signInGuest={signInGuest} />
       ) : (
         <Feed />
       )}
@@ -20,14 +20,10 @@ const Home = ({ handleSignIn, loading, signInError }) => {
   );
 };
 
-Home.defaultProps = {
-  signInError: '',
-};
-
 Home.propTypes = {
-  handleSignIn: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  signInError: PropTypes.string,
+  updateLoading: PropTypes.func.isRequired,
+  signInGuest: PropTypes.func.isRequired,
 };
 
 export default Home;
