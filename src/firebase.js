@@ -6,6 +6,7 @@ import {
   updateProfile,
   signOut,
 } from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAXsxLt1-ebKHlUr_8w0mCLTe6w921K3V8',
@@ -17,8 +18,14 @@ const firebaseConfig = {
 };
 
 initializeApp(firebaseConfig);
+const db = getFirestore();
 
-export const registerUser = (email, password, username, fullName) => {
+export const registerUser = async (email, password, username, fullName) => {
+  const docRef = doc(db, 'users', username);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) return 'A user with that username already exists.';
+
   const auth = getAuth();
   return createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -26,16 +33,20 @@ export const registerUser = (email, password, username, fullName) => {
         displayName: username,
         photoURL: `https://source.boringavatars.com/beam/150/${username}?colors=2D1B33,F36A71,EE887A,E4E391,9ABC8A`,
       }).then(() => {
-        // Need to create user file in firestore, save fullName and other settings there.
-        console.log(fullName);
+        try {
+          setDoc(doc(db, 'users', username), {
+            fullName,
+          });
+        } catch (err) {
+          console.error(err);
+        }
         return userCredential;
       });
     })
     .catch((err) => {
-      // Add an error if username is taken
       switch (err.code) {
         case 'auth/email-already-in-use':
-          return `Another account is using ${email}.`;
+          return `A user with that email already exists.`;
         case 'auth/invalid-email':
           return 'Enter a valid email address.';
         case 'auth/weak-password':
