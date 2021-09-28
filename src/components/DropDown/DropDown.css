@@ -1,0 +1,27 @@
+.user-drop-down {
+  position: absolute;
+  right: 0;
+  background-color: rgb(255, 255, 255);
+  border-radius: 6px;
+  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.0975);
+  width: 200px;
+}
+
+.user-drop-down button {
+  cursor: pointer;
+  display: block;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  padding: 8px 16px;
+  width: 100%;
+  text-align: left;
+}
+
+.user-drop-down button:hover {
+  background-color: rgb(250, 250, 250);
+}
+
+.user-drop-down .sign-out {
+  border-top: 1px solid rgb(219, 219, 219);
+}
