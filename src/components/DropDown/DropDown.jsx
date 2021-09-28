@@ -1,9 +1,29 @@
+import { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { signOutUser } from '../../firebase';
 import './DropDown.css';
 
-const DropDown = () => {
+const DropDown = ({ closeDropDown }) => {
+  const dropDown = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        dropDown.current.contains(e.target) ||
+        e.target.className === 'profile-picture'
+      ) {
+        return;
+      }
+      closeDropDown();
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [closeDropDown]);
+
   return (
-    <div className='user-drop-down'>
+    <div ref={dropDown} className='user-drop-down'>
       <button type='button'>Profile</button>
       <button type='button'>Liked</button>
       <button type='button'>Settings</button>
@@ -14,6 +34,10 @@ const DropDown = () => {
       </div>
     </div>
   );
+};
+
+DropDown.propTypes = {
+  closeDropDown: PropTypes.func.isRequired,
 };
 
 export default DropDown;
