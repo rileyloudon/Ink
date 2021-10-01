@@ -20,7 +20,8 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 const db = getFirestore();
 
-export const registerUser = async (email, password, username, fullName) => {
+export const registerUser = async (email, password, tempUsername, fullName) => {
+  const username = tempUsername.toLowerCase();
   const docRef = doc(db, 'users', username);
   const docSnap = await getDoc(docRef);
 
@@ -35,7 +36,12 @@ export const registerUser = async (email, password, username, fullName) => {
       }).then(() => {
         try {
           setDoc(doc(db, 'users', username), {
+            username,
+            photoURL: `https://source.boringavatars.com/beam/150/${username}?colors=2D1B33,F36A71,EE887A,E4E391,9ABC8A`,
             fullName,
+            posts: [],
+            followers: [],
+            following: [],
           });
         } catch (err) {
           console.error(err);
@@ -78,4 +84,14 @@ export const signInUser = (email, password) => {
 export const signOutUser = () => {
   const auth = getAuth();
   signOut(auth);
+};
+
+export const fetchUserData = async (username) => {
+  const docRef = doc(db, 'users', username);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data();
+  }
+  return 'User not found';
 };
