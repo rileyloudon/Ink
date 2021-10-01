@@ -1,9 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { signOutUser } from '../../firebase';
 import './DropDown.css';
+import UserContext from '../../Context/UserContext';
 
 const DropDown = ({ closeDropDown }) => {
+  const history = useHistory();
+  const { user } = useContext(UserContext);
   const dropDown = useRef();
 
   useEffect(() => {
@@ -24,7 +28,9 @@ const DropDown = ({ closeDropDown }) => {
 
   return (
     <div ref={dropDown} className='user-drop-down'>
-      <button type='button'>Profile</button>
+      <button type='button' onClick={() => history.push(user.displayName)}>
+        Profile
+      </button>
       <button type='button'>Liked</button>
       <button type='button'>Settings</button>
       <div className='sign-out'>
