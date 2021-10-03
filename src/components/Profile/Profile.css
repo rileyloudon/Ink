@@ -1,0 +1,83 @@
+.profile {
+  padding: 30px 20px 0;
+  max-width: 935px;
+}
+
+.profile-header {
+  display: flex;
+  margin: 0 auto 30px;
+}
+
+.profile-header .left {
+  flex-grow: 1;
+  margin-right: 30px;
+  flex-basis: 0;
+}
+
+.profile-header .left img {
+  display: block;
+  margin: auto;
+}
+
+.profile-header .right {
+  flex-grow: 2;
+  flex-basis: 30px;
+  /* margin: auto; */
+}
+
+.profile-header .right .top {
+  display: flex;
+  margin-bottom: 20px;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.profile-header .right .top h3 {
+  display: inline-block;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 32px;
+  margin: 0;
+}
+
+.profile-header .right .top .follow {
+  margin-left: 20px;
+  cursor: pointer;
+  padding: 0 24px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 149, 246);
+  border: 1px solid rgb(0, 149, 246);
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 26px;
+  outline: 0;
+}
+
+.profile-header .right .stats {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.profile-header .right .stats li {
+  display: inline;
+  font-size: 16px;
+  margin-right: 40px;
+  margin-left: 0;
+}
+
+.profile-header .right .stats li span {
+  font-weight: 600;
+  color: rgb(38, 38, 38);
+}
+
+.profile-header .right .bio {
+  display: inline;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+  color: rgb(38, 38, 38);
+  font-size: 16px;
+}
