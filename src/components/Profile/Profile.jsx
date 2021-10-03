@@ -30,15 +30,21 @@ const Profile = () => {
               </button>
             </div>
             <ul className='stats'>
-              <li>{usersProfile.posts.length} posts</li>
-              <li>{usersProfile.followers.length} followers</li>
-              <li>{usersProfile.following.length} following</li>
+              <li>
+                <span>{usersProfile.posts.length}</span> posts
+              </li>
+              <li>
+                <span>{usersProfile.followers.length}</span> followers
+              </li>
+              <li>
+                <span>{usersProfile.following.length}</span> following
+              </li>
             </ul>
+            <div className='info'>
+              <h4>{usersProfile.fullName}</h4>
+              {/* <p>{usersProfile.bio}</p> */}
+            </div>
           </section>
-          <div className='info'>
-            <h4>{usersProfile.fullName}</h4>
-            {/* <p>{usersProfile.bio}</p> */}
-          </div>
         </header>
       </div>
     );
