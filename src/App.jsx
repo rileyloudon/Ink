@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import Header from './components/Header/Header';
 import Home from './components/Home';
 import Register from './components/Register/Register';
+import Profile from './components/Profile/Profile';
 import Chat from './components/Chat';
-import Header from './components/Header/Header';
 import UserContext from './Context/UserContext';
 import './App.css';
 
@@ -24,8 +25,7 @@ function App() {
   };
 
   const signInGuest = () => {
-    // 'Sign in as guest' -> account named @Guest
-    // Sign In Guest Here
+    // Sign In Guest Here -> account named @Guest
   };
 
   return (
@@ -54,8 +54,12 @@ function App() {
               />
             )}
           />
-          <Route exact path='/chat' render={() => <Chat />} />
-          {/* <Route exact path='/:username' /> */}
+          <Route exact path='/chat'>
+            {user ? <Chat /> : <Redirect to='/' />}
+          </Route>
+          <Route exact path='/:username'>
+            {user ? <Profile /> : <Redirect to='/' />}
+          </Route>
         </Switch>
       </UserContext.Provider>
     </div>
