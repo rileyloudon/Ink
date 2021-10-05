@@ -27,16 +27,30 @@ const DropDown = ({ closeDropDown }) => {
   }, [closeDropDown]);
 
   return (
-    <div ref={dropDown} className='user-drop-down'>
-      <button type='button' onClick={() => history.push(user.displayName)}>
-        Profile
-      </button>
-      <button type='button'>Liked</button>
-      <button type='button'>Settings</button>
-      <div className='sign-out'>
-        <button type='button' onClick={signOutUser}>
-          Log Out
+    <div className='drop-down-container'>
+      <div ref={dropDown} className='user-drop-down'>
+        <button
+          type='button'
+          onClick={() => {
+            closeDropDown();
+            history.push(user.displayName);
+          }}
+        >
+          Profile
         </button>
+        <button type='button'>Liked</button>
+        <button type='button'>Settings</button>
+        <div className='sign-out'>
+          <button
+            type='button'
+            onClick={() => {
+              history.push('/');
+              signOutUser();
+            }}
+          >
+            Log Out
+          </button>
+        </div>
       </div>
     </div>
   );
