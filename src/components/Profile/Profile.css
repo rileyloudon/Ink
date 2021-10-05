@@ -1,6 +1,7 @@
 .profile {
   padding: 30px 20px 0;
   max-width: 935px;
+  margin: auto;
 }
 
 .profile-header {
@@ -40,18 +41,29 @@
   margin: 0;
 }
 
-.profile-header .right .top .follow {
+.profile-header .right .top button {
   margin-left: 20px;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.profile-header .right .top .follow {
   padding: 0 24px;
   color: rgb(255, 255, 255);
   background-color: rgb(0, 149, 246);
   border: 1px solid rgb(0, 149, 246);
   border-radius: 3px;
-  font-size: 14px;
-  font-weight: 600;
   line-height: 26px;
-  outline: 0;
+}
+
+.profile-header .right .top .edit {
+  padding: 5px 9px;
+  color: rgb(38, 38, 38);
+  background-color: transparent;
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 4px;
+  line-height: 18px;
 }
 
 .profile-header .right .stats {
