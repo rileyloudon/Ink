@@ -1,6 +1,11 @@
-.user-drop-down {
+.drop-down-container {
   position: absolute;
-  right: 0;
+}
+
+.user-drop-down {
+  position: relative;
+  top: 39px;
+  left: 18px;
   background-color: rgb(255, 255, 255);
   border-radius: 6px;
   box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.0975);
