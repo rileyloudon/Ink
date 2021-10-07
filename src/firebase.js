@@ -6,7 +6,15 @@ import {
   updateProfile,
   signOut,
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAXsxLt1-ebKHlUr_8w0mCLTe6w921K3V8',
@@ -42,6 +50,7 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
             posts: [],
             followers: [],
             following: [],
+            bio: '',
           });
         } catch (err) {
           console.error(err);
@@ -94,4 +103,40 @@ export const fetchUserData = async (username) => {
     return docSnap.data();
   }
   return 'User not found';
+};
+
+export const followUser = async (userToFollow) => {
+  const auth = getAuth();
+
+  const me = doc(db, 'users', auth.currentUser.displayName);
+  const otherUser = doc(db, 'users', userToFollow);
+
+  await updateDoc(me, {
+    following: arrayUnion(userToFollow),
+  });
+
+  await updateDoc(otherUser, {
+    followers: arrayUnion(auth.currentUser.displayName),
+  });
+
+  const docSnap = await getDoc(doc(db, 'users', userToFollow));
+  return docSnap.data();
+};
+
+export const unfollowUser = async (userToUnfollow) => {
+  const auth = getAuth();
+
+  const me = doc(db, 'users', auth.currentUser.displayName);
+  const otherUser = doc(db, 'users', userToUnfollow);
+
+  await updateDoc(me, {
+    following: arrayRemove(userToUnfollow),
+  });
+
+  await updateDoc(otherUser, {
+    followers: arrayRemove(auth.currentUser.displayName),
+  });
+
+  const docSnap = await getDoc(doc(db, 'users', userToUnfollow));
+  return docSnap.data();
 };
