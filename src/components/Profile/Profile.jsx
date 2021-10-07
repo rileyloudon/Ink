@@ -1,48 +1,93 @@
-import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { fetchUserData } from '../../firebase';
+import { useState, useEffect, useContext } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
+import UserContext from '../../Context/UserContext';
+import { fetchUserData, followUser, unfollowUser } from '../../firebase';
 import './Profile.css';
 
 const Profile = () => {
+  const history = useHistory();
   const location = useLocation();
-  const [usersProfile, setUsersProfile] = useState();
+  const { user } = useContext(UserContext);
+
+  const [isUsersProfile, setIsUsersProfile] = useState();
+  const [profile, setProfile] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchUserData(location.pathname.substring(1)).then((res) => {
-      setUsersProfile(res);
+      setProfile(res);
+      if (user.displayName === res.username) setIsUsersProfile(true);
+      else setIsUsersProfile(false);
       setLoading(false);
     });
-  }, [location.pathname]);
+  }, [location.pathname, user.displayName]);
+
+  const InteractiveButton = () => {
+    if (!isUsersProfile && !profile.followers.includes(user.displayName)) {
+      return (
+        <button
+          onClick={() =>
+            followUser(profile.username).then((res) => setProfile(res))
+          }
+          className='follow'
+          type='button'
+        >
+          Follow
+        </button>
+      );
+    }
+
+    if (!isUsersProfile && profile.followers.includes(user.displayName)) {
+      return (
+        <button
+          onClick={() =>
+            unfollowUser(profile.username).then((res) => setProfile(res))
+          }
+          className='unfollow'
+          type='button'
+        >
+          Unfollow
+        </button>
+      );
+    }
+
+    return (
+      <button
+        onClick={() => history.push('/settings')}
+        className='edit'
+        type='button'
+      >
+        Edit Profile
+      </button>
+    );
+  };
 
   const renderProflie = () => {
     return (
       <div className='profile'>
         <header className='profile-header'>
           <div className='left'>
-            <img className='picture' src={usersProfile.photoURL} alt='' />
+            <img className='picture' src={profile.photoURL} alt='' />
           </div>
           <section className='right'>
             <div className='top'>
-              <h3 className='username'>{usersProfile.username}</h3>
-              <button className='follow' type='button'>
-                Follow
-              </button>
+              <h3 className='username'>{profile.username}</h3>
+              <InteractiveButton />
             </div>
             <ul className='stats'>
               <li>
-                <span>{usersProfile.posts.length}</span> posts
+                <span>{profile.posts.length}</span> posts
               </li>
               <li>
-                <span>{usersProfile.followers.length}</span> followers
+                <span>{profile.followers.length}</span> followers
               </li>
               <li>
-                <span>{usersProfile.following.length}</span> following
+                <span>{profile.following.length}</span> following
               </li>
             </ul>
             <div className='info'>
-              <h4>{usersProfile.fullName}</h4>
-              {/* <p>{usersProfile.bio}</p> */}
+              <h4>{profile.fullName}</h4>
+              <p>{profile.bio}</p>
             </div>
           </section>
         </header>
