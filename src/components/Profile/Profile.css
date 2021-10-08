@@ -57,6 +57,15 @@
   line-height: 26px;
 }
 
+.profile-header .right .top .unfollow {
+  padding: 0px 16.5px;
+  color: rgb(237, 73, 86);
+  background-color: transparent;
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 3px;
+  line-height: 26px;
+}
+
 .profile-header .right .top .edit {
   padding: 5px 9px;
   color: rgb(38, 38, 38);
