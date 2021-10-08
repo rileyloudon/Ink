@@ -33,13 +33,21 @@ const DropDown = ({ closeDropDown }) => {
           type='button'
           onClick={() => {
             closeDropDown();
-            history.push(user.displayName);
+            history.push(`/${user.displayName}`);
           }}
         >
           Profile
         </button>
         <button type='button'>Liked</button>
-        <button type='button'>Settings</button>
+        <button
+          type='button'
+          onClick={() => {
+            closeDropDown();
+            history.push('/settings');
+          }}
+        >
+          Settings
+        </button>
         <div className='sign-out'>
           <button
             type='button'
