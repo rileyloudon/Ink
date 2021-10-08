@@ -76,13 +76,16 @@ const Profile = () => {
             </div>
             <ul className='stats'>
               <li>
-                <span>{profile.posts.length}</span> posts
+                <span>{profile.posts.length}</span> post
+                {profile.posts.length === 1 ? '' : 's'}
               </li>
               <li>
-                <span>{profile.followers.length}</span> followers
+                <span>{profile.followers.length}</span> follower
+                {profile.followers.length === 1 ? '' : 's'}
               </li>
               <li>
-                <span>{profile.following.length}</span> following
+                <span>{profile.following.length}</span> follow
+                {profile.following.length === 1 ? '' : 'ing'}
               </li>
             </ul>
             <div className='info'>
