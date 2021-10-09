@@ -1,0 +1,20 @@
+.profile-tabs {
+  border-top: 1px solid rgb(219, 219, 219);
+  color: rgb(142, 142, 142);
+  display: flex;
+  font-weight: 600;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-tabs p {
+  color: rgb(38, 38, 38);
+  border-top: 1px solid rgb(38, 38, 38);
+  font-size: 13px;
+  margin-top: -1px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  height: 52px;
+  display: flex;
+  align-items: center;
+}
