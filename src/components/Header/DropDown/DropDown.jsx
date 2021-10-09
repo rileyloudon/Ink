@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { signOutUser } from '../../firebase';
+import { signOutUser } from '../../../firebase';
 import './DropDown.css';
-import UserContext from '../../Context/UserContext';
+import UserContext from '../../../Context/UserContext';
 
 const DropDown = ({ closeDropDown }) => {
   const history = useHistory();

@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import DropDown from '../DropDown/DropDown';
+import DropDown from './DropDown/DropDown';
 import { home, chat, add, favorite } from '../../img/index';
 import UserContext from '../../Context/UserContext';
 import './header.css';
