@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import UserContext from '../../Context/UserContext';
-import { fetchUserData, followUser, unfollowUser } from '../../firebase';
+import { fetchUserData } from '../../firebase';
+import Bar from './Bar/Bar';
+import Header from './Header/Header';
 import './Profile.css';
 
 const Profile = () => {
-  const history = useHistory();
   const location = useLocation();
   const { user } = useContext(UserContext);
 
@@ -22,78 +23,19 @@ const Profile = () => {
     });
   }, [location.pathname, user.displayName]);
 
-  const InteractiveButton = () => {
-    if (!isUsersProfile && !profile.followers.includes(user.displayName)) {
-      return (
-        <button
-          onClick={() =>
-            followUser(profile.username).then((res) => setProfile(res))
-          }
-          className='follow'
-          type='button'
-        >
-          Follow
-        </button>
-      );
-    }
-
-    if (!isUsersProfile && profile.followers.includes(user.displayName)) {
-      return (
-        <button
-          onClick={() =>
-            unfollowUser(profile.username).then((res) => setProfile(res))
-          }
-          className='unfollow'
-          type='button'
-        >
-          Unfollow
-        </button>
-      );
-    }
-
-    return (
-      <button
-        onClick={() => history.push('/settings')}
-        className='edit'
-        type='button'
-      >
-        Edit Profile
-      </button>
-    );
+  const updateProfile = (newProfile) => {
+    setProfile(newProfile);
   };
 
   const renderProflie = () => {
     return (
       <div className='profile'>
-        <header className='profile-header'>
-          <div className='left'>
-            <img className='picture' src={profile.photoURL} alt='' />
-          </div>
-          <section className='right'>
-            <div className='top'>
-              <h3 className='username'>{profile.username}</h3>
-              <InteractiveButton />
-            </div>
-            <ul className='stats'>
-              <li>
-                <span>{profile.posts.length}</span> post
-                {profile.posts.length === 1 ? '' : 's'}
-              </li>
-              <li>
-                <span>{profile.followers.length}</span> follower
-                {profile.followers.length === 1 ? '' : 's'}
-              </li>
-              <li>
-                <span>{profile.following.length}</span> follow
-                {profile.following.length === 1 ? '' : 'ing'}
-              </li>
-            </ul>
-            <div className='info'>
-              <h4>{profile.fullName}</h4>
-              <p>{profile.bio}</p>
-            </div>
-          </section>
-        </header>
+        <Header
+          profile={profile}
+          updateProfile={updateProfile}
+          isUsersProfile={isUsersProfile}
+        />
+        <Bar />
       </div>
     );
   };

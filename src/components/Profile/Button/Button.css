@@ -1,0 +1,33 @@
+.top button {
+  margin-left: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.top .follow {
+  padding: 0 24px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 149, 246);
+  border: 1px solid rgb(0, 149, 246);
+  border-radius: 3px;
+  line-height: 26px;
+}
+
+.top .unfollow {
+  padding: 0px 16.5px;
+  color: rgb(237, 73, 86);
+  background-color: transparent;
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 3px;
+  line-height: 26px;
+}
+
+.top .edit {
+  padding: 5px 9px;
+  color: rgb(38, 38, 38);
+  background-color: transparent;
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 4px;
+  line-height: 18px;
+}
