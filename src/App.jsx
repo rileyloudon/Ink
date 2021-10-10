@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Header from './components/Header/Header';
@@ -16,8 +16,14 @@ function App() {
   const auth = getAuth();
 
   onAuthStateChanged(auth, (currentUser) => {
-    if (currentUser) setUser(currentUser);
-    else setUser();
+    if (currentUser) {
+      setUser(currentUser);
+      localStorage.setItem('userWillSignIn', 'true');
+      setLoading(false);
+    } else {
+      setUser();
+      localStorage.removeItem('userWillSignIn');
+    }
   });
 
   const updateLoading = (value) => {
@@ -27,6 +33,10 @@ function App() {
   const signInGuest = () => {
     // Sign In Guest Here -> account named @Guest
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('userWillSignIn')) setLoading(true);
+  }, []);
 
   return (
     <div className='App'>
@@ -54,11 +64,22 @@ function App() {
               />
             )}
           />
+          <Route exact path='/settings'>
+            {/* {user ? <Settings /> : <Redirect to='/' />} */}
+          </Route>
           <Route exact path='/chat'>
-            {user ? <Chat /> : <Redirect to='/' />}
+            {user || localStorage.getItem('userWillSignIn') ? (
+              <Chat />
+            ) : (
+              <Redirect to='/' />
+            )}
           </Route>
           <Route exact path='/:username'>
-            {user ? <Profile /> : <Redirect to='/' />}
+            {user || localStorage.getItem('userWillSignIn') ? (
+              <Profile />
+            ) : (
+              <Redirect to='/' />
+            )}
           </Route>
         </Switch>
       </UserContext.Provider>
