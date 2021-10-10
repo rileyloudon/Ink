@@ -5,34 +5,24 @@ import { followUser, unfollowUser } from '../../../firebase';
 import UserContext from '../../../Context/UserContext';
 import './Button.css';
 
-const Button = ({ profile, isUsersProfile, updateProfile }) => {
+const Button = ({ profile, updateProfile }) => {
   const { user } = useContext(UserContext);
   const history = useHistory();
 
-  if (!isUsersProfile && !profile.followers.includes(user.displayName)) {
-    return (
-      <button
-        onClick={() =>
-          followUser(profile.username).then((res) => updateProfile(res))
-        }
-        className='follow'
-        type='button'
-      >
-        Follow
-      </button>
-    );
-  }
+  if (profile.username !== user.displayName) {
+    const userFollowsProfile = profile.followers.includes(user.displayName);
 
-  if (!isUsersProfile && profile.followers.includes(user.displayName)) {
     return (
       <button
         onClick={() =>
-          unfollowUser(profile.username).then((res) => updateProfile(res))
+          !userFollowsProfile
+            ? followUser(profile.username).then((res) => updateProfile(res))
+            : unfollowUser(profile.username).then((res) => updateProfile(res))
         }
-        className='unfollow'
+        className={!userFollowsProfile ? 'follow' : 'unfollow'}
         type='button'
       >
-        Unfollow
+        {!userFollowsProfile ? 'Follow' : 'Unfollow'}
       </button>
     );
   }
@@ -53,7 +43,6 @@ Button.propTypes = {
     username: PropTypes.string.isRequired,
     followers: PropTypes.arrayOf.isRequired,
   }).isRequired,
-  isUsersProfile: PropTypes.bool.isRequired,
   updateProfile: PropTypes.func.isRequired,
 };
 
