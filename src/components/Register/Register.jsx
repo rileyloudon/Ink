@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import { registerUser } from '../../firebase';
+import UserContext from '../../Context/UserContext';
 import astronaut from '../../img/misc/astronaut.svg';
 import './Register.css';
 
 const Register = ({ updateLoading, signInGuest }) => {
+  const { user } = useContext(UserContext);
   const history = useHistory();
 
   const [email, setEmail] = useState('');
@@ -17,7 +19,7 @@ const Register = ({ updateLoading, signInGuest }) => {
   const isFormValid =
     /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g.test(email) &&
     fullName.length >= 1 &&
-    username.length >= 1 &&
+    /^[\w](?!.*?\.{2})[\w.]{0,14}[\w]$/.test(username) &&
     password.length >= 6;
 
   const handleRegister = () => {
@@ -27,6 +29,10 @@ const Register = ({ updateLoading, signInGuest }) => {
       updateLoading(false);
     });
   };
+
+  useEffect(() => {
+    if (typeof user === 'object') history.replace('/');
+  }, [user, history]);
 
   return (
     <div className='register-container'>
@@ -65,6 +71,7 @@ const Register = ({ updateLoading, signInGuest }) => {
           />
           <input
             type='text'
+            maxLength='16'
             placeholder='Username'
             aria-label='Username'
             aria-required='true'
@@ -97,7 +104,6 @@ const Register = ({ updateLoading, signInGuest }) => {
             disabled={!isFormValid}
             onClick={() => {
               if (isFormValid) {
-                history.replace('/');
                 handleRegister(email, password, username, fullName);
               }
             }}
