@@ -6,15 +6,15 @@ import './AddPhoto.css';
 
 const AddPhoto = ({ updateAddModal }) => {
   const modal = useRef();
-  const [message, setMessage] = useState('Drag Photos Here');
+  const [dropRejected, setDropRejected] = useState(false);
   const [image, setImage] = useState();
 
-  const onDrop = useCallback((acceptedFiles, fileRejections) => {
-    if (fileRejections.length === 1)
-      setMessage('Invalid File Type. Please use .jpeg or .png.');
-    else {
-      setImage(URL.createObjectURL(acceptedFiles[0]));
-    }
+  const onDropAccepted = useCallback((acceptedFiles) => {
+    setImage(URL.createObjectURL(acceptedFiles[0]));
+  }, []);
+
+  const onDropRejected = useCallback(() => {
+    setDropRejected(true);
   }, []);
 
   const { getRootProps, getInputProps, open } = useDropzone({
@@ -22,12 +22,13 @@ const AddPhoto = ({ updateAddModal }) => {
     accept: 'image/jpeg, image/png',
     noClick: true,
     noKeyboard: true,
-    onDrop,
+    onDropAccepted,
+    onDropRejected,
   });
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (modal.current.contains(e.target)) return;
+      if (modal.current.className !== e.target.className) return;
 
       updateAddModal(false);
     };
@@ -40,18 +41,25 @@ const AddPhoto = ({ updateAddModal }) => {
   }, [updateAddModal, image]);
 
   return (
-    <div ref={modal} className='dropzone-contaienr'>
+    <div ref={modal} className='dropzone-container'>
       <div {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
-        <p>{message}</p>
-        <button type='button' onClick={open}>
+        <h3>
+          {!dropRejected
+            ? 'Drag Photos Here.'
+            : 'This file type is not supported.'}
+        </h3>
+        {dropRejected && <p>Please use .jpeg or .png</p>}
+        <button className='select-from-computer' type='button' onClick={open}>
           Select From Computer
         </button>
-        <img
-          style={{ width: '150px', height: 'auto' }}
-          src={image}
-          alt='test'
-        />
+        {image && (
+          <img
+            style={{ width: '150px', height: 'auto' }}
+            src={image}
+            alt='test'
+          />
+        )}
       </div>
     </div>
   );
