@@ -24,16 +24,17 @@
   border-radius: 12px;
 }
 
-.dropzone > p {
+.dropzone h3 {
   margin: 0;
-  color: rgb(142, 142, 142);
-}
-
-.dropzone > p:first-of-type {
   margin-bottom: 3px;
   font-size: 22px;
   font-weight: 300;
   color: initial;
+}
+
+.dropzone p {
+  margin: 0;
+  color: rgb(142, 142, 142);
 }
 
 .dropzone .select-from-computer {
