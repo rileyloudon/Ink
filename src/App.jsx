@@ -6,12 +6,15 @@ import Home from './components/Home';
 import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
 import Chat from './components/Chat';
+import AddPhoto from './components/AddPhoto/AddPhoto';
 import UserContext from './Context/UserContext';
 import './App.css';
 
 function App() {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
+
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const auth = getAuth();
 
@@ -30,6 +33,10 @@ function App() {
     setLoading(value);
   };
 
+  const updateAddModal = (value) => {
+    setShowAddModal(value);
+  };
+
   const signInGuest = () => {
     // Sign In Guest Here -> account named @Guest
   };
@@ -41,7 +48,8 @@ function App() {
   return (
     <div className='App'>
       <UserContext.Provider value={{ user, setUser }}>
-        {user && <Header />}
+        {user && <Header updateAddModal={updateAddModal} />}
+        {showAddModal && <AddPhoto updateAddModal={updateAddModal} />}
         <Switch>
           <Route
             exact
