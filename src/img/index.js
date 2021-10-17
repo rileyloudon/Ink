@@ -10,6 +10,9 @@ import addActive from './add/dark-add-a.svg';
 import favoriteNotActive from './favorite/dark-favorite-na.svg';
 import favoriteActive from './favorite/dark-favorite-a.svg';
 
+import photoDefault from './photo/dark-photo.svg';
+import photoError from './photo/dark-photo-error.svg';
+
 export const home = {
   homeNotActive,
   homeActive,
@@ -28,4 +31,9 @@ export const add = {
 export const favorite = {
   favoriteNotActive,
   favoriteActive,
+};
+
+export const photo = {
+  photoDefault,
+  photoError,
 };
