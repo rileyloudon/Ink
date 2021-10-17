@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import PropTypes from 'prop-types';
+import { photo } from '../../img/index';
 import './AddPhoto.css';
 
 const AddPhoto = ({ updateAddModal }) => {
@@ -44,15 +45,27 @@ const AddPhoto = ({ updateAddModal }) => {
     <div ref={modal} className='dropzone-container'>
       <div {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
-        <h3>
-          {!dropRejected
-            ? 'Drag Photos Here.'
-            : 'This file type is not supported.'}
-        </h3>
-        {dropRejected && <p>Please use .jpeg or .png</p>}
-        <button className='select-from-computer' type='button' onClick={open}>
-          Select From Computer
-        </button>
+        {!image && (
+          <>
+            <img
+              src={!dropRejected ? photo.photoDefault : photo.photoError}
+              alt=''
+            />
+            <h3>
+              {!dropRejected
+                ? 'Drag Photos Here.'
+                : 'This file type is not supported.'}
+            </h3>
+            {dropRejected && <p>Please use .jpeg or .png</p>}
+            <button
+              className='select-from-computer'
+              type='button'
+              onClick={open}
+            >
+              Select From Computer
+            </button>
+          </>
+        )}
         {image && (
           <img
             style={{ width: '150px', height: 'auto' }}
