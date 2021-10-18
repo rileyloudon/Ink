@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Header from './components/Header/Header';
@@ -12,7 +12,9 @@ import './App.css';
 
 function App() {
   const [user, setUser] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(
+    JSON.parse(localStorage.getItem('userWillSignIn') || false)
+  );
 
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -21,7 +23,8 @@ function App() {
   onAuthStateChanged(auth, (currentUser) => {
     if (currentUser) {
       setUser(currentUser);
-      localStorage.setItem('userWillSignIn', 'true');
+      if (!localStorage.getItem('userWillSignIn'))
+        localStorage.setItem('userWillSignIn', 'true');
       setLoading(false);
     } else {
       setUser();
@@ -41,14 +44,12 @@ function App() {
     // Sign In Guest Here -> account named @Guest
   };
 
-  useEffect(() => {
-    if (localStorage.getItem('userWillSignIn')) setLoading(true);
-  }, []);
-
   return (
     <div className='App'>
       <UserContext.Provider value={{ user, setUser }}>
-        {user && <Header updateAddModal={updateAddModal} />}
+        {user && (
+          <Header updateAddModal={updateAddModal} showAddModal={showAddModal} />
+        )}
         {showAddModal && <AddPhoto updateAddModal={updateAddModal} />}
         <Switch>
           <Route
