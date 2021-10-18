@@ -44,6 +44,14 @@ const AddPhoto = ({ updateAddModal }) => {
   return (
     <div ref={modal} className='dropzone-container'>
       <div {...getRootProps({ className: 'dropzone' })}>
+        <button
+          className='close'
+          aria-label='close'
+          type='button'
+          onClick={() => updateAddModal(false)}
+        >
+          &#x2715;
+        </button>
         <input {...getInputProps()} />
         {!image && (
           <>
