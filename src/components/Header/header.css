@@ -53,6 +53,7 @@
   flex: 1;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .header-container .nav img {
@@ -60,6 +61,13 @@
   width: 26px;
   height: 26px;
   cursor: pointer;
+}
+
+.header-container .nav .add {
+  border: none;
+  background-color: transparent;
+  padding: inherit;
+  margin: 0;
 }
 
 .header-container .nav .profile-border {
