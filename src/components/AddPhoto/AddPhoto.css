@@ -13,6 +13,7 @@
 
 .dropzone {
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -22,6 +23,18 @@
   height: 90vh;
   background-color: rgb(255, 255, 255);
   border-radius: 12px;
+}
+
+.dropzone .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  font-size: 38px;
+  margin: 0 16px;
+  padding: 0;
 }
 
 .dropzone img {
