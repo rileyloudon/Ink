@@ -1,11 +1,12 @@
 import { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import DropDown from './DropDown/DropDown';
 import { home, chat, add, favorite } from '../../img/index';
 import UserContext from '../../Context/UserContext';
 import './header.css';
 
-const Header = () => {
+const Header = ({ updateAddModal, showAddModal }) => {
   const location = useLocation();
   const { user } = useContext(UserContext);
 
@@ -35,7 +36,7 @@ const Header = () => {
                 src={
                   location.pathname === '/' &&
                   !displayUserDropdown &&
-                  (activeTab !== 'add' || activeTab !== 'favorite')
+                  !showAddModal
                     ? home.homeActive
                     : home.homeNotActive
                 }
@@ -47,7 +48,7 @@ const Header = () => {
                 src={
                   location.pathname === '/chat' &&
                   !displayUserDropdown &&
-                  (activeTab !== 'add' || activeTab !== 'favorite')
+                  !showAddModal
                     ? chat.chatActive
                     : chat.chatNotActive
                 }
@@ -55,11 +56,20 @@ const Header = () => {
               />
             </Link>
 
-            {/* onClick -> Pop up modal, setActiveTab('add') */}
-            <img
-              src={activeTab === 'add' ? add.addActive : add.addNotActive}
-              alt='Add'
-            />
+            <button
+              type='button'
+              className='add'
+              onClick={() => updateAddModal(true)}
+            >
+              <img
+                src={
+                  !displayUserDropdown && showAddModal
+                    ? add.addActive
+                    : add.addNotActive
+                }
+                alt='Add'
+              />
+            </button>
 
             {/* onClick -> Display follow requests, likes, setActiveTab('favorite') */}
             <img
@@ -87,6 +97,11 @@ const Header = () => {
       </div>
     </header>
   );
+};
+
+Header.propTypes = {
+  updateAddModal: PropTypes.func.isRequired,
+  showAddModal: PropTypes.bool.isRequired,
 };
 
 export default Header;
