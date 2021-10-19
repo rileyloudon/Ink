@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import DropImage from './DropImage/DropImage';
-import './AddPhoto.css';
+import './AddPost.css';
 
-const AddPhoto = ({ updateAddModal }) => {
+const AddPost = ({ updateAddModal }) => {
   const modal = useRef();
   const [image, setImage] = useState();
 
@@ -38,8 +38,8 @@ const AddPhoto = ({ updateAddModal }) => {
   );
 };
 
-AddPhoto.propTypes = {
+AddPost.propTypes = {
   updateAddModal: PropTypes.func.isRequired,
 };
 
-export default AddPhoto;
+export default AddPost;
