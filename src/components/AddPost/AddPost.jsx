@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import DropImage from './DropImage/DropImage';
 import './AddPost.css';
+import Caption from './Caption/Caption';
 
 const AddPost = ({ updateAddModal }) => {
   const modal = useRef();
@@ -25,15 +26,27 @@ const AddPost = ({ updateAddModal }) => {
 
   return (
     <div ref={modal} className='dropzone-container'>
-      {!image ? (
-        <DropImage updateImage={updateImage} updateAddModal={updateAddModal} />
-      ) : (
-        <img
-          style={{ width: '150px', height: 'auto' }}
-          src={image}
-          alt='test'
-        />
-      )}
+      <div className='modal'>
+        <div className='top-bar'>
+          <h2>{!image ? 'New Post' : 'Caption'}</h2>
+          <button
+            className='close'
+            aria-label='close'
+            type='button'
+            onClick={() => updateAddModal(false)}
+          >
+            &#x2715;
+          </button>
+        </div>
+        {!image ? (
+          <DropImage
+            updateImage={updateImage}
+            updateAddModal={updateAddModal}
+          />
+        ) : (
+          <Caption image={image} updateAddModal={updateAddModal} />
+        )}
+      </div>
     </div>
   );
 };

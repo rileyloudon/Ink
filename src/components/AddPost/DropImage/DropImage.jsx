@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { photo } from '../../../img/index';
 import './DropImage.css';
 
-const DropImage = ({ updateImage, updateAddModal }) => {
+const DropImage = ({ updateImage }) => {
   const [dropRejected, setDropRejected] = useState(false);
 
   const onDropAccepted = useCallback(
@@ -30,17 +30,6 @@ const DropImage = ({ updateImage, updateAddModal }) => {
 
   return (
     <div {...getRootProps({ className: 'dropzone' })}>
-      <div className='top-bar'>
-        <h2>New Post</h2>
-        <button
-          className='close'
-          aria-label='close'
-          type='button'
-          onClick={() => updateAddModal(false)}
-        >
-          &#x2715;
-        </button>
-      </div>
       <input {...getInputProps()} />
       <img src={!dropRejected ? photo.photoDefault : photo.photoError} alt='' />
       <h3>
@@ -57,7 +46,6 @@ const DropImage = ({ updateImage, updateAddModal }) => {
 };
 
 DropImage.propTypes = {
-  updateAddModal: PropTypes.func.isRequired,
   updateImage: PropTypes.func.isRequired,
 };
 
