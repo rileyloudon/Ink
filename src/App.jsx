@@ -6,7 +6,7 @@ import Home from './components/Home';
 import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
 import Chat from './components/Chat';
-import AddPhoto from './components/AddPhoto/AddPhoto';
+import AddPost from './components/AddPost/AddPost';
 import UserContext from './Context/UserContext';
 import './App.css';
 
@@ -50,7 +50,7 @@ function App() {
         {user && (
           <Header updateAddModal={updateAddModal} showAddModal={showAddModal} />
         )}
-        {showAddModal && <AddPhoto updateAddModal={updateAddModal} />}
+        {showAddModal && <AddPost updateAddModal={updateAddModal} />}
         <Switch>
           <Route
             exact
