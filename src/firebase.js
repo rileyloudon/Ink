@@ -14,7 +14,15 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
+  Timestamp,
 } from 'firebase/firestore';
+
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAXsxLt1-ebKHlUr_8w0mCLTe6w921K3V8',
@@ -27,6 +35,9 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 const db = getFirestore();
+const storage = getStorage();
+const storageRef = ref(storage);
+console.log(storageRef);
 
 export const registerUser = async (email, password, tempUsername, fullName) => {
   const username = tempUsername.toLowerCase();
@@ -139,4 +150,30 @@ export const unfollowUser = async (userToUnfollow) => {
 
   const docSnap = await getDoc(doc(db, 'users', userToUnfollow));
   return docSnap.data();
+};
+
+export const savePost = async (image, caption, disableComments) => {
+  try {
+    const filePath = `${getAuth().currentUser.displayName}/${
+      image.properties.name
+    }`;
+
+    const newImageRef = ref(getStorage(), filePath);
+    const fileSnapshot = await uploadBytesResumable(newImageRef, image.url);
+
+    const publicImageUrl = await getDownloadURL(newImageRef);
+
+    const docRef = await doc(db, 'users', getAuth().currentUser.displayName);
+    return await updateDoc(docRef, {
+      posts: arrayUnion({
+        imageUrl: publicImageUrl,
+        caption,
+        disableComments,
+        storageUrl: fileSnapshot.metadata.fullPath,
+        timestamp: Timestamp.now(),
+      }),
+    });
+  } catch (err) {
+    return `There was an error uploading this post, ${err}`;
+  }
 };
