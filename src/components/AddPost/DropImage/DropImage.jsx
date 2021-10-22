@@ -10,7 +10,8 @@ const DropImage = ({ updateImage }) => {
 
   const onDropAccepted = useCallback(
     (acceptedFiles) => {
-      updateImage(URL.createObjectURL(acceptedFiles[0]));
+      // First variable is the file with properties, second is a link to the picture
+      updateImage(acceptedFiles[0], URL.createObjectURL(acceptedFiles[0]));
     },
     [updateImage]
   );
