@@ -29,7 +29,7 @@ const AddPost = ({ updateAddModal }) => {
     <div ref={modal} className='dropzone-container'>
       <div className='modal'>
         <div className='top-bar'>
-          <h2>{!image ? 'New Post' : 'Caption'}</h2>
+          <h2>{!image.properties ? 'New Post' : 'Caption'}</h2>
           <button
             className='close'
             aria-label='close'
@@ -39,7 +39,7 @@ const AddPost = ({ updateAddModal }) => {
             &#x2715;
           </button>
         </div>
-        {!image ? (
+        {!image.properties ? (
           <DropImage updateImage={updateImage} />
         ) : (
           <Caption image={image} updateAddModal={updateAddModal} />
