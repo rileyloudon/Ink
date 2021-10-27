@@ -17,12 +17,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from 'firebase/storage';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAXsxLt1-ebKHlUr_8w0mCLTe6w921K3V8',
@@ -45,37 +40,14 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
 
   const auth = getAuth();
 
-  try {
-    const credential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+  // Need to fix: user gets signed in right after being created,
+  // doesn't get their profile picture in time for header render
 
-    try {
-      await updateProfile(auth.currentUser, {
-        displayName: username,
-        photoURL: `https://source.boringavatars.com/beam/150/${username}?colors=2D1B33,F36A71,EE887A,E4E391,9ABC8A`,
-      });
-    } catch (err) {
-      return `Error updating profile, ${err}`;
-    }
-
-    try {
-      setDoc(doc(db, 'users', username), {
-        username,
-        photoURL: `https://source.boringavatars.com/beam/150/${username}?colors=2D1B33,F36A71,EE887A,E4E391,9ABC8A`,
-        fullName,
-        posts: [],
-        followers: [],
-        following: [],
-        bio: '',
-      });
-    } catch (err) {
-      return `Error updating profile, ${err}`;
-    }
-    return credential;
-  } catch (err) {
+  const credential = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  ).catch((err) => {
     switch (err.code) {
       case 'auth/email-already-in-use':
         return `A user with that email already exists.`;
@@ -86,16 +58,40 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
       default:
         return 'Error';
     }
-  }
+  });
+
+  await updateProfile(auth.currentUser, {
+    displayName: username,
+    photoURL: `https://source.boringavatars.com/beam/150/${username}?colors=2D1B33,F36A71,EE887A,E4E391,9ABC8A`,
+  }).catch((err) => {
+    return `Error updating profile, ${err}`;
+  });
+
+  await setDoc(doc(db, 'users', username), {
+    username,
+    photoURL: `https://source.boringavatars.com/beam/150/${username}?colors=2D1B33,F36A71,EE887A,E4E391,9ABC8A`,
+    fullName,
+    posts: [],
+    followers: [],
+    following: [],
+    bio: '',
+  }).catch((err) => {
+    return `Error updating profile, ${err}`;
+  });
+
+  await auth.currentUser.reload();
+
+  return credential;
 };
 
 export const signInUser = async (email, password) => {
   const auth = getAuth();
 
-  try {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
-    return credential;
-  } catch (err) {
+  const credential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  ).catch((err) => {
     switch (err.code) {
       case 'auth/invalid-email':
         return 'Enter a valid email address.';
@@ -106,12 +102,13 @@ export const signInUser = async (email, password) => {
       default:
         return 'Error';
     }
-  }
+  });
+  return credential;
 };
 
-export const signOutUser = () => {
+export const signOutUser = async () => {
   const auth = getAuth();
-  signOut(auth);
+  await signOut(auth).catch((err) => `Error signing out, ${err}`);
 };
 
 export const fetchUserData = async (username) => {
@@ -162,14 +159,15 @@ export const unfollowUser = async (userToUnfollow) => {
 
 export const savePost = async (image, caption, disableComments) => {
   try {
-    const filePath = `${getAuth().currentUser.displayName}/${
-      image.properties.name
-    }`;
+    const storage = getStorage();
+    const storageRef = ref(
+      storage,
+      `${getAuth().currentUser.displayName}/${image.properties.name}`
+    );
 
-    const newImageRef = ref(getStorage(), filePath);
-    const fileSnapshot = await uploadBytesResumable(newImageRef, image.url);
+    const upload = await uploadBytes(storageRef, image.properties);
 
-    const publicImageUrl = await getDownloadURL(newImageRef);
+    const publicImageUrl = await getDownloadURL(storageRef);
 
     const docRef = await doc(db, 'users', getAuth().currentUser.displayName);
     return await updateDoc(docRef, {
@@ -177,7 +175,7 @@ export const savePost = async (image, caption, disableComments) => {
         imageUrl: publicImageUrl,
         caption,
         disableComments,
-        storageUrl: fileSnapshot.metadata.fullPath,
+        storageUrl: upload.metadata.fullPath,
         timestamp: Timestamp.now(),
       }),
     });
