@@ -4,6 +4,7 @@ import { fetchUserData } from '../../firebase';
 import Loading from '../Loading/Loading';
 import Bar from './Bar/Bar';
 import Header from './Header/Header';
+import Posts from './Posts/Posts';
 import './Profile.css';
 
 const Profile = () => {
@@ -33,6 +34,7 @@ const Profile = () => {
       <div className='profile'>
         <Header profile={profile} updateProfile={updateProfile} />
         <Bar />
+        <Posts profile={profile} />
       </div>
     ) : (
       <div className='no-user'>
