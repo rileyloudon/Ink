@@ -6,6 +6,15 @@
   border-bottom: 1px solid rgb(219, 219, 219);
 }
 
+.header-white-background {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 54px;
+  background-color: white;
+  border-bottom: 1px solid rgb(219, 219, 219);
+}
+
 .header-container {
   display: flex;
   justify-content: space-between;
@@ -13,6 +22,7 @@
   position: fixed;
   box-sizing: border-box;
   width: 100vw;
+  height: 55px;
   max-width: 975px;
   top: 0;
   padding: 0 20px;

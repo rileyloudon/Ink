@@ -18,6 +18,7 @@ const Header = ({ updateAddModal, showAddModal }) => {
   return (
     <header>
       <div className='center-header'>
+        <div className='header-white-background' />
         <div className='header-container'>
           <Link to='/' className='title'>
             <p className='ink'>Ink</p>
