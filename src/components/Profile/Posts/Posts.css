@@ -1,0 +1,30 @@
+.posts {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 2000px;
+}
+
+.post {
+  flex-grow: 1;
+  flex: 2 2 calc(100% / 4);
+  height: 293px;
+  overflow: hidden;
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.post:not(:nth-child(3n)) {
+  margin-right: 28px;
+}
+
+.post-image {
+  position: absolute;
+  top: -9999px;
+  bottom: -9999px;
+  left: -9999px;
+  right: -9999px;
+  height: 100%;
+  margin: auto;
+  overflow: hidden;
+}
