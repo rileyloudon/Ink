@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import './Posts.css';
 
 const Posts = ({ profile }) => {
+  const reversePosts = [...profile.posts].reverse();
+
   const [displayedPosts, setDisplayedPosts] = useState(
-    profile.posts.slice(0, 9)
+    reversePosts.slice(0, 9)
   );
   const [hiddenPosts, setHiddenPosts] = useState(
-    profile.posts.slice(9, profile.posts.length + 1)
+    reversePosts.slice(9, reversePosts.length + 1)
   );
 
   const renderPost = (post) => {
@@ -32,11 +34,11 @@ const Posts = ({ profile }) => {
         return;
       const addedPosts = hiddenPosts.slice(0, 6);
       setDisplayedPosts((oldArray) => [...oldArray, ...addedPosts]);
-      setHiddenPosts((oldArray) => oldArray.slice(6, profile.posts.length + 1));
+      setHiddenPosts((oldArray) => oldArray.slice(6, reversePosts.length + 1));
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [profile.posts, hiddenPosts, displayedPosts]);
+  }, [reversePosts, hiddenPosts, displayedPosts]);
 
   return (
     <div className='posts'>
