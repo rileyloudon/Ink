@@ -175,6 +175,8 @@ export const savePost = async (image, caption, disableComments) => {
         imageUrl: publicImageUrl,
         caption,
         disableComments,
+        likes: [],
+        comments: [],
         storageUrl: upload.metadata.fullPath,
         timestamp: Timestamp.now(),
       }),
