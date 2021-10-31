@@ -13,6 +13,9 @@ import favoriteActive from './favorite/dark-favorite-a.svg';
 import photoDefault from './photo/dark-photo.svg';
 import photoError from './photo/dark-photo-error.svg';
 
+import darkTextBubble from './comment/dark-comment.svg';
+import lightTextBubble from './comment/light-comment.svg';
+
 export const home = {
   homeNotActive,
   homeActive,
@@ -36,4 +39,9 @@ export const favorite = {
 export const photo = {
   photoDefault,
   photoError,
+};
+
+export const comment = {
+  darkTextBubble,
+  lightTextBubble,
 };
