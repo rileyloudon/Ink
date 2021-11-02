@@ -20,6 +20,12 @@
   margin-right: 28px;
 }
 
+.post .view-post {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .post .post-stats {
   display: none;
   position: absolute;
@@ -32,7 +38,7 @@
   font-weight: 600;
 }
 
-.post .post-image:hover + .post-stats {
+.post .view-post:hover .post-stats {
   display: flex;
   pointer-events: none;
 }
@@ -45,7 +51,7 @@
 }
 
 .post .post-stats img {
-  width: 28px;
+  width: 26px;
   padding-right: 2px;
 }
 

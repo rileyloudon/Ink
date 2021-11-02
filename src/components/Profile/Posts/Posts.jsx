@@ -14,23 +14,36 @@ const Posts = ({ profile }) => {
     reversePosts.slice(9, reversePosts.length + 1)
   );
 
+  const viewPost = () => {
+    console.log('hi');
+  };
+
   const renderPost = (post) => {
     return (
       <div key={post.imageUrl} className='post'>
         <img className='post-image' src={post.imageUrl} alt='' />
-        <div className='post-stats'>
-          <span>
-            <img src={favorite.lightFavoriteActive} alt='' />
-            {post.likes.length}
-          </span>
-          <span>
-            {post.disableComments ? null : (
-              <span>
-                <img src={comment.lightTextBubble} alt='' />{' '}
-                {post.comments.length}
-              </span>
-            )}
-          </span>
+        <div
+          className='view-post'
+          onClick={viewPost}
+          onKeyPress={viewPost}
+          aria-label='View Post'
+          role='button'
+          tabIndex={-1}
+        >
+          <div className='post-stats'>
+            <span>
+              <img src={favorite.lightFavoriteActive} alt='' />
+              {post.likes.length}
+            </span>
+            <span>
+              {post.disableComments ? null : (
+                <span>
+                  <img src={comment.lightTextBubble} alt='' />{' '}
+                  {post.comments.length}
+                </span>
+              )}
+            </span>
+          </div>
         </div>
       </div>
     );
