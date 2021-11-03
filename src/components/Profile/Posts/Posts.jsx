@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { comment, favorite } from '../../../img/index';
 import './Posts.css';
 
 const Posts = ({ profile }) => {
+  const location = useLocation();
   // Default order renders oldest first, this way we render newest first.
   const reversePosts = [...profile.posts].reverse();
 
@@ -14,22 +16,18 @@ const Posts = ({ profile }) => {
     reversePosts.slice(9, reversePosts.length + 1)
   );
 
-  const viewPost = () => {
-    console.log('hi');
-  };
-
-  const renderPost = (post) => {
+  const renderPost = (post, i) => {
     return (
-      <div key={post.imageUrl} className='post'>
+      <Link
+        className='post'
+        key={post.imageUrl}
+        to={{
+          pathname: `/${profile.username}/${i}`,
+          state: { background: location },
+        }}
+      >
         <img className='post-image' src={post.imageUrl} alt='' />
-        <div
-          className='view-post'
-          onClick={viewPost}
-          onKeyPress={viewPost}
-          aria-label='View Post'
-          role='button'
-          tabIndex={-1}
-        >
+        <div className='view-post'>
           <div className='post-stats'>
             <span>
               <img src={favorite.lightFavoriteActive} alt='' />
@@ -45,7 +43,7 @@ const Posts = ({ profile }) => {
             </span>
           </div>
         </div>
-      </div>
+      </Link>
     );
   };
 
@@ -66,14 +64,15 @@ const Posts = ({ profile }) => {
 
   return (
     <div className='posts'>
-      {displayedPosts.map((post) => renderPost(post))}
+      {displayedPosts.map((post, i) => renderPost(post, i))}
     </div>
   );
 };
 
 Posts.propTypes = {
   profile: PropTypes.shape({
-    posts: PropTypes.arrayOf.isRequired,
+    username: PropTypes.string,
+    posts: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
 };
 
