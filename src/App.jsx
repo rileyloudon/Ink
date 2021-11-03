@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Header from './components/Header/Header';
 import Home from './components/Home';
@@ -7,10 +7,15 @@ import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
 import Chat from './components/Chat';
 import AddPost from './components/AddPost/AddPost';
+import ModalView from './ViewPost/ModalView/ModalView';
+import SoloView from './ViewPost/SoloView/SoloView';
 import UserContext from './Context/UserContext';
 import './App.css';
 
 function App() {
+  const location = useLocation();
+  const background = location.state && location.state.background;
+  console.log(background);
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(
     JSON.parse(localStorage.getItem('userWillSignIn') || false)
@@ -83,7 +88,10 @@ function App() {
               <Redirect to='/' />
             )}
           </Route>
-          <Route exact path='/:username'>
+          <Route path='/:username/:id'>
+            <SoloView />
+          </Route>
+          <Route path='/:username'>
             {user || localStorage.getItem('userWillSignIn') ? (
               <Profile />
             ) : (
@@ -91,6 +99,11 @@ function App() {
             )}
           </Route>
         </Switch>
+        {background && (
+          <Route path='/:username/:id'>
+            <ModalView />
+          </Route>
+        )}
       </UserContext.Provider>
     </div>
   );
