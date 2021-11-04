@@ -15,7 +15,7 @@ import './App.css';
 function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
-  console.log(background);
+
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(
     JSON.parse(localStorage.getItem('userWillSignIn') || false)
@@ -56,48 +56,50 @@ function App() {
           <Header updateAddModal={updateAddModal} showAddModal={showAddModal} />
         )}
         {showAddModal && <AddPost updateAddModal={updateAddModal} />}
-        <Switch>
-          <Route
-            exact
-            path='/'
-            render={() => (
-              <Home
-                updateLoading={updateLoading}
-                loading={loading}
-                signInGuest={signInGuest}
-              />
-            )}
-          />
-          <Route
-            exact
-            path='/register'
-            render={() => (
-              <Register
-                updateLoading={updateLoading}
-                signInGuest={signInGuest}
-              />
-            )}
-          />
-          <Route exact path='/settings'>
-            {/* {user ? <Settings /> : <Redirect to='/' />} */}
-          </Route>
-          <Route exact path='/chat'>
-            {user || localStorage.getItem('userWillSignIn') ? (
-              <Chat />
-            ) : (
-              <Redirect to='/' />
-            )}
-          </Route>
-          <Route path='/:username/:id'>
+        <Switch location={background || location}>
+          <Route exact path='/:username/:id'>
             <SoloView />
           </Route>
-          <Route path='/:username'>
-            {user || localStorage.getItem('userWillSignIn') ? (
-              <Profile />
-            ) : (
-              <Redirect to='/' />
-            )}
-          </Route>
+          <Switch>
+            <Route
+              exact
+              path='/'
+              render={() => (
+                <Home
+                  updateLoading={updateLoading}
+                  loading={loading}
+                  signInGuest={signInGuest}
+                />
+              )}
+            />
+            <Route
+              exact
+              path='/register'
+              render={() => (
+                <Register
+                  updateLoading={updateLoading}
+                  signInGuest={signInGuest}
+                />
+              )}
+            />
+            <Route exact path='/settings'>
+              {/* {user ? <Settings /> : <Redirect to='/' />} */}
+            </Route>
+            <Route exact path='/chat'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <Chat />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+            <Route path='/:username'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <Profile />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+          </Switch>
         </Switch>
         {background && (
           <Route path='/:username/:id'>
