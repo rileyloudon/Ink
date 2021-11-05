@@ -169,7 +169,7 @@ export const savePost = async (image, caption, disableComments) => {
 
     const publicImageUrl = await getDownloadURL(storageRef);
 
-    const docRef = await doc(db, 'users', getAuth().currentUser.displayName);
+    const docRef = doc(db, 'users', getAuth().currentUser.displayName);
     return await updateDoc(docRef, {
       posts: arrayUnion({
         imageUrl: publicImageUrl,
@@ -184,4 +184,16 @@ export const savePost = async (image, caption, disableComments) => {
   } catch (err) {
     return `There was an error uploading this post, ${err}`;
   }
+};
+
+export const fetchIndividualPost = async (location) => {
+  const locationArray = location.split('/');
+  const docRef = doc(db, 'users', locationArray[1]);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const allPosts = docSnap.data().posts.reverse();
+    return allPosts[locationArray[2]];
+  }
+  return 'Post not found';
 };
