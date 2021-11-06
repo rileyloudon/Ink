@@ -34,9 +34,7 @@ const DropImage = ({ updateImage }) => {
       <input {...getInputProps()} />
       <img src={!dropRejected ? photo.photoDefault : photo.photoError} alt='' />
       <h3>
-        {!dropRejected
-          ? 'Drag Photos Here.'
-          : 'This file type is not supported.'}
+        {!dropRejected ? 'Drag Photos Here' : 'This file type is not supported'}
       </h3>
       {dropRejected && <p>Please use .jpeg or .png</p>}
       <button className='select-from-computer' type='button' onClick={open}>
