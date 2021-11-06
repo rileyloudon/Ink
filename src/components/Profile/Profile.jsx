@@ -15,7 +15,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchUserData(location.pathname.substring(1)).then((res) => {
+    const username = location.pathname.substring(1).split('/');
+    fetchUserData(username[0]).then((res) => {
       if (res === 'User not found') setUserExists(false);
       else {
         setProfile(res);
