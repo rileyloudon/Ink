@@ -23,11 +23,13 @@ const Caption = ({ image, updateAddModal }) => {
   return (
     <div className='caption'>
       <figure className='image'>
-        <img src={image.url} alt='test' />
+        <img src={image.url} alt='' />
       </figure>
       <form className='form'>
-        <img src={user.photoURL} alt='' />
-        <h3>{user.displayName}</h3>
+        <div className='poster'>
+          <img src={user.photoURL} alt='' />
+          <h3>{user.displayName}</h3>
+        </div>
         <textarea
           name='caption-text'
           id=''
@@ -38,7 +40,7 @@ const Caption = ({ image, updateAddModal }) => {
           onChange={(e) => setText(e.target.value)}
         />
         <label htmlFor='disable-commenting'>
-          Turn Off Commenting
+          Turn Off Commenting?
           <input
             type='checkbox'
             id='disable-commenting'

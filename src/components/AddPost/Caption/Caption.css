@@ -1,0 +1,80 @@
+.caption-bar {
+  height: 52px;
+}
+
+.caption {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: calc(100% - 53px);
+}
+
+.image,
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  border-left: 1px solid rgb(219, 219, 219);
+  height: 100%;
+}
+
+.caption .image {
+  border-bottom-left-radius: 12px;
+  width: 100%;
+  background-color: rgb(250, 250, 250);
+}
+
+.caption .image img {
+  max-width: calc(100% - 32px);
+  margin: auto;
+}
+
+.caption .form {
+  padding: 0 16px;
+}
+
+.caption .form .poster {
+  display: flex;
+  flex-direction: row;
+}
+
+.caption .form .poster img {
+  width: 28px;
+  padding-right: 5px;
+  margin: 0;
+}
+
+.caption .form textarea {
+  border: none;
+  resize: none;
+  overflow: auto;
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0;
+  color: rgb(38, 38, 38);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.caption .form textarea:focus {
+  outline: none;
+}
+
+.caption .form label {
+  user-select: none;
+  margin: 12px 0;
+}
+
+.caption .form button {
+  font-size: 14px;
+  padding: 0 24px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 149, 246);
+  border: 1px solid rgb(0, 149, 246);
+  border-radius: 3px;
+  line-height: 26px;
+  cursor: pointer;
+}
