@@ -7,8 +7,8 @@ import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
 import Chat from './components/Chat';
 import AddPost from './components/AddPost/AddPost';
-import ModalView from './ViewPost/ModalView/ModalView';
-import SoloView from './ViewPost/SoloView/SoloView';
+import ModalView from './components/ViewPost/ModalView/ModalView';
+import SoloView from './components/ViewPost/SoloView/SoloView';
 import UserContext from './Context/UserContext';
 import './App.css';
 
@@ -58,7 +58,11 @@ function App() {
         {showAddModal && <AddPost updateAddModal={updateAddModal} />}
         <Switch location={background || location}>
           <Route exact path='/:username/:id'>
-            <SoloView />
+            {user || localStorage.getItem('userWillSignIn') ? (
+              <SoloView />
+            ) : (
+              <Redirect to='/' />
+            )}
           </Route>
           <Switch>
             <Route
