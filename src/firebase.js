@@ -188,12 +188,21 @@ export const savePost = async (image, caption, disableComments) => {
 
 export const fetchIndividualPost = async (location) => {
   const locationArray = location.split('/');
+  const postNumber = parseInt(locationArray[2], 10);
+
   const docRef = doc(db, 'users', locationArray[1]);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
     const allPosts = docSnap.data().posts.reverse();
+    if (
+      postNumber >= allPosts.length ||
+      postNumber < 0 ||
+      !Number.isInteger(postNumber)
+    )
+      return 'Post not found';
+
     return allPosts[locationArray[2]];
   }
-  return 'Post not found';
+  return 'User not found';
 };
