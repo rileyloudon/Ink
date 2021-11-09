@@ -11,17 +11,12 @@ const Profile = () => {
   const location = useLocation();
 
   const [profile, setProfile] = useState();
-  const [userExists, setUserExists] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const username = location.pathname.substring(1).split('/');
     fetchUserData(username[0]).then((res) => {
-      if (res === 'User not found') setUserExists(false);
-      else {
-        setProfile(res);
-        setUserExists(true);
-      }
+      setProfile(res);
       setLoading(false);
     });
   }, [location.pathname]);
@@ -31,16 +26,16 @@ const Profile = () => {
   };
 
   const renderProflie = () => {
-    return userExists ? (
+    return profile === 'User not found' ? (
+      <div className='no-user'>
+        <h2>User Not Found.</h2>
+        <p>Please double check the URL to make sure it&#39;s correct.</p>
+      </div>
+    ) : (
       <div className='profile'>
         <Header profile={profile} updateProfile={updateProfile} />
         <Bar />
         <Posts profile={profile} />
-      </div>
-    ) : (
-      <div className='no-user'>
-        <h2>User Not Found.</h2>
-        <p>Please double check the URL to make sure it&#39;s correct.</p>
       </div>
     );
   };
