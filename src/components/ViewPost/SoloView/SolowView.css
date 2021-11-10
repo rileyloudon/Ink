@@ -30,6 +30,32 @@
 
 .solo-view .comments {
   width: 34%;
+  background-color: rgb(255, 255, 255);
+}
+
+.solo-view .comments .poster {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 60px;
+  border-bottom: 1px solid rgb(219, 219, 219);
+}
+
+.solo-view .comments .poster img {
+  width: 28px;
+}
+
+.solo-view .comments .poster span {
+  color: rgb(38, 38, 38);
+  font-weight: 600;
+}
+
+.solo-view .comments .poster a {
+  text-decoration: inherit;
+}
+
+.solo-view .comments .poster a:first-of-type {
+  margin: 0 15px 0 16px;
 }
 
 .solo-view .comments .add-comment {
@@ -62,7 +88,7 @@
     sans-serif;
 }
 
-.solo-view .comments .post {
+.solo-view .comments .post-btn {
   background: 0 0;
   padding: 0;
   font-weight: 600;
@@ -76,10 +102,11 @@
   position: relative;
 }
 
-.solo-view .comments .post:disabled {
+.solo-view .comments .post-btn:disabled {
+  cursor: initial;
   opacity: 0.3;
 }
 
-.solo-view .error {
+.post-error {
   text-align: center;
 }
