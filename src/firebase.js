@@ -202,7 +202,11 @@ export const fetchIndividualPost = async (location) => {
     )
       return 'Post not found';
 
-    return allPosts[locationArray[2]];
+    return {
+      username: docSnap.data().username,
+      photoURL: docSnap.data().photoURL,
+      post: allPosts[locationArray[2]],
+    };
   }
   return 'User not found';
 };
