@@ -33,9 +33,9 @@ const SoloView = () => {
             <Link to={`/${postData.username}`}>
               <img src={postData.photoURL} alt='' />
             </Link>
-            <h3>
-              <Link to={`/${postData.username}`}>{postData.username}</Link>
-            </h3>
+            <Link to={`/${postData.username}`}>
+              <span>{postData.username}</span>
+            </Link>
           </div>
           {/* <p>MAP COMMENTS</p> */}
           <section className='add-comment'>
