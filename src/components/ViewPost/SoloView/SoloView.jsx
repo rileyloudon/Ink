@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { fetchIndividualPost } from '../../../firebase';
+import { emoji } from '../../../img';
 import Loading from '../../Loading/Loading';
 
 import './SolowView.css';
@@ -39,6 +40,13 @@ const SoloView = () => {
           </div>
           {/* <p>MAP COMMENTS</p> */}
           <section className='add-comment'>
+            <button
+              type='button'
+              className='emoji-btn'
+              // onClick={() => displayEmojis(true)}
+            >
+              <img src={emoji.darkFace} alt='' />
+            </button>
             <textarea placeholder='Add a comment...' />
             <button className='post-btn' type='button' disabled>
               Post
