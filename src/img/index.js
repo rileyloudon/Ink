@@ -17,6 +17,8 @@ import photoError from './photo/dark-photo-error.svg';
 import darkTextBubble from './comment/dark-comment.svg';
 import lightTextBubble from './comment/light-comment.svg';
 
+import darkFace from './emoji/dark-emoji-face.svg';
+
 export const home = {
   homeNotActive,
   homeActive,
@@ -46,4 +48,8 @@ export const photo = {
 export const comment = {
   darkTextBubble,
   lightTextBubble,
+};
+
+export const emoji = {
+  darkFace,
 };
