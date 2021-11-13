@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import { registerUser } from '../../firebase';
@@ -99,7 +99,7 @@ const Register = ({ updateLoading, signInGuest }) => {
             required
           />
           <button
-            className={isFormValid ? 'register-btn active' : 'register-btn'}
+            className='register-btn'
             type='button'
             disabled={!isFormValid}
             onClick={() => {

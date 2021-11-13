@@ -50,7 +50,7 @@ const SignIn = ({ updateLoading, signInGuest }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <button
-              className={isFormValid ? 'log-in-btn active' : 'log-in-btn'}
+              className='log-in-btn'
               type='submit'
               disabled={!isFormValid}
               onClick={() => {
