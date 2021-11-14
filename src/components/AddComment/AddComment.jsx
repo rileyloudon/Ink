@@ -20,7 +20,7 @@ const AddComment = () => {
           showSkinTones={false}
           native='true'
           sheetSize='16'
-          perLine='6'
+          perLine='7'
           onSelect={selectEmoji}
         />
       )}
@@ -38,6 +38,7 @@ const AddComment = () => {
           <img src={emoji.darkFace} alt='' />
         </button>
         <textarea
+          id='textarea'
           placeholder='Add a comment...'
           value={comment}
           onChange={(e) => setComment(e.target.value)}
