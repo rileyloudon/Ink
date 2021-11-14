@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { fetchIndividualPost } from '../../../firebase';
-import { emoji } from '../../../img';
+import { favorite, comment } from '../../../img';
+import AddComment from '../../AddComment/AddComment';
 import Loading from '../../Loading/Loading';
 
 import './SolowView.css';
@@ -29,30 +30,43 @@ const SoloView = () => {
         <figure className='post-image'>
           <img src={postData.post.imageUrl} alt='' />
         </figure>
-        <div className='comments'>
-          <div className='poster'>
+        <section className='side-bar'>
+          <setion className='poster'>
             <Link to={`/${postData.username}`}>
               <img src={postData.photoURL} alt='' />
             </Link>
             <Link to={`/${postData.username}`}>
               <span>{postData.username}</span>
             </Link>
-          </div>
-          {/* <p>MAP COMMENTS</p> */}
-          <section className='add-comment'>
-            <button
-              type='button'
-              className='emoji-btn'
-              // onClick={() => displayEmojis(true)}
-            >
-              <img src={emoji.darkFace} alt='' />
-            </button>
-            <textarea placeholder='Add a comment...' />
-            <button className='post-btn' type='button' disabled>
-              Post
-            </button>
+          </setion>
+          <section className='comments' />
+          <section className='interact'>
+            <div className='icons'>
+              <button
+                type='button'
+                // onClick={LIKE POST}
+              >
+                <img src={favorite.favoriteNotActive} alt='' />
+              </button>
+              <button
+                type='button'
+                onClick={() => document.getElementById('textarea').focus()}
+              >
+                <img src={comment.darkTextOutline} alt='' />
+              </button>
+            </div>
+            <div className='likes'>
+              <p>
+                {postData.post.likes.length === 0
+                  ? 'Be the first to like this'
+                  : `${postData.post.likes.length} likes`}
+              </p>
+            </div>
           </section>
-        </div>
+          <section className='comment-box'>
+            <AddComment />
+          </section>
+        </section>
       </div>
     );
   };

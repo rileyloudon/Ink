@@ -1,21 +1,18 @@
 .solo-view {
   display: flex;
   flex-direction: row;
-  /* align-items: center; */
   width: 95vw;
   max-width: 920px;
-  height: auto;
   margin: auto;
   margin-top: 52px;
   border: 1px solid rgb(219, 219, 219);
 }
 
 .solo-view .post-image,
-.solo-view .comments {
+.solo-view .side-bar {
   display: flex;
   flex-direction: column;
   margin: 0;
-  height: 100%;
 }
 
 .solo-view .post-image {
@@ -28,14 +25,14 @@
   margin: auto;
 }
 
-.solo-view .comments {
+.solo-view .side-bar {
   width: auto;
   background-color: rgb(255, 255, 255);
 }
 
 /* USE FLEX GROW TO PUSH EVERYTHING UNDER COMMENTS TO THE BOTTOM */
 
-.solo-view .comments .poster {
+.solo-view .side-bar .poster {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -43,81 +40,51 @@
   border-bottom: 1px solid rgb(219, 219, 219);
 }
 
-.solo-view .comments .poster img {
+.solo-view .side-bar .poster img {
   width: 28px;
 }
 
-.solo-view .comments .poster span {
+.solo-view .side-bar .poster span {
   color: rgb(38, 38, 38);
   font-weight: 600;
 }
 
-.solo-view .comments .poster a {
+.solo-view .side-bar .poster a {
   text-decoration: inherit;
 }
 
-.solo-view .comments .poster a:first-of-type {
+.solo-view .side-bar .poster a:first-of-type {
   margin: 0 15px 0 16px;
 }
 
-.solo-view .comments .add-comment {
-  margin-top: 14px;
-  padding: 8px 16px;
+.solo-view .side-bar .comments {
+  padding: 0;
+  margin: 0 16px;
+  margin-bottom: 4px;
   display: flex;
-  align-items: center;
-  flex-direction: row;
-  border-top: 1px solid rgb(219, 219, 219);
+  flex-direction: column;
+  flex-grow: 1;
 }
 
-.solo-view .comments .add-comment .emoji-btn {
+.solo-view .interact {
+  padding-left: 16px;
+}
+
+.solo-view .interact button {
   background: 0 0;
   border: none;
-  margin: 0;
-  padding: 0;
   cursor: pointer;
-  height: 28px;
-}
-
-.solo-view .comments .add-comment .emoji-btn img {
-  height: inherit;
-}
-
-.solo-view .comments textarea {
-  background: 0 0;
-  border: 0;
-  display: flex;
-  flex-grow: 1;
-  color: rgb(38, 38, 38);
-  height: 18px;
-  outline: 0;
   padding: 0;
-  margin-left: 8px;
-  width: 0;
-  resize: none;
-  font-size: 16px;
-  width: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  margin: 0;
 }
 
-.solo-view .comments .post-btn {
-  background: 0 0;
-  padding: 0;
-  font-weight: 600;
-  font-size: 16px;
-  text-align: center;
-  border: 0;
-  height: auto;
-  margin: auto;
-  color: rgba(0, 149, 246, 1);
-  display: inline;
+.solo-view .interact button img {
+  width: 28px;
+  padding-right: 8px;
+}
+
+.solo-view .comment-box {
   position: relative;
-}
-
-.solo-view .comments .post-btn:disabled {
-  cursor: initial;
-  opacity: 0.3;
 }
 
 .post-error {
