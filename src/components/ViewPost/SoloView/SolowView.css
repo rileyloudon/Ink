@@ -3,6 +3,7 @@
   flex-direction: row;
   width: 95vw;
   max-width: 920px;
+  min-height: 500px;
   margin: auto;
   margin-top: 52px;
   border: 1px solid rgb(219, 219, 219);
@@ -29,8 +30,6 @@
   width: auto;
   background-color: rgb(255, 255, 255);
 }
-
-/* USE FLEX GROW TO PUSH EVERYTHING UNDER COMMENTS TO THE BOTTOM */
 
 .solo-view .side-bar .poster {
   display: flex;
@@ -81,6 +80,16 @@
 .solo-view .interact button img {
   width: 28px;
   padding-right: 8px;
+}
+
+.solo-view .interact .likes p {
+  margin: 0;
+  padding: 8px 0;
+}
+
+.solo-view .interact .date time {
+  font-size: 12px;
+  color: rgb(142, 142, 142);
 }
 
 .solo-view .comment-box {
