@@ -187,6 +187,7 @@ export const savePost = async (image, caption, disableComments) => {
 };
 
 export const fetchIndividualPost = async (location) => {
+  // location will be /USERNAME/POST_NUMBER
   const locationArray = location.split('/');
   const postNumber = parseInt(locationArray[2], 10);
 
@@ -209,4 +210,30 @@ export const fetchIndividualPost = async (location) => {
     };
   }
   return 'User not found';
+};
+
+export const toggleLikePost = async (username, location) => {
+  const locationArray = location.split('/');
+  const postNumber = parseInt(locationArray[2], 10);
+
+  const auth = getAuth();
+
+  const docRef = doc(db, 'users', username);
+
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const allPosts = docSnap.data().posts;
+    if (!allPosts[postNumber].likes.includes(auth.currentUser.displayName)) {
+      allPosts[postNumber].likes.push(auth.currentUser.displayName);
+    } else {
+      allPosts[postNumber].likes = allPosts[postNumber].likes.filter(
+        (user) => user !== auth.currentUser.displayName
+      );
+    }
+
+    await updateDoc(docRef, {
+      posts: allPosts,
+    });
+  }
 };
