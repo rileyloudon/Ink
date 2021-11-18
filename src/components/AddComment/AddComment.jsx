@@ -18,9 +18,9 @@ const AddComment = () => {
         <Picker
           showPreview={false}
           showSkinTones={false}
-          native='true'
-          sheetSize='16'
-          perLine='7'
+          native
+          sheetSize={16}
+          perLine={7}
           onSelect={selectEmoji}
         />
       )}
