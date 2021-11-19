@@ -13,12 +13,11 @@ const DropDown = ({ closeDropDown }) => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
-        dropDown.current.contains(e.target) ||
-        e.target.className === 'profile-picture'
-      ) {
-        return;
-      }
-      closeDropDown();
+        dropDown.current &&
+        !dropDown.current.contains(e.target) &&
+        e.target.className !== 'profile-picture'
+      )
+        closeDropDown();
     };
 
     document.addEventListener('mousedown', handleClickOutside);
