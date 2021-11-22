@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useHistory, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { fetchIndividualPost, toggleLikePost } from '../../../firebase';
 import { favorite, comment } from '../../../img';
-import UserContext from '../../../Context/UserContext';
 import AddComment from '../../AddComment/AddComment';
 import Loading from '../../Loading/Loading';
-
-import './SolowView.css';
+import './SoloView.css';
 
 const SoloView = ({ type }) => {
-  const { user } = useContext(UserContext);
   const modal = useRef();
   const location = useLocation();
   const history = useHistory();
@@ -18,12 +15,28 @@ const SoloView = ({ type }) => {
   const [postData, setPostData] = useState();
   const [loading, setLoading] = useState(true);
 
+  const likePost = () => {
+    toggleLikePost(postData.username, location.pathname).then((res) => {
+      // res returns if user liked the post
+      if (res === true) {
+        setPostData((prevState) => ({
+          ...prevState,
+          likeCount: prevState.likeCount + 1,
+          userLikes: true,
+        }));
+      } else if (res === false) {
+        setPostData((prevState) => ({
+          ...prevState,
+          likeCount: prevState.likeCount - 1,
+          userLikes: false,
+        }));
+      }
+    });
+  };
+
   const likeCount = () => {
-    if (postData.post.likes.length >= 1)
-      return `${postData.post.likes.length} like${postData.post.likes.length}` ===
-        1
-        ? null
-        : 's';
+    if (postData.likeCount >= 1)
+      return `${postData.likeCount} like${postData.likeCount === 1 ? '' : 's'}`;
     return 'Be the first to like this';
   };
 
@@ -88,12 +101,7 @@ const SoloView = ({ type }) => {
           ref={type === 'modal' ? modal : null}
           className={type === 'modal' ? 'solo-view modal-view' : 'solo-view'}
         >
-          <figure
-            className='post-image'
-            onDoubleClick={() =>
-              toggleLikePost(postData.username, location.pathname)
-            }
-          >
+          <figure className='post-image' onDoubleClick={likePost}>
             <img src={postData.post.imageUrl} alt='' />
           </figure>
           <section className='side-bar'>
@@ -108,15 +116,10 @@ const SoloView = ({ type }) => {
             <section className='comments' />
             <section className='interact'>
               <div className='icons'>
-                <button
-                  type='button'
-                  onClick={() =>
-                    toggleLikePost(postData.username, location.pathname)
-                  }
-                >
+                <button type='button' onClick={likePost}>
                   <img
                     src={
-                      postData.post.likes.includes(user.displayName)
+                      postData.userLikes
                         ? favorite.darkLikedFavorite
                         : favorite.favoriteNotActive
                     }
