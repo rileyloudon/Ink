@@ -121,6 +121,36 @@ export const fetchUserData = async (username) => {
   return 'User not found';
 };
 
+// export const toggleFollowUser = async (userToFollow) => {
+//   const auth = getAuth();
+
+//   const me = doc(db, 'users', auth.currentUser.displayName);
+//   const otherUser = doc(db, 'users', userToFollow);
+
+//   const docSnap = await getDoc(doc(db, 'users', userToFollow));
+
+//   if (!docSnap.data().followers.includes(auth.currentUser.displayName)) {
+//     // Follow User
+//     await updateDoc(me, {
+//       following: arrayUnion(userToFollow),
+//     });
+
+//     await updateDoc(otherUser, {
+//       followers: arrayUnion(auth.currentUser.displayName),
+//     });
+//   } else {
+//     // Unfollow User
+//     await updateDoc(me, {
+//       following: arrayRemove(userToFollow),
+//     });
+
+//     await updateDoc(otherUser, {
+//       followers: arrayRemove(auth.currentUser.displayName),
+//     });
+//   }
+//   return docSnap.data();
+// };
+
 export const followUser = async (userToFollow) => {
   const auth = getAuth();
 
@@ -191,6 +221,8 @@ export const fetchIndividualPost = async (location) => {
   const locationArray = location.split('/');
   const postNumber = parseInt(locationArray[2], 10);
 
+  const auth = getAuth();
+
   const docRef = doc(db, 'users', locationArray[1]);
   const docSnap = await getDoc(docRef);
 
@@ -207,6 +239,10 @@ export const fetchIndividualPost = async (location) => {
       username: docSnap.data().username,
       photoURL: docSnap.data().photoURL,
       post: allPosts[locationArray[2]],
+      likeCount: allPosts[locationArray[2]].likes.length,
+      userLikes: allPosts[postNumber].likes.includes(
+        auth.currentUser.displayName
+      ),
     };
   }
   return 'User not found';
@@ -223,7 +259,7 @@ export const toggleLikePost = async (username, location) => {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    const allPosts = docSnap.data().posts;
+    const allPosts = docSnap.data().posts.reverse();
     if (!allPosts[postNumber].likes.includes(auth.currentUser.displayName)) {
       allPosts[postNumber].likes.push(auth.currentUser.displayName);
     } else {
@@ -233,7 +269,13 @@ export const toggleLikePost = async (username, location) => {
     }
 
     await updateDoc(docRef, {
-      posts: allPosts,
+      posts: allPosts.reverse(),
     });
+
+    return allPosts
+      .reverse()
+      [postNumber].likes.includes(auth.currentUser.displayName);
   }
+
+  return 'Error';
 };
