@@ -58,7 +58,7 @@ function App() {
         <Switch location={background || location}>
           <Route exact path='/:username/:id'>
             {user || localStorage.getItem('userWillSignIn') ? (
-              <SoloView type='null' />
+              <SoloView modal={false} />
             ) : (
               <Redirect to='/' />
             )}
@@ -106,7 +106,7 @@ function App() {
         </Switch>
         {background && (
           <Route path='/:username/:id'>
-            <SoloView type='modal' />
+            <SoloView modal />
           </Route>
         )}
       </UserContext.Provider>

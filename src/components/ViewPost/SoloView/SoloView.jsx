@@ -7,8 +7,8 @@ import AddComment from '../../AddComment/AddComment';
 import Loading from '../../Loading/Loading';
 import './SoloView.css';
 
-const SoloView = ({ type }) => {
-  const modal = useRef();
+const SoloView = ({ modal }) => {
+  const modalRef = useRef();
   const location = useLocation();
   const history = useHistory();
 
@@ -80,7 +80,8 @@ const SoloView = ({ type }) => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (modal.current && !modal.current.contains(e.target)) history.goBack();
+      if (modalRef.current && !modalRef.current.contains(e.target))
+        history.goBack();
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -96,10 +97,10 @@ const SoloView = ({ type }) => {
       </div>
     ) : (
       <>
-        {type === 'modal' && <div className='post-backdrop' />}
+        {modal && <div className='post-backdrop' />}
         <div
-          ref={type === 'modal' ? modal : null}
-          className={type === 'modal' ? 'solo-view modal-view' : 'solo-view'}
+          ref={modal ? modalRef : null}
+          className={modal ? 'solo-view modal-view' : 'solo-view'}
         >
           <figure className='post-image' onDoubleClick={likePost}>
             <img src={postData.post.imageUrl} alt='' />
@@ -155,7 +156,7 @@ const SoloView = ({ type }) => {
 };
 
 SoloView.propTypes = {
-  type: PropTypes.string.isRequired,
+  modal: PropTypes.bool.isRequired,
 };
 
 export default SoloView;
