@@ -1,13 +1,23 @@
 import { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Picker } from 'emoji-mart';
 import { emoji } from '../../img';
 import './AddComment.css';
 import 'emoji-mart/css/emoji-mart.css';
+import { addComment } from '../../firebase';
 
-const AddComment = () => {
+const AddComment = ({ post }) => {
   const picker = useRef();
   const [comment, setComment] = useState('');
   const [displayEmojiPicker, setDisplayEmojiPicker] = useState(false);
+
+  const handleSubmit = (e) => {
+    if (comment.trim().length >= 1) {
+      e.preventDefault();
+      addComment(post, comment);
+      setComment('');
+    }
+  };
 
   const selectEmoji = (emojiObject) => {
     setComment((currentComment) => currentComment + emojiObject.native);
@@ -44,7 +54,7 @@ const AddComment = () => {
         </div>
       )}
 
-      <section className='add-comment'>
+      <form className='add-comment' onSubmit={(e) => handleSubmit(e)}>
         <button
           type='button'
           className='emoji-btn'
@@ -61,17 +71,27 @@ const AddComment = () => {
           placeholder='Add a comment...'
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleSubmit(e);
+            }
+          }}
         />
         <button
           className='post-btn'
-          type='button'
-          disabled={comment.length < 1}
+          type='submit'
+          disabled={comment.trim().length < 1}
         >
           Post
         </button>
-      </section>
+      </form>
     </>
   );
+};
+
+AddComment.propTypes = {
+  post: PropTypes.shape({}).isRequired,
 };
 
 export default AddComment;
