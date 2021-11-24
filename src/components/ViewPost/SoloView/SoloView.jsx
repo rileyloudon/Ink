@@ -16,7 +16,7 @@ const SoloView = ({ modal }) => {
   const [loading, setLoading] = useState(true);
 
   const likePost = () => {
-    toggleLikePost(postData.username, location.pathname).then((res) => {
+    toggleLikePost(location.pathname).then((res) => {
       // res returns if user liked the post
       if (res === true) {
         setPostData((prevState) => ({
@@ -144,7 +144,7 @@ const SoloView = ({ modal }) => {
               </div>
             </section>
             <section className='comment-box'>
-              <AddComment />
+              <AddComment post={postData.post} />
             </section>
           </section>
         </div>
@@ -155,8 +155,12 @@ const SoloView = ({ modal }) => {
   return loading ? <Loading /> : renderPost();
 };
 
+SoloView.defaultProps = {
+  modal: false,
+};
+
 SoloView.propTypes = {
-  modal: PropTypes.bool.isRequired,
+  modal: PropTypes.bool,
 };
 
 export default SoloView;

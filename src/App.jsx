@@ -58,7 +58,7 @@ function App() {
         <Switch location={background || location}>
           <Route exact path='/:username/:id'>
             {user || localStorage.getItem('userWillSignIn') ? (
-              <SoloView modal={false} />
+              <SoloView />
             ) : (
               <Redirect to='/' />
             )}
