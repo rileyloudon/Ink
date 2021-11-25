@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Header from './components/Header/Header';
@@ -24,17 +24,21 @@ function App() {
 
   const auth = getAuth();
 
-  onAuthStateChanged(auth, (currentUser) => {
-    if (currentUser) {
-      setUser(currentUser);
-      if (!localStorage.getItem('userWillSignIn'))
-        localStorage.setItem('userWillSignIn', 'true');
-      setLoading(false);
-    } else {
-      setUser();
-      localStorage.removeItem('userWillSignIn');
-    }
-  });
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        if (!localStorage.getItem('userWillSignIn'))
+          localStorage.setItem('userWillSignIn', 'true');
+        setLoading(false);
+      } else {
+        setUser();
+        localStorage.removeItem('userWillSignIn');
+      }
+
+      return () => unsub;
+    });
+  }, [auth]);
 
   const updateLoading = (value) => {
     setLoading(value);
