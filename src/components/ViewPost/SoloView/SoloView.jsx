@@ -15,6 +15,23 @@ const SoloView = ({ modal }) => {
   const [postData, setPostData] = useState();
   const [loading, setLoading] = useState(true);
 
+  const renderComments = postData
+    ? postData.post.comments.map((commentObj) => (
+        <>
+          <div className='commenter'>
+            {/* GET USERS PROFILE PICTURE: */}
+            {/* <Link to={`/${commentObj.by}`}>
+              <span>{}</span>
+            </Link> */}
+            <Link to={`/${commentObj.by}`}>
+              <span>{commentObj.by}</span>
+            </Link>
+            <p>{commentObj.comment}</p>
+          </div>
+        </>
+      ))
+    : null;
+
   const likePost = () => {
     toggleLikePost(location.pathname).then((res) => {
       // res returns if user liked the post
@@ -114,7 +131,18 @@ const SoloView = ({ modal }) => {
                 <span>{postData.username}</span>
               </Link>
             </section>
-            <section className='comments' />
+            <section className='comments'>
+              <div className='commenter'>
+                <Link to={`/${postData.username}`}>
+                  <img src={postData.photoURL} alt='' />
+                </Link>
+                <Link to={`/${postData.username}`}>
+                  <span>{postData.username}</span>
+                </Link>
+                <p className='post-caption'>{postData.post.caption}</p>
+              </div>
+              {renderComments}
+            </section>
             <section className='interact'>
               <div className='icons'>
                 <button type='button' onClick={likePost}>
