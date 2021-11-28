@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -294,6 +295,7 @@ export const addComment = async (post, comment) => {
     allPosts[postIndex].comments.push({
       comment,
       by: auth.currentUser.displayName,
+      key: uuidv4(),
     });
 
     await updateDoc(docRef, {
@@ -304,4 +306,10 @@ export const addComment = async (post, comment) => {
   }
 
   return 'Error';
+};
+
+export const getProfilePicture = async (user) => {
+  const docRef = doc(db, 'users', user);
+  const docSnap = await getDoc(docRef);
+  return docSnap.data().photoURL;
 };
