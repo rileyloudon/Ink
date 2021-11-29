@@ -6,15 +6,9 @@ import './Posts.css';
 
 const Posts = ({ profile }) => {
   const location = useLocation();
-  // Default order renders oldest first, this way we render newest first.
-  const reversePosts = [...profile.posts].reverse();
 
-  const [displayedPosts, setDisplayedPosts] = useState(
-    reversePosts.slice(0, 9)
-  );
-  const [hiddenPosts, setHiddenPosts] = useState(
-    reversePosts.slice(9, reversePosts.length + 1)
-  );
+  const [displayedPosts, setDisplayedPosts] = useState();
+  const [hiddenPosts, setHiddenPosts] = useState();
 
   const renderPost = (post, i) => {
     return (
@@ -48,6 +42,13 @@ const Posts = ({ profile }) => {
   };
 
   useEffect(() => {
+    setDisplayedPosts([...profile.posts].reverse().slice(0, 9));
+    setHiddenPosts(
+      [...profile.posts].reverse().slice(9, [...profile.posts].length + 1)
+    );
+  }, [profile]);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (
         window.innerHeight + document.documentElement.scrollTop !==
@@ -56,15 +57,19 @@ const Posts = ({ profile }) => {
         return;
       const addPosts = hiddenPosts.slice(0, 6);
       setDisplayedPosts((oldArray) => [...oldArray, ...addPosts]);
-      setHiddenPosts((oldArray) => oldArray.slice(6, reversePosts.length + 1));
+      setHiddenPosts((oldArray) =>
+        oldArray.slice(6, [...profile.posts].length + 1)
+      );
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [reversePosts, hiddenPosts, displayedPosts]);
+  }, [hiddenPosts, displayedPosts, profile]);
 
   return (
     <div className='posts'>
-      {displayedPosts.map((post, i) => renderPost(post, i))}
+      {displayedPosts
+        ? displayedPosts.map((post, i) => renderPost(post, i))
+        : null}
     </div>
   );
 };
