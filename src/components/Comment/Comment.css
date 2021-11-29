@@ -1,0 +1,27 @@
+.commenter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 12px 0;
+  height: max-content;
+}
+
+.commenter p {
+  margin: 0;
+}
+
+.commenter img {
+  margin-right: 15px;
+  width: 28px;
+  height: 28px;
+}
+
+.commenter span {
+  margin-right: 4px;
+  color: rgb(38, 38, 38);
+  font-weight: 600;
+}
+
+.commenter a {
+  text-decoration: inherit;
+}
