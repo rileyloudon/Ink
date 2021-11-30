@@ -10,12 +10,18 @@ import {
 import {
   getFirestore,
   doc,
+  // addDoc,
   setDoc,
   getDoc,
+  getDocs,
   updateDoc,
   arrayUnion,
   arrayRemove,
   Timestamp,
+  collection,
+  // where,
+  // query,
+  // orderBy,
 } from 'firebase/firestore';
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -72,7 +78,6 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
     username,
     photoURL: `https://source.boringavatars.com/beam/150/${username}?colors=2D1B33,F36A71,EE887A,E4E391,9ABC8A`,
     fullName,
-    posts: [],
     followers: [],
     following: [],
     bio: '',
@@ -116,24 +121,29 @@ export const fetchUserData = async (username) => {
   const docRef = doc(db, 'users', username);
   const docSnap = await getDoc(docRef);
 
+  const collectionRef = collection(db, 'users', username, 'posts');
+  const postsSnap = await getDocs(collectionRef);
+
   if (docSnap.exists()) {
-    return docSnap.data();
+    const posts = [];
+    postsSnap.forEach((post) => posts.push(post.data()));
+    return { header: docSnap.data(), posts };
   }
   return 'User not found';
 };
 
-// export const toggleFollowUser = async (userToFollow) => {
+// export const toggleFollowUser = async (userToInteract) => {
 //   const auth = getAuth();
 
 //   const me = doc(db, 'users', auth.currentUser.displayName);
-//   const otherUser = doc(db, 'users', userToFollow);
+//   const otherUser = doc(db, 'users', userToInteract);
 
-//   const docSnap = await getDoc(doc(db, 'users', userToFollow));
+//   const docSnap = await getDoc(doc(db, 'users', userToInteract));
 
 //   if (!docSnap.data().followers.includes(auth.currentUser.displayName)) {
 //     // Follow User
 //     await updateDoc(me, {
-//       following: arrayUnion(userToFollow),
+//       following: arrayUnion(userToInteract),
 //     });
 
 //     await updateDoc(otherUser, {
@@ -142,7 +152,7 @@ export const fetchUserData = async (username) => {
 //   } else {
 //     // Unfollow User
 //     await updateDoc(me, {
-//       following: arrayRemove(userToFollow),
+//       following: arrayRemove(userToInteract),
 //     });
 
 //     await updateDoc(otherUser, {
@@ -173,10 +183,10 @@ export const followUser = async (userToFollow) => {
 export const unfollowUser = async (userToUnfollow) => {
   const auth = getAuth();
 
-  const me = doc(db, 'users', auth.currentUser.displayName);
+  const currentUser = doc(db, 'users', auth.currentUser.displayName);
   const otherUser = doc(db, 'users', userToUnfollow);
 
-  await updateDoc(me, {
+  await updateDoc(currentUser, {
     following: arrayRemove(userToUnfollow),
   });
 
@@ -188,7 +198,7 @@ export const unfollowUser = async (userToUnfollow) => {
   return docSnap.data();
 };
 
-export const savePost = async (image, caption, disableComments) => {
+export const saveNewPost = async (image, caption, disableComments) => {
   try {
     const storage = getStorage();
     const storageRef = ref(
@@ -200,17 +210,19 @@ export const savePost = async (image, caption, disableComments) => {
 
     const publicImageUrl = await getDownloadURL(storageRef);
 
-    const docRef = doc(db, 'users', getAuth().currentUser.displayName);
-    return await updateDoc(docRef, {
-      posts: arrayUnion({
-        imageUrl: publicImageUrl,
-        caption,
-        disableComments,
-        likes: [],
-        comments: [],
-        storageUrl: upload.metadata.fullPath,
-        timestamp: Timestamp.now(),
-      }),
+    const docRef = doc(
+      collection(db, 'users', getAuth().currentUser.displayName, 'posts')
+    );
+
+    return await setDoc(docRef, {
+      imageUrl: publicImageUrl,
+      caption,
+      disableComments,
+      likes: [],
+      comments: [],
+      storageUrl: upload.metadata.fullPath,
+      id: docRef.id,
+      timestamp: Timestamp.now(),
     });
   } catch (err) {
     return `There was an error uploading this post, ${err}`;
@@ -218,64 +230,65 @@ export const savePost = async (image, caption, disableComments) => {
 };
 
 export const fetchIndividualPost = async (location) => {
-  // location will be /USERNAME/POST_NUMBER
+  // location will be /USERNAME/postID
+  // [1] = post owners username
+  // [2] = post id
   const locationArray = location.split('/');
-  const postNumber = parseInt(locationArray[2], 10);
 
   const auth = getAuth();
 
-  const docRef = doc(db, 'users', locationArray[1]);
-  const docSnap = await getDoc(docRef);
+  const userRef = doc(db, 'users', locationArray[1]);
+  const userSnap = await getDoc(userRef);
 
-  if (docSnap.exists()) {
-    const allPosts = docSnap.data().posts.reverse();
-    if (
-      postNumber >= allPosts.length ||
-      postNumber < 0 ||
-      !Number.isInteger(postNumber)
-    )
-      return 'Post not found';
+  const postRef = doc(db, 'users', locationArray[1], 'posts', locationArray[2]);
+  const postSnap = await getDoc(postRef);
 
-    return {
-      username: docSnap.data().username,
-      photoURL: docSnap.data().photoURL,
-      post: allPosts[locationArray[2]],
-      likeCount: allPosts[locationArray[2]].likes.length,
-      userLikes: allPosts[postNumber].likes.includes(
-        auth.currentUser.displayName
-      ),
-    };
+  if (userSnap.exists()) {
+    if (postSnap.exists()) {
+      return {
+        username: userSnap.data().username,
+        photoURL: userSnap.data().photoURL,
+        post: postSnap.data(),
+        likeCount: postSnap.data().likes.length,
+        userLikes: postSnap.data().likes.includes(auth.currentUser.displayName),
+      };
+    }
+
+    return 'Post not found';
   }
   return 'User not found';
 };
 
 export const toggleLikePost = async (location) => {
+  // location will be /USERNAME/postID
+  // [1] = post owners username
+  // [2] = post id
   const locationArray = location.split('/');
-  const postNumber = parseInt(locationArray[2], 10);
 
   const auth = getAuth();
 
-  const docRef = doc(db, 'users', locationArray[1]);
+  const userRef = doc(db, 'users', locationArray[1]);
+  const userSnap = await getDoc(userRef);
 
-  const docSnap = await getDoc(docRef);
+  const postRef = doc(db, 'users', locationArray[1], 'posts', locationArray[2]);
+  const postSnap = await getDoc(postRef);
 
-  if (docSnap.exists()) {
-    const allPosts = docSnap.data().posts.reverse();
-    if (!allPosts[postNumber].likes.includes(auth.currentUser.displayName)) {
-      allPosts[postNumber].likes.push(auth.currentUser.displayName);
+  if (userSnap.exists() && postSnap.exists()) {
+    const post = postSnap.data();
+
+    if (!post.likes.includes(auth.currentUser.displayName)) {
+      post.likes.push(auth.currentUser.displayName);
     } else {
-      allPosts[postNumber].likes = allPosts[postNumber].likes.filter(
+      post.likes = post.likes.filter(
         (user) => user !== auth.currentUser.displayName
       );
     }
 
-    await updateDoc(docRef, {
-      posts: allPosts.reverse(),
+    await updateDoc(postRef, {
+      likes: post.likes,
     });
 
-    return allPosts
-      .reverse()
-      [postNumber].likes.includes(auth.currentUser.displayName);
+    return post.likes.includes(auth.currentUser.displayName);
   }
 
   return 'Error';
@@ -284,25 +297,26 @@ export const toggleLikePost = async (location) => {
 export const addComment = async (post, comment) => {
   const postOwner = post.storageUrl.split('/')[0];
   const auth = getAuth();
-  const docRef = doc(db, 'users', postOwner);
+  const postRef = doc(db, 'users', postOwner, 'posts', post.id);
+  const postSnap = await getDoc(postRef);
 
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    const postIndex = docSnap
-      .data()
-      .posts.findIndex((testPost) => testPost.imageUrl === post.imageUrl);
-    const allPosts = docSnap.data().posts;
-    allPosts[postIndex].comments.push({
+  if (postSnap.exists()) {
+    const postData = postSnap.data();
+
+    postData.comments.push({
       comment,
       by: auth.currentUser.displayName,
+      timestamp: Timestamp.now(),
+      likes: [],
+      replies: [],
       key: uuidv4(),
     });
 
-    await updateDoc(docRef, {
-      posts: allPosts,
+    await updateDoc(postRef, {
+      comments: postData.comments,
     });
 
-    return allPosts[postIndex].comments;
+    return postData.comments;
   }
 
   return 'Error';
