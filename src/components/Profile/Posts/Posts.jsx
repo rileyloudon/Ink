@@ -10,13 +10,13 @@ const Posts = ({ profile }) => {
   const [displayedPosts, setDisplayedPosts] = useState();
   const [hiddenPosts, setHiddenPosts] = useState();
 
-  const renderPost = (post, i) => {
+  const renderPost = (post) => {
     return (
       <Link
         className='post'
         key={post.imageUrl}
         to={{
-          pathname: `/${profile.username}/${i}`,
+          pathname: `/${profile.header.username}/${post.id}`,
           state: { background: location },
         }}
       >
@@ -67,16 +67,16 @@ const Posts = ({ profile }) => {
 
   return (
     <div className='posts'>
-      {displayedPosts
-        ? displayedPosts.map((post, i) => renderPost(post, i))
-        : null}
+      {displayedPosts ? displayedPosts.map((post) => renderPost(post)) : null}
     </div>
   );
 };
 
 Posts.propTypes = {
   profile: PropTypes.shape({
-    username: PropTypes.string,
+    header: PropTypes.shape({
+      username: PropTypes.string,
+    }),
     posts: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
 };
