@@ -6,11 +6,11 @@ const Header = ({ profile, updateProfile }) => {
   return (
     <header className='profile-header'>
       <div className='left'>
-        <img className='picture' src={profile.photoURL} alt='' />
+        <img className='picture' src={profile.header.photoURL} alt='' />
       </div>
       <section className='right'>
         <div className='top'>
-          <h3 className='username'>{profile.username}</h3>
+          <h3 className='username'>{profile.header.username}</h3>
           <Button profile={profile} updateProfile={updateProfile} />
         </div>
         <ul className='stats'>
@@ -22,20 +22,20 @@ const Header = ({ profile, updateProfile }) => {
           </li>
           <li>
             <span>
-              <span>{profile.followers.length}</span> follower
-              {profile.followers.length === 1 ? '' : 's'}
+              <span>{profile.header.followers.length}</span> follower
+              {profile.header.followers.length === 1 ? '' : 's'}
             </span>
           </li>
           <li>
             <span>
-              <span>{profile.following.length}</span> follow
-              {profile.following.length === 1 ? '' : 'ing'}
+              <span>{profile.header.following.length}</span> follow
+              {profile.header.following.length === 1 ? '' : 'ing'}
             </span>
           </li>
         </ul>
         <div className='info'>
-          <h4>{profile.fullName}</h4>
-          <p>{profile.bio}</p>
+          <h4>{profile.header.fullName}</h4>
+          <p>{profile.header.bio}</p>
         </div>
       </section>
     </header>
@@ -44,13 +44,15 @@ const Header = ({ profile, updateProfile }) => {
 
 Header.propTypes = {
   profile: PropTypes.shape({
-    photoURL: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    posts: PropTypes.arrayOf.isRequired,
-    followers: PropTypes.arrayOf.isRequired,
-    following: PropTypes.arrayOf.isRequired,
-    fullName: PropTypes.string.isRequired,
-    bio: PropTypes.string.isRequired,
+    header: PropTypes.shape({
+      photoURL: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
+      followers: PropTypes.arrayOf(PropTypes.string).isRequired,
+      following: PropTypes.arrayOf(PropTypes.string).isRequired,
+      fullName: PropTypes.string.isRequired,
+      bio: PropTypes.string.isRequired,
+    }),
+    posts: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   updateProfile: PropTypes.func.isRequired,
 };

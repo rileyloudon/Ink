@@ -16,7 +16,11 @@ const Profile = () => {
   useEffect(() => {
     const username = location.pathname.substring(1).split('/');
     fetchUserData(username[0]).then((res) => {
+      // res returns an object:
+      // header -> all the header data
+      // posts -> all the posts
       setProfile(res);
+      console.log(res);
       setLoading(false);
     });
   }, [location.pathname]);

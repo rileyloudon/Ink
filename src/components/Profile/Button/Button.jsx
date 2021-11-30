@@ -9,15 +9,23 @@ const Button = ({ profile, updateProfile }) => {
   const { user } = useContext(UserContext);
   const history = useHistory();
 
-  if (profile.username !== user.displayName) {
-    const userFollowsProfile = profile.followers.includes(user.displayName);
+  // const [working, setWorking] = useState(false);
+
+  if (profile.header.username !== user.displayName) {
+    const userFollowsProfile = profile.header.followers.includes(
+      user.displayName
+    );
 
     return (
       <button
         onClick={() =>
           !userFollowsProfile
-            ? followUser(profile.username).then((res) => updateProfile(res))
-            : unfollowUser(profile.username).then((res) => updateProfile(res))
+            ? followUser(profile.header.username).then((res) =>
+                updateProfile(res)
+              )
+            : unfollowUser(profile.header.username).then((res) =>
+                updateProfile(res)
+              )
         }
         className={!userFollowsProfile ? 'follow' : 'unfollow'}
         type='button'
@@ -40,8 +48,10 @@ const Button = ({ profile, updateProfile }) => {
 
 Button.propTypes = {
   profile: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    followers: PropTypes.arrayOf.isRequired,
+    header: PropTypes.shape({
+      username: PropTypes.string.isRequired,
+      followers: PropTypes.arrayOf(PropTypes.string).isRequired,
+    }),
   }).isRequired,
   updateProfile: PropTypes.func.isRequired,
 };
