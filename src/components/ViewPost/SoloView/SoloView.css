@@ -55,8 +55,7 @@
   background-color: rgb(255, 255, 255);
 }
 
-.solo-view .side-bar .poster,
-.solo-view .side-bar .commenter {
+.solo-view .side-bar .poster {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -64,31 +63,18 @@
   border-bottom: 1px solid rgb(219, 219, 219);
 }
 
-.solo-view .side-bar .commenter {
-  margin: 12px 0;
-  height: max-content;
-  border-bottom: none;
-}
-
-.solo-view .side-bar .commenter p {
-  margin: 0;
-}
-
-.solo-view .side-bar .poster img,
-.solo-view .side-bar .commenter img {
+.solo-view .side-bar .poster img {
   margin-right: 15px;
   width: 28px;
 }
 
-.solo-view .side-bar .poster span,
-.solo-view .side-bar .commenter span {
+.solo-view .side-bar .poster span {
   margin-right: 4px;
   color: rgb(38, 38, 38);
   font-weight: 600;
 }
 
-.solo-view .side-bar .poster a,
-.solo-view .side-bar .commenter a {
+.solo-view .side-bar .poster a {
   text-decoration: inherit;
 }
 
@@ -106,6 +92,7 @@
 }
 
 .solo-view .interact {
+  margin-bottom: 14px;
   padding-left: 16px;
 }
 
