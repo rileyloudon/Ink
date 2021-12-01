@@ -19,9 +19,10 @@ import {
   arrayRemove,
   Timestamp,
   collection,
-  // where,
-  // query,
-  // orderBy,
+  collectionGroup,
+  where,
+  query,
+  orderBy,
 } from 'firebase/firestore';
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -198,8 +199,9 @@ export const unfollowUser = async (userToUnfollow) => {
   return docSnap.data();
 };
 
-export const saveNewPost = async (image, caption, disableComments) => {
+export const uploadNewPost = async (image, caption, disableComments) => {
   try {
+    const auth = getAuth();
     const storage = getStorage();
     const storageRef = ref(
       storage,
@@ -211,10 +213,11 @@ export const saveNewPost = async (image, caption, disableComments) => {
     const publicImageUrl = await getDownloadURL(storageRef);
 
     const docRef = doc(
-      collection(db, 'users', getAuth().currentUser.displayName, 'posts')
+      collection(db, 'users', auth.currentUser.displayName, 'posts')
     );
 
     return await setDoc(docRef, {
+      owner: auth.currentUser.displayName,
       imageUrl: publicImageUrl,
       caption,
       disableComments,
@@ -326,4 +329,23 @@ export const getProfilePicture = async (user) => {
   const docRef = doc(db, 'users', user);
   const docSnap = await getDoc(docRef);
   return docSnap.data().photoURL;
+};
+
+export const getFeed = async () => {
+  const auth = getAuth();
+
+  const userRef = doc(db, 'users', auth.currentUser.displayName);
+  const docSnap = await getDoc(userRef);
+
+  const q = query(
+    collectionGroup(db, 'posts'),
+    where('owner', 'in', docSnap.data().following),
+    orderBy('timestamp', 'asc')
+  );
+
+  const querySnapshot = await getDocs(q);
+
+  const followingUsersPosts = [];
+  querySnapshot.forEach((post) => followingUsersPosts.push(post.data()));
+  return followingUsersPosts;
 };
