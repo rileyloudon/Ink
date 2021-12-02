@@ -1,0 +1,12 @@
+.icons button {
+  background: 0 0;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.icons button img {
+  width: 28px;
+  padding-right: 8px;
+}
