@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useHistory, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { fetchIndividualPost, toggleLikePost } from '../../../firebase';
-import { favorite, comment } from '../../../img';
-import AddComment from '../../AddComment/AddComment';
-import Loading from '../../Loading/Loading';
-import './SoloView.css';
+import { fetchIndividualPost, toggleLikePost } from '../../firebase';
+import Comment from '../Post/Comment/Comment';
+import ButtonBar from '../Post/ButtonBar/ButtonBar';
+import AddComment from '../Post/AddComment/AddComment';
+import Loading from '../Loading/Loading';
+import './SinglePost.css';
 
 const SoloView = ({ modal }) => {
   const modalRef = useRef();
@@ -15,25 +16,8 @@ const SoloView = ({ modal }) => {
   const [postData, setPostData] = useState();
   const [loading, setLoading] = useState(true);
 
-  const renderComments = postData
-    ? postData.post.comments.map((commentObj) => (
-        <>
-          <div className='commenter'>
-            {/* GET USERS PROFILE PICTURE: */}
-            {/* <Link to={`/${commentObj.by}`}>
-              <span>{}</span>
-            </Link> */}
-            <Link to={`/${commentObj.by}`}>
-              <span>{commentObj.by}</span>
-            </Link>
-            <p>{commentObj.comment}</p>
-          </div>
-        </>
-      ))
-    : null;
-
   const likePost = () => {
-    toggleLikePost(location.pathname).then((res) => {
+    toggleLikePost(postData.post).then((res) => {
       // res returns if user liked the post
       if (res === true) {
         setPostData((prevState) => ({
@@ -91,6 +75,7 @@ const SoloView = ({ modal }) => {
   useEffect(() => {
     fetchIndividualPost(location.pathname).then((res) => {
       setPostData(res);
+      console.log(res);
       setLoading(false);
     });
   }, [location.pathname]);
@@ -141,27 +126,17 @@ const SoloView = ({ modal }) => {
                 </Link>
                 <p className='post-caption'>{postData.post.caption}</p>
               </div>
-              {renderComments}
+              {postData.post.comments.map((commentObj) => (
+                <Comment key={commentObj.key} commentObj={commentObj} />
+              ))}
             </section>
             <section className='interact'>
-              <div className='icons'>
-                <button type='button' onClick={likePost}>
-                  <img
-                    src={
-                      postData.userLikes
-                        ? favorite.darkLikedFavorite
-                        : favorite.favoriteNotActive
-                    }
-                    alt=''
-                  />
-                </button>
-                <button
-                  type='button'
-                  onClick={() => document.getElementById('textarea').focus()}
-                >
-                  <img src={comment.darkTextOutline} alt='' />
-                </button>
-              </div>
+              <ButtonBar
+                likeStatus={postData.userLikes}
+                likePost={likePost}
+                disableComments={postData.post.disableComments}
+                postId={postData.post.id}
+              />
               <div className='likes'>
                 <p>{likeCount()}</p>
               </div>
@@ -171,9 +146,11 @@ const SoloView = ({ modal }) => {
                 </time>
               </div>
             </section>
-            <section className='comment-box'>
-              <AddComment post={postData.post} />
-            </section>
+            {!postData.post.disableComments && (
+              <section className='comment-box'>
+                <AddComment post={postData.post} />
+              </section>
+            )}
           </section>
         </div>
       </>
