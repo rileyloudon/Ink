@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { getProfilePicture } from '../../firebase';
+import { fetchProfilePicture } from '../../../firebase';
 import './Comment.css';
 
-const Comment = ({ commentObj }) => {
+const Comment = ({ commentObj, includePicture }) => {
   const [profilePicture, setProfilePicture] = useState();
 
   useEffect(() => {
-    getProfilePicture(commentObj.by).then((res) => setProfilePicture(res));
-  }, [commentObj]);
+    if (includePicture)
+      fetchProfilePicture(commentObj.by).then((res) => setProfilePicture(res));
+  }, [commentObj, includePicture]);
 
   return (
     <div className='commenter'>
-      <Link to={`/${commentObj.by}`}>
-        <img src={profilePicture} alt='' />
-      </Link>
+      {includePicture && (
+        <Link to={`/${commentObj.by}`}>
+          <img src={profilePicture} alt='' />
+        </Link>
+      )}
       <Link to={`/${commentObj.by}`}>
         <span>{commentObj.by}</span>
       </Link>
@@ -24,11 +27,16 @@ const Comment = ({ commentObj }) => {
   );
 };
 
+Comment.defaultProps = {
+  includePicture: true,
+};
+
 Comment.propTypes = {
   commentObj: PropTypes.shape({
     by: PropTypes.string,
     comment: PropTypes.string,
   }).isRequired,
+  includePicture: PropTypes.bool,
 };
 
 export default Comment;

@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Picker } from 'emoji-mart';
-import { emoji } from '../../img';
+import { emoji } from '../../../img';
+import { addComment } from '../../../firebase';
 import './AddComment.css';
 import 'emoji-mart/css/emoji-mart.css';
-import { addComment } from '../../firebase';
 
 const AddComment = ({ post }) => {
   const picker = useRef();
@@ -67,7 +67,7 @@ const AddComment = ({ post }) => {
           <img className='happy-face' src={emoji.darkFace} alt='' />
         </button>
         <textarea
-          id='textarea'
+          id={`${post.id}-textarea`}
           placeholder='Add a comment...'
           value={comment}
           onChange={(e) => setComment(e.target.value)}
@@ -91,7 +91,9 @@ const AddComment = ({ post }) => {
 };
 
 AddComment.propTypes = {
-  post: PropTypes.shape({}).isRequired,
+  post: PropTypes.shape({
+    id: PropTypes.string,
+  }).isRequired,
 };
 
 export default AddComment;
