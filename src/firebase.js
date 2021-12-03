@@ -122,12 +122,15 @@ export const fetchUserData = async (username) => {
   const docRef = doc(db, 'users', username);
   const docSnap = await getDoc(docRef);
 
-  const collectionRef = collection(db, 'users', username, 'posts');
-  const postsSnap = await getDocs(collectionRef);
+  const postsRef = query(
+    collection(db, 'users', username, 'posts'),
+    orderBy('timestamp', 'asc')
+  );
+  const postsSnap = await getDocs(postsRef);
 
   if (docSnap.exists()) {
     const posts = [];
-    postsSnap.forEach((post) => posts.push(post.data()));
+    postsSnap.forEach((post) => posts.unshift(post.data()));
     return { header: docSnap.data(), posts };
   }
   return 'User not found';
@@ -262,76 +265,49 @@ export const fetchIndividualPost = async (location) => {
   return 'User not found';
 };
 
-export const toggleLikePost = async (location) => {
-  // location will be /USERNAME/postID
-  // [1] = post owners username
-  // [2] = post id
-  const locationArray = location.split('/');
-
+export const toggleLikePost = async (post) => {
   const auth = getAuth();
 
-  const userRef = doc(db, 'users', locationArray[1]);
-  const userSnap = await getDoc(userRef);
-
-  const postRef = doc(db, 'users', locationArray[1], 'posts', locationArray[2]);
+  const postRef = doc(db, 'users', post.owner, 'posts', post.id);
   const postSnap = await getDoc(postRef);
 
-  if (userSnap.exists() && postSnap.exists()) {
-    const post = postSnap.data();
-
-    if (!post.likes.includes(auth.currentUser.displayName)) {
-      post.likes.push(auth.currentUser.displayName);
-    } else {
-      post.likes = post.likes.filter(
-        (user) => user !== auth.currentUser.displayName
-      );
-    }
-
+  if (!postSnap.data().likes.includes(auth.currentUser.displayName)) {
     await updateDoc(postRef, {
-      likes: post.likes,
+      likes: arrayUnion(auth.currentUser.displayName),
     });
-
-    return post.likes.includes(auth.currentUser.displayName);
+  } else {
+    await updateDoc(postRef, {
+      likes: arrayRemove(auth.currentUser.displayName),
+    });
   }
 
-  return 'Error';
+  return !postSnap.data().likes.includes(auth.currentUser.displayName);
 };
 
 export const addComment = async (post, comment) => {
   const postOwner = post.storageUrl.split('/')[0];
   const auth = getAuth();
   const postRef = doc(db, 'users', postOwner, 'posts', post.id);
-  const postSnap = await getDoc(postRef);
 
-  if (postSnap.exists()) {
-    const postData = postSnap.data();
-
-    postData.comments.push({
+  await updateDoc(postRef, {
+    comments: arrayUnion({
       comment,
       by: auth.currentUser.displayName,
       timestamp: Timestamp.now(),
       likes: [],
       replies: [],
       key: uuidv4(),
-    });
-
-    await updateDoc(postRef, {
-      comments: postData.comments,
-    });
-
-    return postData.comments;
-  }
-
-  return 'Error';
+    }),
+  });
 };
 
-export const getProfilePicture = async (user) => {
+export const fetchProfilePicture = async (user) => {
   const docRef = doc(db, 'users', user);
   const docSnap = await getDoc(docRef);
   return docSnap.data().photoURL;
 };
 
-export const getFeed = async () => {
+export const fetchFeed = async () => {
   const auth = getAuth();
 
   const userRef = doc(db, 'users', auth.currentUser.displayName);
@@ -346,6 +322,6 @@ export const getFeed = async () => {
   const querySnapshot = await getDocs(q);
 
   const followingUsersPosts = [];
-  querySnapshot.forEach((post) => followingUsersPosts.push(post.data()));
+  querySnapshot.forEach((post) => followingUsersPosts.unshift(post.data()));
   return followingUsersPosts;
 };
