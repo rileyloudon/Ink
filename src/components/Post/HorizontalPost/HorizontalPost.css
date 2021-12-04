@@ -8,7 +8,7 @@
   top: 0;
 }
 
-.solo-view {
+.horizontal-view {
   display: flex;
   flex-direction: row;
   width: 95vw;
@@ -20,7 +20,7 @@
   margin-bottom: 100px;
 }
 
-.solo-view.modal-view {
+.horizontal-view.modal-view {
   margin-top: 0;
   z-index: 99;
   position: fixed;
@@ -31,31 +31,31 @@
   transform: translate(-50%, -50%);
 }
 
-.solo-view .post-image,
-.solo-view .side-bar {
+.horizontal-view .post-image,
+.horizontal-view .side-bar {
   display: flex;
   flex-direction: column;
   margin: 0;
 }
 
-.solo-view .post-image {
-  width: 66%;
+.horizontal-view .post-image {
+  width: 75%;
   background-color: rgb(250, 250, 250);
 }
 
-.solo-view .post-image img {
+.horizontal-view .post-image img {
   max-width: 100%;
   max-height: 100%;
   margin: auto;
 }
 
-.solo-view .side-bar {
+.horizontal-view .side-bar {
   flex-grow: 1;
-  width: auto;
+  width: 25%;
   background-color: rgb(255, 255, 255);
 }
 
-.solo-view .side-bar .poster {
+.horizontal-view .side-bar .poster {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -63,26 +63,26 @@
   border-bottom: 1px solid rgb(219, 219, 219);
 }
 
-.solo-view .side-bar .poster img {
+.horizontal-view .side-bar .poster img {
   margin-right: 15px;
   width: 28px;
 }
 
-.solo-view .side-bar .poster span {
+.horizontal-view .side-bar .poster span {
   margin-right: 4px;
   color: rgb(38, 38, 38);
   font-weight: 600;
 }
 
-.solo-view .side-bar .poster a {
+.horizontal-view .side-bar .poster a {
   text-decoration: inherit;
 }
 
-.solo-view .side-bar .poster a:first-of-type {
+.horizontal-view .side-bar .poster a:first-of-type {
   margin: 0 0 0 16px;
 }
 
-.solo-view .side-bar .comments {
+.horizontal-view .side-bar .comments {
   padding: 0;
   margin: 8px 16px;
   margin-bottom: 4px;
@@ -91,22 +91,12 @@
   flex-grow: 1;
 }
 
-.solo-view .interact {
+.horizontal-view .interact {
   margin-bottom: 14px;
   padding-left: 16px;
 }
 
-.solo-view .interact .likes p {
-  margin: 0;
-  padding: 8px 0;
-}
-
-.solo-view .interact .date time {
-  font-size: 12px;
-  color: rgb(142, 142, 142);
-}
-
-.solo-view .comment-box {
+.horizontal-view .comment-box {
   position: relative;
 }
 

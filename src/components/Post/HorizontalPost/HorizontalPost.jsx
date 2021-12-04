@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useHistory, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { fetchIndividualPost, toggleLikePost } from '../../firebase';
-import Comment from '../Post/Comment/Comment';
-import ButtonBar from '../Post/ButtonBar/ButtonBar';
-import AddComment from '../Post/AddComment/AddComment';
-import Loading from '../Loading/Loading';
-import './SinglePost.css';
+import { fetchIndividualPost, toggleLikePost } from '../../../firebase';
+import Comment from '../Comment/Comment';
+import ButtonBar from '../ButtonBar/ButtonBar';
+import AddComment from '../AddComment/AddComment';
+import Loading from '../../Loading/Loading';
+import Likes from '../Likes/Likes';
+import DatePosted from '../DatePosted/DatePosted';
+import Caption from '../Caption/Caption';
+import './HorizontalPost.css';
 
-const SoloView = ({ modal }) => {
+const HorizontalPost = ({ modal }) => {
   const modalRef = useRef();
   const location = useLocation();
   const history = useHistory();
@@ -35,47 +38,9 @@ const SoloView = ({ modal }) => {
     });
   };
 
-  const likeCount = () => {
-    if (postData.likeCount >= 1)
-      return `${postData.likeCount} like${postData.likeCount === 1 ? '' : 's'}`;
-    return 'Be the first to like this';
-  };
-
-  const postedDate = () => {
-    const postDate = postData.post.timestamp.toDate();
-    const todaysDate = new Date();
-    const difference = Math.round(
-      Math.abs(todaysDate - postDate) / (1000 * 60 * 60 * 24)
-    );
-
-    const monthNames = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-
-    if (difference > 7)
-      return `${
-        monthNames[postDate.getMonth()]
-      } ${postDate.getDate()}, ${postDate.getFullYear()}`;
-    if (difference > 1 && difference <= 7) return `${difference} days ago`;
-    if (difference === 1) return 'Yesterday';
-    return 'Today';
-  };
-
   useEffect(() => {
     fetchIndividualPost(location.pathname).then((res) => {
       setPostData(res);
-      console.log(res);
       setLoading(false);
     });
   }, [location.pathname]);
@@ -102,55 +67,41 @@ const SoloView = ({ modal }) => {
         {modal && <div className='post-backdrop' />}
         <div
           ref={modal ? modalRef : null}
-          className={modal ? 'solo-view modal-view' : 'solo-view'}
+          className={modal ? 'horizontal-view modal-view' : 'horizontal-view'}
         >
           <figure className='post-image' onDoubleClick={likePost}>
             <img src={postData.post.imageUrl} alt='' />
           </figure>
           <section className='side-bar'>
             <section className='poster'>
-              <Link to={`/${postData.username}`}>
+              <Link to={`/${postData.post.owner}`}>
                 <img src={postData.photoURL} alt='' />
               </Link>
-              <Link to={`/${postData.username}`}>
-                <span>{postData.username}</span>
+              <Link to={`/${postData.post.owner}`}>
+                <span>{postData.post.owner}</span>
               </Link>
             </section>
             <section className='comments'>
-              <div className='commenter'>
-                <Link to={`/${postData.username}`}>
-                  <img src={postData.photoURL} alt='' />
-                </Link>
-                <Link to={`/${postData.username}`}>
-                  <span>{postData.username}</span>
-                </Link>
-                <p className='post-caption'>{postData.post.caption}</p>
-              </div>
+              <Caption
+                owner={postData.post.owner}
+                photoURL={postData.photoURL}
+                caption={postData.post.caption}
+              />
               {postData.post.comments.map((commentObj) => (
                 <Comment key={commentObj.key} commentObj={commentObj} />
               ))}
             </section>
             <section className='interact'>
               <ButtonBar
-                likeStatus={postData.userLikes}
+                userLikes={postData.userLikes}
                 likePost={likePost}
                 disableComments={postData.post.disableComments}
                 postId={postData.post.id}
               />
-              <div className='likes'>
-                <p>{likeCount()}</p>
-              </div>
-              <div className='date'>
-                <time dateTime={postData.post.timestamp.toDate()}>
-                  {postedDate()}
-                </time>
-              </div>
+              <Likes likeCount={postData.likeCount} />
+              <DatePosted timestamp={postData.post.timestamp} />
             </section>
-            {!postData.post.disableComments && (
-              <section className='comment-box'>
-                <AddComment post={postData.post} />
-              </section>
-            )}
+            <AddComment post={postData.post} />
           </section>
         </div>
       </>
@@ -160,12 +111,12 @@ const SoloView = ({ modal }) => {
   return loading ? <Loading /> : renderPost();
 };
 
-SoloView.defaultProps = {
+HorizontalPost.defaultProps = {
   modal: false,
 };
 
-SoloView.propTypes = {
+HorizontalPost.propTypes = {
   modal: PropTypes.bool,
 };
 
-export default SoloView;
+export default HorizontalPost;
