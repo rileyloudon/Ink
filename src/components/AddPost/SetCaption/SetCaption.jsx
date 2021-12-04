@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import UserContext from '../../../Context/UserContext';
-import { savePost } from '../../../firebase';
-import './Caption.css';
+import { uploadNewPost } from '../../../firebase';
+import './SetCaption.css';
 
-const Caption = ({ image, updateAddModal }) => {
+const SetCaption = ({ image, updateAddModal }) => {
   const { user } = useContext(UserContext);
 
   const [text, setText] = useState('');
@@ -14,14 +14,14 @@ const Caption = ({ image, updateAddModal }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    savePost(image, text, disableCommenting).then((res) => {
+    uploadNewPost(image, text, disableCommenting).then((res) => {
       if (typeof res === 'string') setError(res);
       else updateAddModal(false);
     });
   };
 
   return (
-    <div className='caption'>
+    <div className='set-caption'>
       <figure className='image'>
         <img src={image.url} alt='' />
       </figure>
@@ -57,7 +57,7 @@ const Caption = ({ image, updateAddModal }) => {
   );
 };
 
-Caption.propTypes = {
+SetCaption.propTypes = {
   image: PropTypes.shape({
     url: PropTypes.string.isRequired,
     properties: PropTypes.shape({
@@ -67,4 +67,4 @@ Caption.propTypes = {
   updateAddModal: PropTypes.func.isRequired,
 };
 
-export default Caption;
+export default SetCaption;

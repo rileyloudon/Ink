@@ -1,8 +1,8 @@
-.caption-bar {
+.set-caption-bar {
   height: 52px;
 }
 
-.caption {
+.set-caption {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -20,34 +20,34 @@
   height: 100%;
 }
 
-.caption .image {
+.set-caption .image {
   border-bottom-left-radius: 12px;
   width: 100%;
   background-color: rgb(250, 250, 250);
 }
 
-.caption .image img {
+.set-caption .image img {
   max-height: 100%;
   max-width: calc(100% - 32px);
   margin: auto;
 }
 
-.caption .form {
+.set-caption .form {
   padding: 0 16px;
 }
 
-.caption .form .poster {
+.set-caption .form .poster {
   display: flex;
   flex-direction: row;
 }
 
-.caption .form .poster img {
+.set-caption .form .poster img {
   width: 28px;
   padding-right: 5px;
   margin: 0;
 }
 
-.caption .form textarea {
+.set-caption .form textarea {
   border: none;
   resize: none;
   overflow: auto;
@@ -60,11 +60,11 @@
     sans-serif;
 }
 
-.caption .form textarea:focus {
+.set-caption .form textarea:focus {
   outline: none;
 }
 
-.caption .form label {
+.set-caption .form label {
   display: flex;
   align-items: center;
   position: relative;
@@ -72,7 +72,7 @@
   margin: 16px 0;
 }
 
-.caption .form label input {
+.set-caption .form label input {
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
@@ -84,11 +84,11 @@
   margin-bottom: auto;
 }
 
-.caption .form label input:checked {
+.set-caption .form label input:checked {
   background: rgb(0, 149, 246);
 }
 
-.caption .form button {
+.set-caption .form button {
   font-size: 14px;
   padding: 0 24px;
   color: rgb(255, 255, 255);
