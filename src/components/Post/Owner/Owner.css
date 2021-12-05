@@ -1,0 +1,22 @@
+.owner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid rgb(219, 219, 219);
+  padding: 14px 4px 14px 16px;
+}
+
+.owner img {
+  margin-right: 15px;
+  width: 28px;
+}
+
+.owner span {
+  margin-right: 4px;
+  color: rgb(38, 38, 38);
+  font-weight: 600;
+}
+
+.owner a {
+  text-decoration: inherit;
+}
