@@ -20,7 +20,12 @@ const Posts = ({ profile }) => {
           state: { background: location },
         }}
       >
-        <img className='post-image' src={post.imageUrl} alt='' />
+        <img
+          loading='eager'
+          className='post-image'
+          src={post.imageUrl}
+          alt=''
+        />
         <div className='view-post'>
           <div className='post-stats'>
             <span>
@@ -42,10 +47,8 @@ const Posts = ({ profile }) => {
   };
 
   useEffect(() => {
-    setDisplayedPosts([...profile.posts].reverse().slice(0, 9));
-    setHiddenPosts(
-      [...profile.posts].reverse().slice(9, [...profile.posts].length + 1)
-    );
+    setDisplayedPosts([...profile.posts].slice(0, 9));
+    setHiddenPosts([...profile.posts].slice(9, [...profile.posts].length + 1));
   }, [profile]);
 
   useEffect(() => {
