@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchUserData } from '../../firebase';
 import Loading from '../Loading/Loading';
 import Bar from './Bar/Bar';
@@ -8,26 +8,22 @@ import Posts from './Posts/Posts';
 import './Profile.css';
 
 const Profile = () => {
-  const location = useLocation();
+  const { username } = useParams();
 
   const [profile, setProfile] = useState();
   const [loading, setLoading] = useState(true);
 
+  const updateProfile = (newProfile) => setProfile(newProfile);
+
   useEffect(() => {
-    const username = location.pathname.substring(1).split('/');
-    fetchUserData(username[0]).then((res) => {
+    fetchUserData(username).then((res) => {
       // res returns an object:
-      // header -> all the header data
-      // posts -> all the posts
+      // header: all data for the header
+      // posts: all the users posts
       setProfile(res);
-      console.log(res);
       setLoading(false);
     });
-  }, [location.pathname]);
-
-  const updateProfile = (newProfile) => {
-    setProfile(newProfile);
-  };
+  }, [username]);
 
   const renderProflie = () => {
     return profile === 'User not found' ? (
