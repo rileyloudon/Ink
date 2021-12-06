@@ -15,10 +15,13 @@ const VerticalPost = ({ post }) => {
   const { user } = useContext(UserContext);
 
   const [profilePicture, setProfilePicture] = useState();
+  const [postComments, setPostComments] = useState(post.comments);
   const [likeStatus, setLikeStatus] = useState({
     likeCount: post.likes.length,
     userLikes: post.likes.includes(user.displayName),
   });
+
+  const updateCommentsArray = (comments) => setPostComments(comments);
 
   const likePost = () => {
     toggleLikePost(post).then((res) => {
@@ -45,7 +48,7 @@ const VerticalPost = ({ post }) => {
     <div className='vertical-view'>
       <Owner owner={post.owner} profilePicture={profilePicture} />
       <figure className='post-image' onDoubleClick={likePost}>
-        <img loading='eager' src={post.imageUrl} alt='' />
+        <img src={post.imageUrl} alt='' />
       </figure>
       <section className='bottom-bar'>
         <section className='interact'>
@@ -59,7 +62,7 @@ const VerticalPost = ({ post }) => {
         </section>
         <section className='comments'>
           <Caption owner={post.owner} caption={post.caption} />
-          {post.comments.map((commentObj) => (
+          {postComments.map((commentObj) => (
             <Comment
               key={commentObj.key}
               commentObj={commentObj}
@@ -68,7 +71,7 @@ const VerticalPost = ({ post }) => {
           ))}
           <DatePosted marginBottom={16} timestamp={post.timestamp} />
         </section>
-        <AddComment post={post} />
+        <AddComment updateCommentsArray={updateCommentsArray} post={post} />
       </section>
     </div>
   );

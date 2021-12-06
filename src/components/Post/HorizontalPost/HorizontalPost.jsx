@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation, useHistory, Link } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { fetchIndividualPost, toggleLikePost } from '../../../firebase';
 import Comment from '../Comment/Comment';
@@ -9,15 +9,27 @@ import Loading from '../../Loading/Loading';
 import Likes from '../Likes/Likes';
 import DatePosted from '../DatePosted/DatePosted';
 import Caption from '../Caption/Caption';
+import Owner from '../Owner/Owner';
 import './HorizontalPost.css';
 
 const HorizontalPost = ({ modal }) => {
   const modalRef = useRef();
-  const location = useLocation();
+
+  const { username, postId } = useParams();
   const history = useHistory();
 
   const [postData, setPostData] = useState();
   const [loading, setLoading] = useState(true);
+
+  const updateCommentsArray = (comments) => {
+    setPostData((prevState) => ({
+      ...prevState,
+      post: {
+        ...prevState.post,
+        comments,
+      },
+    }));
+  };
 
   const likePost = () => {
     toggleLikePost(postData.post).then((res) => {
@@ -39,11 +51,11 @@ const HorizontalPost = ({ modal }) => {
   };
 
   useEffect(() => {
-    fetchIndividualPost(location.pathname).then((res) => {
+    fetchIndividualPost(username, postId).then((res) => {
       setPostData(res);
       setLoading(false);
     });
-  }, [location.pathname]);
+  }, [username, postId]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -73,14 +85,10 @@ const HorizontalPost = ({ modal }) => {
             <img src={postData.post.imageUrl} alt='' />
           </figure>
           <section className='side-bar'>
-            <section className='poster'>
-              <Link to={`/${postData.post.owner}`}>
-                <img src={postData.photoURL} alt='' />
-              </Link>
-              <Link to={`/${postData.post.owner}`}>
-                <span>{postData.post.owner}</span>
-              </Link>
-            </section>
+            <Owner
+              owner={postData.post.owner}
+              profilePicture={postData.photoURL}
+            />
             <section className='comments'>
               <Caption
                 owner={postData.post.owner}
@@ -101,7 +109,10 @@ const HorizontalPost = ({ modal }) => {
               <Likes likeCount={postData.likeCount} />
               <DatePosted timestamp={postData.post.timestamp} />
             </section>
-            <AddComment post={postData.post} />
+            <AddComment
+              updateCommentsArray={updateCommentsArray}
+              post={postData.post}
+            />
           </section>
         </div>
       </>
