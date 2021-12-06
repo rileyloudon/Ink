@@ -16,9 +16,13 @@ const Owner = ({ owner, profilePicture }) => {
   );
 };
 
+Owner.defaultProps = {
+  profilePicture: null,
+};
+
 Owner.propTypes = {
   owner: PropTypes.string.isRequired,
-  profilePicture: PropTypes.string.isRequired,
+  profilePicture: PropTypes.string,
 };
 
 export default Owner;
