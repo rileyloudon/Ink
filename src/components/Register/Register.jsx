@@ -7,7 +7,8 @@ import astronaut from '../../img/misc/astronaut.svg';
 import './Register.css';
 
 const Register = ({ updateLoading, signInGuest }) => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+
   const history = useHistory();
 
   const [email, setEmail] = useState('');
@@ -26,6 +27,12 @@ const Register = ({ updateLoading, signInGuest }) => {
     updateLoading(true);
     registerUser(email, password, username, fullName).then((res) => {
       if (typeof res === 'string') setRegisterError(res);
+      else
+        setUser((prevState) => ({
+          ...prevState,
+          displayName: res.displayName,
+          photoURL: res.photoURL,
+        }));
       updateLoading(false);
     });
   };
@@ -65,12 +72,15 @@ const Register = ({ updateLoading, signInGuest }) => {
             aria-required='true'
             // name='username' is so password managers save and use email
             name='username'
+            autoComplete='username email'
+            inputMode='email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
             type='text'
+            spellCheck='off'
             maxLength='16'
             placeholder='Username'
             aria-label='Username'
@@ -81,6 +91,7 @@ const Register = ({ updateLoading, signInGuest }) => {
           />
           <input
             type='text'
+            spellCheck='off'
             placeholder='Full Name'
             aria-label='Full Name'
             aria-required='true'
@@ -89,6 +100,7 @@ const Register = ({ updateLoading, signInGuest }) => {
             required
           />
           <input
+            autoComplete='new-password'
             type='password'
             placeholder='Password'
             aria-label='Password'
@@ -103,9 +115,7 @@ const Register = ({ updateLoading, signInGuest }) => {
             type='button'
             disabled={!isFormValid}
             onClick={() => {
-              if (isFormValid) {
-                handleRegister(email, password, username, fullName);
-              }
+              if (isFormValid) handleRegister();
             }}
           >
             Sign Up
