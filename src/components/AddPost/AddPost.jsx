@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import DropImage from './DropImage/DropImage';
-import Caption from './Caption/Caption';
+import SetCaption from './SetCaption/SetCaption';
 import './AddPost.css';
 
 const AddPost = ({ updateAddModal }) => {
@@ -42,7 +42,7 @@ const AddPost = ({ updateAddModal }) => {
         {!image.properties ? (
           <DropImage updateImage={updateImage} />
         ) : (
-          <Caption image={image} updateAddModal={updateAddModal} />
+          <SetCaption image={image} updateAddModal={updateAddModal} />
         )}
       </div>
     </div>
