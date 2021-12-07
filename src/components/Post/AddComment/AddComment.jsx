@@ -6,7 +6,7 @@ import { addComment } from '../../../firebase';
 import './AddComment.css';
 import 'emoji-mart/css/emoji-mart.css';
 
-const AddComment = ({ post }) => {
+const AddComment = ({ updateCommentsArray, post }) => {
   const picker = useRef();
   const [comment, setComment] = useState('');
   const [displayEmojiPicker, setDisplayEmojiPicker] = useState(false);
@@ -14,8 +14,10 @@ const AddComment = ({ post }) => {
   const handleSubmit = (e) => {
     if (comment.trim().length >= 1) {
       e.preventDefault();
-      addComment(post, comment);
-      setComment('');
+      addComment(post, comment).then((res) => {
+        setComment('');
+        updateCommentsArray(res);
+      });
     }
   };
 
@@ -38,8 +40,8 @@ const AddComment = ({ post }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  return (
-    <>
+  return post.disableComments ? null : (
+    <section className='comment-box'>
       {displayEmojiPicker && (
         <div ref={picker}>
           <Picker
@@ -66,7 +68,8 @@ const AddComment = ({ post }) => {
         >
           <img className='happy-face' src={emoji.darkFace} alt='' />
         </button>
-        <textarea
+        <input
+          autoComplete='off'
           id={`${post.id}-textarea`}
           placeholder='Add a comment...'
           value={comment}
@@ -86,13 +89,15 @@ const AddComment = ({ post }) => {
           Post
         </button>
       </form>
-    </>
+    </section>
   );
 };
 
 AddComment.propTypes = {
+  updateCommentsArray: PropTypes.func.isRequired,
   post: PropTypes.shape({
     id: PropTypes.string,
+    disableComments: PropTypes.bool,
   }).isRequired,
 };
 
