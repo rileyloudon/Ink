@@ -1,0 +1,26 @@
+.caption {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 0 4px 0;
+}
+
+.caption img {
+  margin-right: 15px;
+  width: 28px;
+}
+
+.caption .post-owner {
+  margin-right: 4px;
+  color: rgb(38, 38, 38);
+  font-weight: 600;
+}
+
+.caption a {
+  text-decoration: inherit;
+}
+
+.caption .post-caption {
+  word-break: break-all;
+  word-wrap: break-word;
+}
