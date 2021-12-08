@@ -19,10 +19,12 @@ const Comment = ({ commentObj, includePicture }) => {
           <img src={profilePicture} alt='' />
         </Link>
       )}
-      <Link to={`/${commentObj.by}`}>
-        <span>{commentObj.by}</span>
-      </Link>
-      <p>{commentObj.comment}</p>
+      <div>
+        <Link to={`/${commentObj.by}`}>
+          <span className='by'>{commentObj.by}</span>
+        </Link>
+        <span className='comment'>{commentObj.comment}</span>
+      </div>
     </div>
   );
 };

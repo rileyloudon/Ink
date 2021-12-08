@@ -8,9 +8,11 @@
   /* height: 18px; */
 }
 
-.commenter p {
+.commenter .comment {
   margin: 0;
   line-height: 18px;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 
 .commenter img {
@@ -19,7 +21,7 @@
   height: 28px;
 }
 
-.commenter span {
+.commenter .by {
   margin-right: 4px;
   color: rgb(38, 38, 38);
   font-weight: 600;
