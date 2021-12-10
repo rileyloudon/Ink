@@ -7,7 +7,8 @@ import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
 import Chat from './components/Chat';
 import AddPost from './components/AddPost/AddPost';
-import SoloView from './components/ViewPost/SoloView/SoloView';
+import HorizontalPost from './components/Post/HorizontalPost/HorizontalPost';
+import LikedFeed from './components/LikedFeed/LikedFeed';
 import UserContext from './Context/UserContext';
 import './App.css';
 
@@ -22,9 +23,14 @@ function App() {
 
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const auth = getAuth();
+  const updateLoading = (value) => setLoading(value);
+  const updateAddModal = (value) => setShowAddModal(value);
+  const signInGuest = () => {
+    // Sign In Guest -> account named @Guest
+  };
 
   useEffect(() => {
+    const auth = getAuth();
     const unsub = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
@@ -38,19 +44,7 @@ function App() {
 
       return () => unsub;
     });
-  }, [auth]);
-
-  const updateLoading = (value) => {
-    setLoading(value);
-  };
-
-  const updateAddModal = (value) => {
-    setShowAddModal(value);
-  };
-
-  const signInGuest = () => {
-    // Sign In Guest Here -> account named @Guest
-  };
+  }, []);
 
   return (
     <div className='App'>
@@ -60,9 +54,16 @@ function App() {
         )}
         {showAddModal && <AddPost updateAddModal={updateAddModal} />}
         <Switch location={background || location}>
-          <Route exact path='/:username/:id'>
+          <Route path='/:username/liked'>
             {user || localStorage.getItem('userWillSignIn') ? (
-              <SoloView />
+              <LikedFeed />
+            ) : (
+              <Redirect to='/' />
+            )}
+          </Route>
+          <Route exact path='/:username/:postId'>
+            {user || localStorage.getItem('userWillSignIn') ? (
+              <HorizontalPost />
             ) : (
               <Redirect to='/' />
             )}
@@ -109,8 +110,8 @@ function App() {
           </Switch>
         </Switch>
         {background && (
-          <Route path='/:username/:id'>
-            <SoloView modal />
+          <Route path='/:username/:postId'>
+            <HorizontalPost modal />
           </Route>
         )}
       </UserContext.Provider>
