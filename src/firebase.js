@@ -23,6 +23,10 @@ import {
   where,
   query,
   orderBy,
+  // startAt,
+  startAfter,
+  limit,
+  increment,
 } from 'firebase/firestore';
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -36,11 +40,13 @@ const firebaseConfig = {
   appId: '1:420414494355:web:08c7a26f275859976b9f66',
 };
 
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const db = getFirestore();
+console.log(app);
 
 export const registerUser = async (email, password, tempUsername, fullName) => {
   const username = tempUsername.toLowerCase();
+  const usersProfilePicture = `https://source.boringavatars.com/beam/150/${username}?colors=FFABAB,FFDAAB,DDFFAB,ABE4FF,D9ABFF`;
   const docRef = doc(db, 'users', username);
   const docSnap = await getDoc(docRef);
 
@@ -51,11 +57,7 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
   // Need to fix: user gets signed in right after being created,
   // doesn't get their profile picture in time for header render
 
-  const credential = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  ).catch((err) => {
+  await createUserWithEmailAndPassword(auth, email, password).catch((err) => {
     switch (err.code) {
       case 'auth/email-already-in-use':
         return `A user with that email already exists.`;
@@ -70,25 +72,24 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
 
   await updateProfile(auth.currentUser, {
     displayName: username,
-    photoURL: `https://source.boringavatars.com/beam/150/${username}?colors=2D1B33,F36A71,EE887A,E4E391,9ABC8A`,
+    photoURL: usersProfilePicture,
   }).catch((err) => {
     return `Error updating profile, ${err}`;
   });
 
   await setDoc(doc(db, 'users', username), {
     username,
-    photoURL: `https://source.boringavatars.com/beam/150/${username}?colors=2D1B33,F36A71,EE887A,E4E391,9ABC8A`,
+    photoURL: usersProfilePicture,
     fullName,
     followers: [],
     following: [],
     bio: '',
+    postCount: 0,
   }).catch((err) => {
     return `Error updating profile, ${err}`;
   });
 
-  await auth.currentUser.reload();
-
-  return credential;
+  return { displayName: username, photoURL: usersProfilePicture };
 };
 
 export const signInUser = async (email, password) => {
@@ -124,16 +125,32 @@ export const fetchUserData = async (username) => {
 
   const postsRef = query(
     collection(db, 'users', username, 'posts'),
-    orderBy('timestamp', 'asc')
+    orderBy('timestamp', 'desc'),
+    limit(12)
   );
+
   const postsSnap = await getDocs(postsRef);
 
   if (docSnap.exists()) {
     const posts = [];
-    postsSnap.forEach((post) => posts.unshift(post.data()));
-    return { header: docSnap.data(), posts };
+    postsSnap.forEach((post) => posts.push(post.data()));
+    return { header: docSnap.data(), initialPosts: posts };
   }
   return 'User not found';
+};
+
+export const fetchNextProfilePosts = async (username, start) => {
+  const postsRef = query(
+    collection(db, 'users', username, 'posts'),
+    orderBy('timestamp', 'desc'),
+    startAfter(start),
+    limit(6)
+  );
+
+  const postsSnap = await getDocs(postsRef);
+  const posts = [];
+  postsSnap.forEach((post) => posts.push(post.data()));
+  return posts;
 };
 
 // export const toggleFollowUser = async (userToInteract) => {
@@ -153,16 +170,18 @@ export const fetchUserData = async (username) => {
 //     await updateDoc(otherUser, {
 //       followers: arrayUnion(auth.currentUser.displayName),
 //     });
-//   } else {
-//     // Unfollow User
-//     await updateDoc(me, {
-//       following: arrayRemove(userToInteract),
-//     });
 
-//     await updateDoc(otherUser, {
-//       followers: arrayRemove(auth.currentUser.displayName),
-//     });
+//     return 'p';
 //   }
+//   // Unfollow User
+//   await updateDoc(me, {
+//     following: arrayRemove(userToInteract),
+//   });
+
+//   await updateDoc(otherUser, {
+//     followers: arrayRemove(auth.currentUser.displayName),
+//   });
+
 //   return docSnap.data();
 // };
 
@@ -208,7 +227,7 @@ export const uploadNewPost = async (image, caption, disableComments) => {
     const storage = getStorage();
     const storageRef = ref(
       storage,
-      `${getAuth().currentUser.displayName}/${image.properties.name}`
+      `${auth.currentUser.displayName}/${image.properties.name}`
     );
 
     const upload = await uploadBytes(storageRef, image.properties);
@@ -219,11 +238,16 @@ export const uploadNewPost = async (image, caption, disableComments) => {
       collection(db, 'users', auth.currentUser.displayName, 'posts')
     );
 
+    await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
+      postCount: increment(1),
+    });
+
     return await setDoc(docRef, {
       owner: auth.currentUser.displayName,
       imageUrl: publicImageUrl,
       caption,
       disableComments,
+      hideComments: false,
       likes: [],
       comments: [],
       storageUrl: upload.metadata.fullPath,
@@ -235,24 +259,18 @@ export const uploadNewPost = async (image, caption, disableComments) => {
   }
 };
 
-export const fetchIndividualPost = async (location) => {
-  // location will be /USERNAME/postID
-  // [1] = post owners username
-  // [2] = post id
-  const locationArray = location.split('/');
-
+export const fetchIndividualPost = async (username, postId) => {
   const auth = getAuth();
 
-  const userRef = doc(db, 'users', locationArray[1]);
+  const userRef = doc(db, 'users', username);
   const userSnap = await getDoc(userRef);
 
-  const postRef = doc(db, 'users', locationArray[1], 'posts', locationArray[2]);
+  const postRef = doc(db, 'users', username, 'posts', postId);
   const postSnap = await getDoc(postRef);
 
   if (userSnap.exists()) {
     if (postSnap.exists()) {
       return {
-        username: userSnap.data().username,
         photoURL: userSnap.data().photoURL,
         post: postSnap.data(),
         likeCount: postSnap.data().likes.length,
@@ -299,6 +317,9 @@ export const addComment = async (post, comment) => {
       key: uuidv4(),
     }),
   });
+
+  const docSnap = await getDoc(doc(db, 'users', postOwner, 'posts', post.id));
+  return docSnap.data().comments;
 };
 
 export const fetchProfilePicture = async (user) => {
@@ -309,19 +330,39 @@ export const fetchProfilePicture = async (user) => {
 
 export const fetchFeed = async () => {
   const auth = getAuth();
-
   const userRef = doc(db, 'users', auth.currentUser.displayName);
   const docSnap = await getDoc(userRef);
 
-  const q = query(
-    collectionGroup(db, 'posts'),
-    where('owner', 'in', docSnap.data().following),
-    orderBy('timestamp', 'asc')
-  );
+  if (docSnap.data().following.length > 0) {
+    const q = query(
+      collectionGroup(db, 'posts'),
+      where('owner', 'in', docSnap.data().following),
+      orderBy('timestamp', 'desc')
+    );
 
-  const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(q);
 
-  const followingUsersPosts = [];
-  querySnapshot.forEach((post) => followingUsersPosts.unshift(post.data()));
-  return followingUsersPosts;
+    const followingUsersPosts = [];
+    querySnapshot.forEach((post) => followingUsersPosts.push(post.data()));
+    return followingUsersPosts;
+  }
+  return [];
+};
+
+export const fetchLikedPosts = async (username) => {
+  try {
+    const q = query(
+      collectionGroup(db, 'posts'),
+      where('likes', 'array-contains', username),
+      orderBy('timestamp', 'desc')
+    );
+
+    const querySnapshot = await getDocs(q);
+    const likedPosts = [];
+    querySnapshot.forEach((post) => likedPosts.push(post.data()));
+    return likedPosts;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
 };
