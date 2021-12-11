@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { fetchNextProfilePosts } from '../../../firebase';
 import { comment, favorite } from '../../../img/index';
 import './Posts.css';
 
-const Posts = ({ profile }) => {
+const Posts = ({ username, initialPosts }) => {
   const location = useLocation();
 
   const [displayedPosts, setDisplayedPosts] = useState();
-  const [hiddenPosts, setHiddenPosts] = useState();
+  const [nextPosts, setNextPosts] = useState();
 
   const renderPost = (post) => {
     return (
@@ -16,16 +17,11 @@ const Posts = ({ profile }) => {
         className='post'
         key={post.imageUrl}
         to={{
-          pathname: `/${profile.header.username}/${post.id}`,
+          pathname: `/${username}/${post.id}`,
           state: { background: location },
         }}
       >
-        <img
-          loading='eager'
-          className='post-image'
-          src={post.imageUrl}
-          alt=''
-        />
+        <img className='post-image' src={post.imageUrl} alt='' />
         <div className='view-post'>
           <div className='post-stats'>
             <span>
@@ -47,26 +43,27 @@ const Posts = ({ profile }) => {
   };
 
   useEffect(() => {
-    setDisplayedPosts([...profile.posts].slice(0, 9));
-    setHiddenPosts([...profile.posts].slice(9, [...profile.posts].length + 1));
-  }, [profile]);
+    setDisplayedPosts(initialPosts.slice(0, 6));
+    setNextPosts(initialPosts.slice(6));
+  }, [initialPosts]);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const loadMorePosts = () => {
       if (
-        window.innerHeight + document.documentElement.scrollTop !==
+        window.innerHeight + document.documentElement.scrollTop ===
         document.documentElement.offsetHeight
-      )
-        return;
-      const addPosts = hiddenPosts.slice(0, 6);
-      setDisplayedPosts((oldArray) => [...oldArray, ...addPosts]);
-      setHiddenPosts((oldArray) =>
-        oldArray.slice(6, [...profile.posts].length + 1)
-      );
+      ) {
+        setDisplayedPosts((oldArray) => [...oldArray, ...nextPosts]);
+        fetchNextProfilePosts(
+          username,
+          nextPosts[nextPosts.length - 1].timestamp
+        ).then((res) => setNextPosts(res));
+      }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [hiddenPosts, displayedPosts, profile]);
+    if (nextPosts && nextPosts[nextPosts.length - 1])
+      window.addEventListener('scroll', loadMorePosts);
+    return () => window.removeEventListener('scroll', loadMorePosts);
+  }, [nextPosts, username, displayedPosts]);
 
   return (
     <div className='posts'>
@@ -75,13 +72,13 @@ const Posts = ({ profile }) => {
   );
 };
 
+Posts.defaultProps = {
+  initialPosts: [],
+};
+
 Posts.propTypes = {
-  profile: PropTypes.shape({
-    header: PropTypes.shape({
-      username: PropTypes.string,
-    }),
-    posts: PropTypes.arrayOf(PropTypes.shape({})),
-  }).isRequired,
+  username: PropTypes.string.isRequired,
+  initialPosts: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export default Posts;

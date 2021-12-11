@@ -13,13 +13,18 @@ const Profile = () => {
   const [profile, setProfile] = useState();
   const [loading, setLoading] = useState(true);
 
-  const updateProfile = (newProfile) => setProfile(newProfile);
+  const updateHeader = (newHeader) => {
+    setProfile((oldProfile) => ({
+      ...oldProfile,
+      header: newHeader,
+    }));
+  };
 
   useEffect(() => {
     fetchUserData(username).then((res) => {
       // res returns an object:
       // header: all data for the header
-      // posts: all the users posts
+      // initialPosts: first 12 posts, fetch more on scroll
       setProfile(res);
       setLoading(false);
     });
@@ -33,9 +38,12 @@ const Profile = () => {
       </div>
     ) : (
       <div className='profile'>
-        <Header profile={profile} updateProfile={updateProfile} />
+        <Header profile={profile} updateHeader={updateHeader} />
         <Bar />
-        <Posts profile={profile} />
+        <Posts
+          username={profile.header.username}
+          initialPosts={profile.initialPosts}
+        />
       </div>
     );
   };
