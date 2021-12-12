@@ -37,7 +37,15 @@ const DropDown = ({ closeDropDown }) => {
         >
           Profile
         </button>
-        <button type='button'>Liked</button>
+        <button
+          type='button'
+          onClick={() => {
+            closeDropDown();
+            history.push(`/${user.displayName}/liked`);
+          }}
+        >
+          Liked
+        </button>
         <button
           type='button'
           onClick={() => {
