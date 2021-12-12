@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import Button from '../Button/Button';
 import './Header.css';
 
-const Header = ({ profile, updateProfile }) => {
+const Header = ({ profile, updateHeader }) => {
   return (
     <header className='profile-header'>
       <div className='left'>
@@ -11,13 +11,13 @@ const Header = ({ profile, updateProfile }) => {
       <section className='right'>
         <div className='top'>
           <h3 className='username'>{profile.header.username}</h3>
-          <Button profile={profile} updateProfile={updateProfile} />
+          <Button profile={profile} updateHeader={updateHeader} />
         </div>
         <ul className='stats'>
           <li>
             <span>
-              <span>{profile.posts.length}</span> post
-              {profile.posts.length === 1 ? '' : 's'}
+              <span>{profile.header.postCount}</span> post
+              {profile.header.postCount === 1 ? '' : 's'}
             </span>
           </li>
           <li>
@@ -51,10 +51,10 @@ Header.propTypes = {
       following: PropTypes.arrayOf(PropTypes.string).isRequired,
       fullName: PropTypes.string.isRequired,
       bio: PropTypes.string.isRequired,
+      postCount: PropTypes.number,
     }),
-    posts: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
-  updateProfile: PropTypes.func.isRequired,
+  updateHeader: PropTypes.func.isRequired,
 };
 
 export default Header;

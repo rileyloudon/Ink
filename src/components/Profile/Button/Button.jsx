@@ -5,7 +5,7 @@ import { followUser, unfollowUser } from '../../../firebase';
 import UserContext from '../../../Context/UserContext';
 import './Button.css';
 
-const Button = ({ profile, updateProfile }) => {
+const Button = ({ profile, updateHeader }) => {
   const { user } = useContext(UserContext);
   const history = useHistory();
 
@@ -21,10 +21,10 @@ const Button = ({ profile, updateProfile }) => {
         onClick={() =>
           !userFollowsProfile
             ? followUser(profile.header.username).then((res) =>
-                updateProfile(res)
+                updateHeader(res)
               )
             : unfollowUser(profile.header.username).then((res) =>
-                updateProfile(res)
+                updateHeader(res)
               )
         }
         className={!userFollowsProfile ? 'follow' : 'unfollow'}
@@ -53,7 +53,7 @@ Button.propTypes = {
       followers: PropTypes.arrayOf(PropTypes.string).isRequired,
     }),
   }).isRequired,
-  updateProfile: PropTypes.func.isRequired,
+  updateHeader: PropTypes.func.isRequired,
 };
 
 export default Button;
