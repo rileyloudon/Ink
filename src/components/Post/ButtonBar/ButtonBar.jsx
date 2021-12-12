@@ -2,15 +2,13 @@ import PropTypes from 'prop-types';
 import { favorite, comment } from '../../../img';
 import './ButtonBar.css';
 
-const ButtonBar = ({ likeStatus, likePost, disableComments, postId }) => {
+const ButtonBar = ({ userLikes, likePost, disableComments, postId }) => {
   return (
     <div className='icons'>
       <button type='button' onClick={likePost}>
         <img
           src={
-            likeStatus.userLikes
-              ? favorite.darkLikedFavorite
-              : favorite.favoriteNotActive
+            userLikes ? favorite.darkLikedFavorite : favorite.favoriteNotActive
           }
           alt=''
         />
@@ -28,7 +26,7 @@ const ButtonBar = ({ likeStatus, likePost, disableComments, postId }) => {
 };
 
 ButtonBar.propTypes = {
-  likeStatus: PropTypes.bool.isRequired,
+  userLikes: PropTypes.bool.isRequired,
   disableComments: PropTypes.bool.isRequired,
   likePost: PropTypes.func.isRequired,
   postId: PropTypes.string.isRequired,
