@@ -10,7 +10,6 @@ import {
 import {
   getFirestore,
   doc,
-  // addDoc,
   setDoc,
   getDoc,
   getDocs,
@@ -23,7 +22,6 @@ import {
   where,
   query,
   orderBy,
-  // startAt,
   startAfter,
   limit,
   increment,
@@ -40,9 +38,8 @@ const firebaseConfig = {
   appId: '1:420414494355:web:08c7a26f275859976b9f66',
 };
 
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 const db = getFirestore();
-console.log(app);
 
 export const registerUser = async (email, password, tempUsername, fullName) => {
   const username = tempUsername.toLowerCase();
@@ -126,7 +123,7 @@ export const fetchUserData = async (username) => {
   const postsRef = query(
     collection(db, 'users', username, 'posts'),
     orderBy('timestamp', 'desc'),
-    limit(12)
+    limit(2)
   );
 
   const postsSnap = await getDocs(postsRef);
@@ -144,7 +141,7 @@ export const fetchNextProfilePosts = async (username, start) => {
     collection(db, 'users', username, 'posts'),
     orderBy('timestamp', 'desc'),
     startAfter(start),
-    limit(6)
+    limit(1)
   );
 
   const postsSnap = await getDocs(postsRef);
@@ -337,7 +334,8 @@ export const fetchFeed = async () => {
     const q = query(
       collectionGroup(db, 'posts'),
       where('owner', 'in', docSnap.data().following),
-      orderBy('timestamp', 'desc')
+      orderBy('timestamp', 'desc'),
+      limit(2)
     );
 
     const querySnapshot = await getDocs(q);
@@ -349,12 +347,14 @@ export const fetchFeed = async () => {
   return [];
 };
 
-export const fetchLikedPosts = async (username) => {
+export const fetchLikedPosts = async () => {
+  const auth = getAuth();
   try {
     const q = query(
       collectionGroup(db, 'posts'),
-      where('likes', 'array-contains', username),
-      orderBy('timestamp', 'desc')
+      where('likes', 'array-contains', auth.currentUser.displayName),
+      orderBy('timestamp', 'desc'),
+      limit(2)
     );
 
     const querySnapshot = await getDocs(q);
@@ -363,6 +363,36 @@ export const fetchLikedPosts = async (username) => {
     return likedPosts;
   } catch (err) {
     console.log(err);
+    return [];
+  }
+};
+
+export const fetchNextFeedPosts = async (type, start) => {
+  const auth = getAuth();
+  let docSnap;
+
+  if (type === 'main') {
+    const userRef = doc(db, 'users', auth.currentUser.displayName);
+    docSnap = await getDoc(userRef);
+  }
+
+  try {
+    const q = query(
+      collectionGroup(db, 'posts'),
+      type === 'main'
+        ? where('owner', 'in', docSnap.data().following)
+        : where('likes', 'array-contains', auth.currentUser.displayName),
+      orderBy('timestamp', 'desc'),
+      startAfter(start),
+      limit(1)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const likedPosts = [];
+    querySnapshot.forEach((post) => likedPosts.push(post.data()));
+    return likedPosts;
+  } catch (e) {
+    console.log(e);
     return [];
   }
 };
