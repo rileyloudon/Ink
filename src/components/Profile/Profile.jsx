@@ -21,13 +21,20 @@ const Profile = () => {
   };
 
   useEffect(() => {
+    let isSubscribed = true;
     fetchUserData(username).then((res) => {
       // res returns an object:
       // header: all data for the header
       // initialPosts: first 12 posts, fetch more on scroll
-      setProfile(res);
-      setLoading(false);
+      if (isSubscribed) {
+        setProfile(res);
+        setLoading(false);
+      }
     });
+
+    return () => {
+      isSubscribed = false;
+    };
   }, [username]);
 
   const renderProflie = () => {
