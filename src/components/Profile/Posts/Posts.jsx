@@ -10,6 +10,7 @@ const Posts = ({ username, initialPosts }) => {
 
   const [displayedPosts, setDisplayedPosts] = useState();
   const [nextPosts, setNextPosts] = useState();
+  const [fetchInProgress, setFetchInProgress] = useState(false);
 
   const renderPost = (post) => {
     return (
@@ -43,27 +44,41 @@ const Posts = ({ username, initialPosts }) => {
   };
 
   useEffect(() => {
-    setDisplayedPosts(initialPosts.slice(0, 6));
-    setNextPosts(initialPosts.slice(6));
+    setDisplayedPosts(initialPosts.slice(0, 1));
+    setNextPosts(initialPosts.slice(1));
   }, [initialPosts]);
 
   useEffect(() => {
-    const loadMorePosts = () => {
+    let isSubscribed = true;
+
+    const loadMorePosts = async () => {
       if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
+        Math.ceil(window.innerHeight + window.scrollY) >=
+          document.documentElement.scrollHeight - 100 &&
+        nextPosts[nextPosts.length - 1] &&
+        !fetchInProgress &&
+        isSubscribed
       ) {
-        setDisplayedPosts((oldArray) => [...oldArray, ...nextPosts]);
-        fetchNextProfilePosts(
+        const posts = await fetchNextProfilePosts(
           username,
           nextPosts[nextPosts.length - 1].timestamp
-        ).then((res) => setNextPosts(res));
+        );
+        if (isSubscribed) {
+          setFetchInProgress(true);
+          setDisplayedPosts([...displayedPosts, ...nextPosts]);
+          setNextPosts(posts);
+          setFetchInProgress(false);
+        }
       }
     };
-    if (nextPosts && nextPosts[nextPosts.length - 1])
-      window.addEventListener('scroll', loadMorePosts);
-    return () => window.removeEventListener('scroll', loadMorePosts);
-  }, [nextPosts, username, displayedPosts]);
+
+    window.addEventListener('scroll', loadMorePosts);
+
+    return () => {
+      isSubscribed = false;
+      window.removeEventListener('scroll', loadMorePosts);
+    };
+  }, [nextPosts, username, fetchInProgress, displayedPosts]);
 
   return (
     <div className='posts'>
