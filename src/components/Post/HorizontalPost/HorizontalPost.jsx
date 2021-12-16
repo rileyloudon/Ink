@@ -51,10 +51,16 @@ const HorizontalPost = ({ modal }) => {
   };
 
   useEffect(() => {
+    let isSubscribed = true;
     fetchIndividualPost(username, postId).then((res) => {
-      setPostData(res);
-      setLoading(false);
+      if (isSubscribed) {
+        setPostData(res);
+        setLoading(false);
+      }
     });
+    return () => {
+      isSubscribed = false;
+    };
   }, [username, postId]);
 
   useEffect(() => {

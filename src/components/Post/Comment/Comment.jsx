@@ -8,8 +8,15 @@ const Comment = ({ commentObj, includePicture }) => {
   const [profilePicture, setProfilePicture] = useState();
 
   useEffect(() => {
-    if (includePicture)
-      fetchProfilePicture(commentObj.by).then((res) => setProfilePicture(res));
+    let isSubscribed = true;
+    if (includePicture) {
+      fetchProfilePicture(commentObj.by).then((res) => {
+        if (isSubscribed) setProfilePicture(res);
+      });
+    }
+    return () => {
+      isSubscribed = false;
+    };
   }, [commentObj, includePicture]);
 
   return (

@@ -41,7 +41,13 @@ const VerticalPost = ({ post }) => {
   };
 
   useEffect(() => {
-    fetchProfilePicture(post.owner).then((res) => setProfilePicture(res));
+    let isSubscribed = true;
+    fetchProfilePicture(post.owner).then((res) => {
+      if (isSubscribed) setProfilePicture(res);
+    });
+    return () => {
+      isSubscribed = false;
+    };
   }, [post.owner]);
 
   return (
