@@ -44,8 +44,8 @@ const Posts = ({ username, initialPosts }) => {
   };
 
   useEffect(() => {
-    setDisplayedPosts(initialPosts.slice(0, 1));
-    setNextPosts(initialPosts.slice(1));
+    setDisplayedPosts(initialPosts.slice(0, 6));
+    setNextPosts(initialPosts.slice(6));
   }, [initialPosts]);
 
   useEffect(() => {
@@ -55,6 +55,7 @@ const Posts = ({ username, initialPosts }) => {
       if (
         Math.ceil(window.innerHeight + window.scrollY) >=
           document.documentElement.scrollHeight - 100 &&
+        nextPosts &&
         nextPosts[nextPosts.length - 1] &&
         !fetchInProgress &&
         isSubscribed
