@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import UserContext from '../../Context/UserContext';
-import { fetchLikedPosts } from '../../firebase';
+import { fetchLikedPosts, fetchNextFeedPosts } from '../../firebase';
 import Loading from '../Loading/Loading';
 import VerticalPost from '../Post/VerticalPost/VerticalPost';
 import './LikedFeed.css';
@@ -11,7 +11,9 @@ const LikedFeed = () => {
 
   const { username } = useParams();
 
-  const [likedPosts, setLikedPosts] = useState();
+  const [displayedPosts, setDisplayedPosts] = useState();
+  const [nextPosts, setNextPosts] = useState();
+  const [fetchInProgress, setFetchInProgress] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,7 +23,8 @@ const LikedFeed = () => {
 
     fetchLikedPosts().then((res) => {
       if (isSubscribed) {
-        setLikedPosts(res);
+        setDisplayedPosts(res.slice(0, 10));
+        setNextPosts(res.slice(10));
         setLoading(false);
       }
     });
@@ -30,6 +33,36 @@ const LikedFeed = () => {
       isSubscribed = false;
     };
   }, []);
+
+  useEffect(() => {
+    let isSubscribed = true;
+    const loadMorePosts = async () => {
+      if (
+        Math.ceil(window.innerHeight + window.scrollY) >=
+          document.documentElement.scrollHeight - 250 &&
+        nextPosts &&
+        nextPosts[nextPosts.length - 1] &&
+        !fetchInProgress &&
+        isSubscribed
+      ) {
+        const posts = await fetchNextFeedPosts(
+          'liked',
+          nextPosts[nextPosts.length - 1].timestamp
+        );
+        if (isSubscribed) {
+          setFetchInProgress(true);
+          setDisplayedPosts((oldArray) => [...oldArray, ...nextPosts]);
+          setNextPosts(posts);
+          setFetchInProgress(false);
+        }
+      }
+    };
+    window.addEventListener('scroll', loadMorePosts);
+    return () => {
+      isSubscribed = false;
+      window.removeEventListener('scroll', loadMorePosts);
+    };
+  }, [nextPosts, displayedPosts, fetchInProgress]);
 
   const posts = () => {
     if (user.displayName !== username) {
@@ -45,13 +78,15 @@ const LikedFeed = () => {
 
     return (
       <>
-        {likedPosts.length === 0 ? (
+        {displayedPosts.length === 0 ? (
           <div className='no-liked-posts'>
-            <h3>No posts to show 🙁</h3>
+            <h3>No posts to show</h3>
             <p>Try liking a post to see it here</p>
           </div>
         ) : (
-          likedPosts.map((post) => <VerticalPost key={post.id} post={post} />)
+          displayedPosts.map((post) => (
+            <VerticalPost key={post.id} post={post} />
+          ))
         )}
       </>
     );
