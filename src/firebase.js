@@ -123,7 +123,7 @@ export const fetchUserData = async (username) => {
   const postsRef = query(
     collection(db, 'users', username, 'posts'),
     orderBy('timestamp', 'desc'),
-    limit(2)
+    limit(12)
   );
 
   const postsSnap = await getDocs(postsRef);
@@ -141,7 +141,7 @@ export const fetchNextProfilePosts = async (username, start) => {
     collection(db, 'users', username, 'posts'),
     orderBy('timestamp', 'desc'),
     startAfter(start),
-    limit(1)
+    limit(6)
   );
 
   const postsSnap = await getDocs(postsRef);
@@ -335,7 +335,7 @@ export const fetchFeed = async () => {
       collectionGroup(db, 'posts'),
       where('owner', 'in', docSnap.data().following),
       orderBy('timestamp', 'desc'),
-      limit(2)
+      limit(20)
     );
 
     const querySnapshot = await getDocs(q);
@@ -354,7 +354,7 @@ export const fetchLikedPosts = async () => {
       collectionGroup(db, 'posts'),
       where('likes', 'array-contains', auth.currentUser.displayName),
       orderBy('timestamp', 'desc'),
-      limit(2)
+      limit(20)
     );
 
     const querySnapshot = await getDocs(q);
@@ -384,7 +384,7 @@ export const fetchNextFeedPosts = async (type, start) => {
         : where('likes', 'array-contains', auth.currentUser.displayName),
       orderBy('timestamp', 'desc'),
       startAfter(start),
-      limit(1)
+      limit(10)
     );
 
     const querySnapshot = await getDocs(q);
