@@ -51,9 +51,6 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
 
   const auth = getAuth();
 
-  // Need to fix: user gets signed in right after being created,
-  // doesn't get their profile picture in time for header render
-
   await createUserWithEmailAndPassword(auth, email, password).catch((err) => {
     switch (err.code) {
       case 'auth/email-already-in-use':
@@ -117,6 +114,13 @@ export const signOutUser = async () => {
 };
 
 export const fetchUserData = async (username) => {
+  const docRef = doc(db, 'users', username);
+  const docSnap = await getDoc(docRef);
+
+  return docSnap.data();
+};
+
+export const fetchUserProfileData = async (username) => {
   const docRef = doc(db, 'users', username);
   const docSnap = await getDoc(docRef);
 
