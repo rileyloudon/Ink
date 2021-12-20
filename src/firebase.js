@@ -113,6 +113,28 @@ export const signOutUser = async () => {
   await signOut(auth).catch((err) => `Error signing out, ${err}`);
 };
 
+export const updateUserSettings = async (changed, name, bio) => {
+  const auth = getAuth();
+  const docRef = doc(db, 'users', auth.currentUser.displayName);
+
+  try {
+    if (changed.name) {
+      await updateDoc(docRef, {
+        fullName: name,
+      });
+    }
+
+    if (changed.bio) {
+      await updateDoc(docRef, {
+        bio,
+      });
+    }
+    return true;
+  } catch (err) {
+    return err;
+  }
+};
+
 export const fetchUserData = async (username) => {
   const docRef = doc(db, 'users', username);
   const docSnap = await getDoc(docRef);
