@@ -47,12 +47,16 @@ const Settings = () => {
 
   useEffect(() => {
     let isSubscribed = true;
+
     if (user)
       fetchUserData(user.displayName).then((res) => {
         if (isSubscribed) {
-          setUserData(res);
           setName(res.fullName);
           setBio(res.bio);
+          setUserData(res);
+
+          const textarea = document.getElementById('change-bio');
+          textarea.style.height = `${textarea.scrollHeight}px`;
         }
       });
     return () => {
@@ -63,16 +67,17 @@ const Settings = () => {
   return userData ? (
     <>
       <div className='profile-settings'>
-        <h3>Profile Settings</h3>
         <section>
-          {/* Click img to open change picture modal */}
           <img src={userData.photoURL} alt='' />
+          {/* Click img to open change picture modal */}
           <span>{userData.username}</span>
         </section>
-        <button type='button'>Change profile picture</button>
+        <button className='change-profile-picture' type='button'>
+          Change Profile Picture
+        </button>
         <form>
           <label htmlFor='change-name'>
-            Name
+            <p>Name</p>
             <input
               type='text'
               id='change-name'
@@ -82,29 +87,30 @@ const Settings = () => {
             />
           </label>
           <label htmlFor='change-bio'>
-            Bio
+            <p>Bio</p>
             <textarea
               name='bio'
               id='change-bio'
-              cols='30'
-              rows='10'
               value={bio}
-              onChange={(e) => setBio(e.target.value)}
+              onChange={(e) => {
+                e.target.style.height = 'inherit';
+                e.target.style.height = `${e.target.scrollHeight}px`;
+                setBio(e.target.value);
+              }}
             />
           </label>
         </form>
+        {error && <p>{error}</p>}
+        <button
+          className='save'
+          type='button'
+          disabled={!changedData}
+          onClick={saveSettings}
+        >
+          Save
+        </button>
+        <button type='button'>Delete Account</button>
       </div>
-      {error && <p>{error}</p>}
-      <button
-        type='button'
-        disabled={!changedData}
-        onClick={() => {
-          if (changedData) saveSettings();
-        }}
-      >
-        Save
-      </button>
-      <button type='button'>Delete Account</button>
     </>
   ) : null;
 };
