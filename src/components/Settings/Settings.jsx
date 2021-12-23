@@ -1,4 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 import UserContext from '../../Context/UserContext';
 import { fetchUserData, updateUserSettings } from '../../firebase';
 import './Settings.css';
@@ -14,33 +16,59 @@ const Settings = () => {
 
   // change password (?)
   // private account (?)
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const [userData, setUserData] = useState();
+
+  const [newProfilePicture, setNewProfilePicture] = useState('');
 
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
   const [error, setError] = useState();
 
   const changedData = userData
-    ? userData.fullName !== name || userData.bio !== bio
+    ? newProfilePicture || userData.fullName !== name || userData.bio !== bio
     : null;
+
+  const onDropAccepted = useCallback((acceptedFiles) => {
+    setNewProfilePicture({
+      properties: acceptedFiles[0],
+      url: URL.createObjectURL(acceptedFiles[0]),
+    });
+  }, []);
+
+  const { getRootProps, getInputProps, open } = useDropzone({
+    multiple: false,
+    accept: 'image/jpeg, image/png',
+    noClick: true,
+    noKeyboard: true,
+    noDrag: true,
+    onDropAccepted,
+  });
 
   const saveSettings = () => {
     const changed = {
+      profilePicture: newProfilePicture !== '',
       name: userData.fullName !== name,
       bio: userData.bio !== bio,
     };
 
-    updateUserSettings(changed, name, bio).then((res) => {
-      if (res === true) {
+    updateUserSettings(changed, newProfilePicture, name, bio).then((res) => {
+      if (res.updated === true) {
+        if (res.publicImageUrl) {
+          setUser((prevData) => ({
+            ...prevData,
+            photoURL: res.publicImageUrl,
+          }));
+          setNewProfilePicture('');
+        }
         setUserData((prevData) => ({
           ...prevData,
           fullName: name,
           bio,
         }));
       } else {
-        setError(res);
+        setError(res.err);
       }
     });
   };
@@ -64,17 +92,28 @@ const Settings = () => {
     };
   }, [user]);
 
-  return userData ? (
+  useEffect(() => {
+    return () => URL.revokeObjectURL(newProfilePicture.url);
+  }, [newProfilePicture]);
+
+  return user ? (
     <>
       <div className='profile-settings'>
         <section>
-          <img src={userData.photoURL} alt='' />
+          <img src={newProfilePicture.url || user.photoURL} alt='' />
           {/* Click img to open change picture modal */}
-          <span>{userData.username}</span>
+          <span>{user.displayName}</span>
         </section>
-        <button className='change-profile-picture' type='button'>
-          Change Profile Picture
-        </button>
+        <div {...getRootProps({ className: 'dropzone' })}>
+          <input {...getInputProps()} />
+          <button
+            className='change-profile-picture'
+            type='button'
+            onClick={open}
+          >
+            Change Profile Picture
+          </button>
+        </div>
         <form>
           <label htmlFor='change-name'>
             <p>Name</p>

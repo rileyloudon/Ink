@@ -113,7 +113,7 @@ export const signOutUser = async () => {
   await signOut(auth).catch((err) => `Error signing out, ${err}`);
 };
 
-export const updateUserSettings = async (changed, name, bio) => {
+export const updateUserSettings = async (changed, profilePcture, name, bio) => {
   const auth = getAuth();
   const docRef = doc(db, 'users', auth.currentUser.displayName);
 
@@ -129,9 +129,32 @@ export const updateUserSettings = async (changed, name, bio) => {
         bio,
       });
     }
-    return true;
+
+    if (changed.profilePicture) {
+      const storage = getStorage();
+
+      const storageRef = ref(
+        storage,
+        `${auth.currentUser.displayName}/profilePicture/${profilePcture.properties.name}`
+      );
+
+      await uploadBytes(storageRef, profilePcture.properties);
+
+      const publicImageUrl = await getDownloadURL(storageRef);
+
+      await updateDoc(docRef, {
+        photoURL: publicImageUrl,
+      });
+      await updateProfile(auth.currentUser, {
+        photoURL: publicImageUrl,
+      });
+
+      return { updated: true, publicImageUrl };
+    }
+
+    return { updated: true };
   } catch (err) {
-    return err;
+    return { updated: false, err };
   }
 };
 
