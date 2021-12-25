@@ -2,7 +2,15 @@ import { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import DropDown from './DropDown/DropDown';
-import { home, chat, add, favorite } from '../../img/index';
+import { ReactComponent as HomeOutline } from '../../img/home/home-outline.svg';
+import { ReactComponent as HomeFilled } from '../../img/home/home-filled.svg';
+import { ReactComponent as ChatOutline } from '../../img/chat/chat-outline.svg';
+import { ReactComponent as ChatFilled } from '../../img/chat/chat-filled.svg';
+import { ReactComponent as AddOutline } from '../../img/add/add-outline.svg';
+import { ReactComponent as AddFilled } from '../../img/add/add-filled.svg';
+import { ReactComponent as FavoriteOutline } from '../../img/favorite/favorite-outline.svg';
+import { ReactComponent as FavoriteFilled } from '../../img/favorite/favorite-filled.svg';
+
 import UserContext from '../../Context/UserContext';
 import './header.css';
 
@@ -33,28 +41,22 @@ const Header = ({ updateAddModal, showAddModal }) => {
 
           <div className='nav'>
             <Link to='/'>
-              <img
-                src={
-                  location.pathname === '/' &&
-                  !displayUserDropdown &&
-                  !showAddModal
-                    ? home.homeActive
-                    : home.homeNotActive
-                }
-                alt='Home'
-              />
+              {location.pathname === '/' &&
+              !displayUserDropdown &&
+              !showAddModal ? (
+                <HomeFilled />
+              ) : (
+                <HomeOutline />
+              )}
             </Link>
             <Link to='/chat'>
-              <img
-                src={
-                  location.pathname === '/chat' &&
-                  !displayUserDropdown &&
-                  !showAddModal
-                    ? chat.chatActive
-                    : chat.chatNotActive
-                }
-                alt='Chat'
-              />
+              {location.pathname === '/chat' &&
+              !displayUserDropdown &&
+              !showAddModal ? (
+                <ChatFilled />
+              ) : (
+                <ChatOutline />
+              )}
             </Link>
 
             <button
@@ -62,25 +64,19 @@ const Header = ({ updateAddModal, showAddModal }) => {
               className='add'
               onClick={() => updateAddModal(true)}
             >
-              <img
-                src={
-                  !displayUserDropdown && showAddModal
-                    ? add.addActive
-                    : add.addNotActive
-                }
-                alt='Add'
-              />
+              {!displayUserDropdown && showAddModal ? (
+                <AddFilled />
+              ) : (
+                <AddOutline />
+              )}
             </button>
 
             {/* onClick -> Display follow requests, likes, setActiveTab('favorite') */}
-            <img
-              src={
-                activeTab === 'favorite'
-                  ? favorite.favoriteActive
-                  : favorite.favoriteNotActive
-              }
-              alt='Heart'
-            />
+            {activeTab === 'favorite' ? (
+              <FavoriteFilled />
+            ) : (
+              <FavoriteOutline />
+            )}
 
             <button
               className='profile-border'

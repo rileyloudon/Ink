@@ -86,8 +86,9 @@
   font-size: 14px;
 }
 
-.sign-in .guest-btn img {
+.sign-in .guest-btn svg {
   width: 16px;
+  height: 16px;
   margin-right: 8px;
   position: relative;
   top: 3px;

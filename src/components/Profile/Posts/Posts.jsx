@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { fetchNextProfilePosts } from '../../../firebase';
-import { comment, favorite } from '../../../img/index';
+import { ReactComponent as FavoriteFilled } from '../../../img/favorite/favorite-filled.svg';
+import { ReactComponent as CommentFilled } from '../../../img/comment/comment-filled.svg';
 import './Posts.css';
 
 const Posts = ({ username, initialPosts }) => {
@@ -26,13 +27,13 @@ const Posts = ({ username, initialPosts }) => {
         <div className='view-post'>
           <div className='post-stats'>
             <span>
-              <img src={favorite.lightFavoriteActive} alt='' />
+              <FavoriteFilled />
               {post.likes.length}
             </span>
             <span>
               {post.disableComments ? null : (
                 <span>
-                  <img src={comment.lightTextBubble} alt='' />{' '}
+                  <CommentFilled />
                   {post.comments.length}
                 </span>
               )}

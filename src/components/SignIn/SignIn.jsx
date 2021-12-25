@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { signInUser } from '../../firebase';
-import astronaut from '../../img/misc/astronaut.svg';
+import { ReactComponent as AstronautSvg } from '../../img/misc/astronaut.svg';
 import './SignIn.css';
+import UserContext from '../../Context/UserContext';
 
 const SignIn = ({ updateLoading, signInGuest }) => {
+  const { user } = useContext(UserContext);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [signInError, setSignInError] = useState('');
@@ -15,12 +18,14 @@ const SignIn = ({ updateLoading, signInGuest }) => {
     password.length >= 6;
 
   const handleSignIn = () => {
-    updateLoading(true);
     signInUser(email, password).then((res) => {
       if (typeof res === 'string') setSignInError(res);
-      updateLoading(false);
     });
   };
+
+  useEffect(() => {
+    if (typeof user === 'object') updateLoading(true);
+  }, [user, updateLoading]);
 
   return (
     <div className='sign-in-container'>
@@ -69,7 +74,7 @@ const SignIn = ({ updateLoading, signInGuest }) => {
               type='button'
               onClick={() => signInGuest()}
             >
-              <img src={astronaut} alt='' />
+              <AstronautSvg />
               Log In as Guest
             </button>
           </div>

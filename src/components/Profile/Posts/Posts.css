@@ -50,9 +50,11 @@
   color: rgb(255, 255, 255);
 }
 
-.post .post-stats img {
+.post .post-stats svg {
   width: 26px;
+  height: 26px;
   padding-right: 2px;
+  fill: rgb(255, 255, 255);
 }
 
 .post .post-image {
