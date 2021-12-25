@@ -135,7 +135,7 @@ export const updateUserSettings = async (changed, profilePcture, name, bio) => {
 
       const storageRef = ref(
         storage,
-        `${auth.currentUser.displayName}/profilePicture/${profilePcture.properties.name}`
+        `${auth.currentUser.displayName}/profile-picture`
       );
 
       await uploadBytes(storageRef, profilePcture.properties);
