@@ -1,13 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Picker } from 'emoji-mart';
-import { emoji } from '../../../img';
+import EmojiPicker from '../EmojiPicker/EmojiPicker';
+import { ReactComponent as EmojiSvg } from '../../../img/emoji/emoji-face.svg';
 import { addComment } from '../../../firebase';
 import './AddComment.css';
 import 'emoji-mart/css/emoji-mart.css';
 
 const AddComment = ({ updateCommentsArray, post }) => {
-  const picker = useRef();
   const [comment, setComment] = useState('');
   const [displayEmojiPicker, setDisplayEmojiPicker] = useState(false);
 
@@ -21,39 +20,19 @@ const AddComment = ({ updateCommentsArray, post }) => {
     }
   };
 
+  const updateDisplayEmojiPicker = (value) => setDisplayEmojiPicker(value);
+
   const selectEmoji = (emojiObject) => {
     setComment((currentComment) => currentComment + emojiObject.native);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (
-        picker.current &&
-        !picker.current.contains(e.target) &&
-        e.target.className !== 'happy-face'
-      )
-        setDisplayEmojiPicker(false);
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   return post.disableComments ? null : (
     <section className='comment-box'>
       {displayEmojiPicker && (
-        <div ref={picker}>
-          <Picker
-            ref={picker}
-            showPreview={false}
-            showSkinTones={false}
-            native
-            sheetSize={16}
-            perLine={7}
-            onSelect={selectEmoji}
-          />
-        </div>
+        <EmojiPicker
+          updateDisplayEmojiPicker={updateDisplayEmojiPicker}
+          selectEmoji={selectEmoji}
+        />
       )}
 
       <form className='add-comment' onSubmit={(e) => handleSubmit(e)}>
@@ -66,7 +45,7 @@ const AddComment = ({ updateCommentsArray, post }) => {
               : setDisplayEmojiPicker(true)
           }
         >
-          <img className='happy-face' src={emoji.darkFace} alt='' />
+          <EmojiSvg />
         </button>
         <input
           autoComplete='off'

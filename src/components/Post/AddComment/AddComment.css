@@ -19,8 +19,9 @@
   height: 28px;
 }
 
-.add-comment .emoji-btn img {
+.add-comment .emoji-btn svg {
   height: inherit;
+  width: inherit;
 }
 
 .add-comment input {
@@ -56,17 +57,4 @@
 .add-comment .post-btn:disabled {
   cursor: initial;
   opacity: 0.3;
-}
-
-.emoji-mart {
-  position: absolute;
-  bottom: 59px;
-}
-
-.emoji-mart-bar {
-  display: none;
-}
-
-.emoji-mart-category-label {
-  position: static;
 }
