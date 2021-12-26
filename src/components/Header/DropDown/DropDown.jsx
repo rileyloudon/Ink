@@ -59,8 +59,7 @@ const DropDown = ({ closeDropDown }) => {
           <button
             type='button'
             onClick={() => {
-              history.push('/');
-              signOutUser();
+              signOutUser().then(() => history.push('/'));
             }}
           >
             Log Out

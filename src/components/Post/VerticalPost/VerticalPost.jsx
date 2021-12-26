@@ -16,10 +16,14 @@ const VerticalPost = ({ post }) => {
 
   const [profilePicture, setProfilePicture] = useState();
   const [postComments, setPostComments] = useState(post.comments);
-  const [likeStatus, setLikeStatus] = useState({
-    likeCount: post.likes.length,
-    userLikes: post.likes.includes(user.displayName),
-  });
+  const [likeStatus, setLikeStatus] = useState(
+    user
+      ? {
+          likeCount: post.likes.length,
+          userLikes: post.likes.includes(user.displayName),
+        }
+      : null
+  );
 
   const updateCommentsArray = (comments) => setPostComments(comments);
 

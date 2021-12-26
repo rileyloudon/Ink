@@ -14,7 +14,7 @@ const Feed = () => {
 
   useEffect(() => {
     let isSubscribed = true;
-    if (user.displayName !== null)
+    if (user)
       // fetchFeed returns the first 20 posts, fetch more on scroll
       fetchFeed().then((res) => {
         if (isSubscribed) {
