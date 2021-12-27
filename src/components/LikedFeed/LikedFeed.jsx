@@ -65,7 +65,7 @@ const LikedFeed = () => {
   }, [nextPosts, displayedPosts, fetchInProgress]);
 
   const posts = () => {
-    if (user.displayName !== username) {
+    if (user && user.displayName !== username) {
       return (
         <div className='no-liked-posts'>
           <h3>You can only view your own liked posts</h3>
