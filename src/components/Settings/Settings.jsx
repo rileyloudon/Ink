@@ -21,6 +21,7 @@ const Settings = () => {
   const [userData, setUserData] = useState();
 
   const [newProfilePicture, setNewProfilePicture] = useState('');
+  const [pictureRejected, setPictureRejected] = useState(false);
 
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
@@ -37,13 +38,21 @@ const Settings = () => {
     });
   }, []);
 
+  const onDropRejected = useCallback((rejectedFile) => {
+    if (rejectedFile[0].file.size > 5000000)
+      setPictureRejected('Please select a picture that is less than 5MB');
+    else setPictureRejected('Please select a .jpeg or .png file');
+  }, []);
+
   const { getRootProps, getInputProps, open } = useDropzone({
     multiple: false,
     accept: 'image/jpeg, image/png',
+    maxSize: 5000000, // 5MB
     noClick: true,
     noKeyboard: true,
     noDrag: true,
     onDropAccepted,
+    onDropRejected,
   });
 
   const saveSettings = () => {
@@ -101,7 +110,6 @@ const Settings = () => {
       <div className='profile-settings'>
         <section>
           <img src={newProfilePicture.url || user.photoURL} alt='' />
-          {/* Click img to open change picture modal */}
           <span>{user.displayName}</span>
         </section>
         <div {...getRootProps({ className: 'dropzone' })}>
@@ -113,6 +121,7 @@ const Settings = () => {
           >
             Change Profile Picture
           </button>
+          {pictureRejected && <p className='error'>{pictureRejected}</p>}
         </div>
         <form>
           <label htmlFor='change-name'>
@@ -139,7 +148,7 @@ const Settings = () => {
             />
           </label>
         </form>
-        {error && <p>{error}</p>}
+        {error && <p className='error'>{error}</p>}
         <button
           className='save'
           type='button'
