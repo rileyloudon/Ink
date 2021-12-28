@@ -16,14 +16,14 @@
   flex-direction: column;
   justify-content: center;
   margin: 0;
-  border-left: 1px solid rgb(219, 219, 219);
+  border-left: 1px solid var(--border);
   height: 100%;
 }
 
 .set-caption .image {
   border-bottom-left-radius: 12px;
   width: 100%;
-  background-color: rgb(250, 250, 250);
+  background-color: var(--off-background);
 }
 
 .set-caption .image img {
@@ -54,10 +54,7 @@
   font-size: 16px;
   line-height: 24px;
   margin: 0;
-  color: rgb(38, 38, 38);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  color: var(--text);
 }
 
 .set-caption .form textarea:focus {
@@ -77,7 +74,7 @@
   width: 20px;
   height: 20px;
   border-radius: 15px;
-  border: 1px solid rgb(38, 38, 38);
+  border: 1px solid var(--text);
   position: absolute;
   right: 0;
   margin-top: auto;
@@ -85,15 +82,15 @@
 }
 
 .set-caption .form label input:checked {
-  background: rgb(0, 149, 246);
+  background: var(--button);
 }
 
 .set-caption .form button {
   font-size: 14px;
   padding: 0 24px;
-  color: rgb(255, 255, 255);
-  background-color: rgb(0, 149, 246);
-  border: 1px solid rgb(0, 149, 246);
+  color: var(--background);
+  background-color: var(--button);
+  border: 1px solid var(--button);
   border-radius: 3px;
   line-height: 26px;
   cursor: pointer;

@@ -7,27 +7,27 @@
 
 .top .follow {
   padding: 0 24px;
-  color: rgb(255, 255, 255);
-  background-color: rgb(0, 149, 246);
-  border: 1px solid rgb(0, 149, 246);
+  color: var(--background);
+  background-color: var(--button);
+  border: 1px solid var(--button);
   border-radius: 3px;
   line-height: 26px;
 }
 
 .top .unfollow {
   padding: 0px 16.5px;
-  color: rgb(237, 73, 86);
+  color: var(--error);
   background-color: transparent;
-  border: 1px solid rgb(219, 219, 219);
+  border: 1px solid var(--border);
   border-radius: 3px;
   line-height: 26px;
 }
 
 .top .edit {
   padding: 5px 9px;
-  color: rgb(38, 38, 38);
+  color: var(--text);
   background-color: transparent;
-  border: 1px solid rgb(219, 219, 219);
+  border: 1px solid var(--border);
   border-radius: 4px;
   line-height: 18px;
 }

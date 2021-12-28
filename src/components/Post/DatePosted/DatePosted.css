@@ -1,4 +1,4 @@
 .date time {
   font-size: 12px;
-  color: rgb(142, 142, 142);
+  color: var(--dimmed-text);
 }

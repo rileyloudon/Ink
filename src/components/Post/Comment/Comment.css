@@ -24,7 +24,7 @@
 
 .commenter .by {
   margin-right: 4px;
-  color: rgb(38, 38, 38);
+  color: var(--text);
   font-weight: 600;
 }
 

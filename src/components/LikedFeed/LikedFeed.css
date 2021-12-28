@@ -3,5 +3,5 @@
 }
 
 .own-liked-posts {
-  color: black;
+  color: var(--text);
 }

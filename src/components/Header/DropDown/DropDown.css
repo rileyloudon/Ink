@@ -6,7 +6,7 @@
   position: relative;
   top: 99px;
   left: 13px;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--background);
   border-radius: 6px;
   box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.0975);
   width: 200px;
@@ -24,9 +24,9 @@
 }
 
 .user-drop-down button:hover {
-  background-color: rgb(250, 250, 250);
+  background-color: var(--off-background);
 }
 
 .user-drop-down .sign-out {
-  border-top: 1px solid rgb(219, 219, 219);
+  border-top: 1px solid var(--border);
 }

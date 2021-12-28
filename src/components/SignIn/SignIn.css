@@ -9,10 +9,10 @@
 .sign-in {
   width: 350px;
   height: max-content;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--background);
   margin: 0 0 10px;
   padding: 10px 0;
-  border: 1px solid rgb(219, 219, 219);
+  border: 1px solid var(--border);
   border-radius: 1px;
 }
 
@@ -26,8 +26,8 @@
 .sign-in form input {
   font-size: 14px;
   padding: 9px 0 7px 8px;
-  background-color: rgb(250, 250, 250);
-  border: 1px solid rgb(219, 219, 219);
+  background-color: var(--off-background);
+  border: 1px solid var(--border);
   border-radius: 3px;
   margin: 0 40px 6px;
 }
@@ -36,16 +36,16 @@
   height: 30px;
   margin: 8px 40px;
   border: 1px solid transparent;
-  color: white;
+  color: var(--background);
   font-size: 14px;
   border-radius: 4px;
-  background-color: rgb(0, 149, 246);
+  background-color: var(--button);
   cursor: pointer;
 }
 
 .sign-in .log-in-btn:disabled {
   cursor: initial;
-  background-color: rgba(0, 149, 246, 0.3);
+  background-color: var(--button-disabled);
 }
 
 .sign-in .sign-in-method {
@@ -64,7 +64,7 @@
   font-size: 13px;
   font-weight: 600;
   margin: 0 18px;
-  color: rgb(142, 142, 142);
+  color: var(--dimmed-text);
 }
 
 .sign-in .or-line {
@@ -72,13 +72,13 @@
   top: 0.45em;
   flex-grow: 1;
   height: 1px;
-  background-color: rgb(219, 219, 219);
+  background-color: var(--border);
 }
 
 .sign-in .guest-btn {
   margin: 8px 40px;
   border: 0;
-  color: #385185;
+  color: var(--login-help-text);
   padding: 0;
   background: 0 0;
   cursor: pointer;
@@ -96,7 +96,7 @@
 
 .sign-in .sign-in-error {
   text-align: center;
-  color: rgb(237, 73, 86);
+  color: var(--error);
   margin: 0 40px;
   font-size: 14px;
   padding: 8px 0;
@@ -105,7 +105,7 @@
 .sign-in .reset-password {
   text-align: center;
   display: block;
-  color: rgb(0, 55, 107);
+  color: var(--login-help-text);
   font-size: 12px;
   line-height: 14px;
   margin-top: 12px;
@@ -116,17 +116,17 @@
 .sign-in-container .create-account {
   text-align: center;
   font-size: 14px;
-  color: rgb(38, 38, 38);
+  color: var(--text);
   width: 350px;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--background);
   margin: 0 0 10px;
   padding: 10px 0;
-  border: 1px solid rgb(219, 219, 219);
+  border: 1px solid var(--border);
   border-radius: 1px;
 }
 
 .sign-in-container .create-account a {
-  color: rgb(0, 149, 246);
+  color: var(--button);
   text-decoration: none;
   font-weight: 600;
 }

@@ -53,7 +53,7 @@
 
 .profile-header .right .stats li span {
   font-weight: 600;
-  color: rgb(38, 38, 38);
+  color: var(--text);
 }
 
 .profile-header .right .info h4 {
