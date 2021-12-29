@@ -1,11 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import PropTypes from 'prop-types';
 import UserContext from '../../Context/UserContext';
 import { fetchUserData, updateUserSettings } from '../../firebase';
 import './Settings.css';
 
-const Settings = () => {
+const Settings = ({ theme, updateTheme }) => {
   // change full name
   // change profile picture
   // change bio
@@ -147,6 +148,18 @@ const Settings = () => {
               }}
             />
           </label>
+          <label htmlFor='toggle-theme' className='toggle-theme'>
+            <p>Dark Mode</p>
+            <input
+              type='checkbox'
+              name='toggle-theme'
+              id='toggle-theme'
+              checked={theme === 'dark'}
+              onChange={(e) =>
+                e.target.checked ? updateTheme('dark') : updateTheme('light')
+              }
+            />
+          </label>
         </form>
         {error && <p className='error'>{error}</p>}
         <button
@@ -161,6 +174,11 @@ const Settings = () => {
       </div>
     </>
   ) : null;
+};
+
+Settings.propTypes = {
+  theme: PropTypes.string.isRequired,
+  updateTheme: PropTypes.func.isRequired,
 };
 
 export default Settings;
