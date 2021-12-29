@@ -56,6 +56,16 @@ const Settings = ({ theme, updateTheme }) => {
     onDropRejected,
   });
 
+  const changeTheme = (e) => {
+    if (e.target.checked) {
+      localStorage.setItem('theme', 'dark');
+      updateTheme('dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+      updateTheme('light');
+    }
+  };
+
   const saveSettings = () => {
     const changed = {
       profilePicture: newProfilePicture !== '',
@@ -155,9 +165,7 @@ const Settings = ({ theme, updateTheme }) => {
               name='toggle-theme'
               id='toggle-theme'
               checked={theme === 'dark'}
-              onChange={(e) =>
-                e.target.checked ? updateTheme('dark') : updateTheme('light')
-              }
+              onChange={(e) => changeTheme(e)}
             />
           </label>
         </form>
