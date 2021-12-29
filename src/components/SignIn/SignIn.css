@@ -87,6 +87,7 @@
 }
 
 .sign-in .guest-btn svg {
+  fill: var(--svg);
   width: 16px;
   height: 16px;
   margin-right: 8px;

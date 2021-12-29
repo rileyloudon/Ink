@@ -20,6 +20,7 @@
 }
 
 .add-comment .emoji-btn svg {
+  fill: var(--svg);
   height: inherit;
   width: inherit;
 }

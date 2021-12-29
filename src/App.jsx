@@ -10,11 +10,17 @@ import AddPost from './components/AddPost/AddPost';
 import HorizontalPost from './components/Post/HorizontalPost/HorizontalPost';
 import LikedFeed from './components/LikedFeed/LikedFeed';
 import UserContext from './Context/UserContext';
+import Settings from './components/Settings/Settings';
 import './App.css';
 
 function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
+
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const [theme, setTheme] = useState(
+    JSON.parse(localStorage.getItem('theme')) || prefersDark ? 'dark' : 'light'
+  );
 
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(
@@ -23,8 +29,10 @@ function App() {
 
   const [showAddModal, setShowAddModal] = useState(false);
 
+  const updateTheme = (value) => setTheme(value);
   const updateLoading = (value) => setLoading(value);
   const updateAddModal = (value) => setShowAddModal(value);
+
   const signInGuest = () => {
     // Sign In Guest -> account named @Guest
   };
@@ -46,8 +54,13 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    document.querySelector('html').style.backgroundColor =
+      theme === 'dark' ? 'rgb(44, 44, 44)' : 'rgb(250, 250, 250)';
+  }, [theme]);
+
   return (
-    <div className='App'>
+    <div className='App' data-theme={theme}>
       <UserContext.Provider value={{ user, setUser }}>
         {user && (
           <Header updateAddModal={updateAddModal} showAddModal={showAddModal} />
@@ -68,46 +81,50 @@ function App() {
               <Redirect to='/' />
             )}
           </Route>
-          <Switch>
-            <Route
-              exact
-              path='/'
-              render={() => (
-                <Home
-                  updateLoading={updateLoading}
-                  loading={loading}
-                  signInGuest={signInGuest}
-                />
-              )}
-            />
-            <Route
-              exact
-              path='/register'
-              render={() => (
-                <Register
-                  updateLoading={updateLoading}
-                  signInGuest={signInGuest}
-                />
-              )}
-            />
-            <Route exact path='/settings'>
-              {/* {user ? <Settings /> : <Redirect to='/' />} */}
-            </Route>
-            <Route exact path='/chat'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <Chat />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
-            <Route path='/:username'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <Profile />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
-          </Switch>
+          {/* <Switch> */}
+          <Route
+            exact
+            path='/'
+            render={() => (
+              <Home
+                updateLoading={updateLoading}
+                loading={loading}
+                signInGuest={signInGuest}
+              />
+            )}
+          />
+          <Route
+            exact
+            path='/register'
+            render={() => (
+              <Register
+                updateLoading={updateLoading}
+                signInGuest={signInGuest}
+              />
+            )}
+          />
+          <Route exact path='/settings'>
+            {user || localStorage.getItem('userWillSignIn') ? (
+              <Settings theme={theme} updateTheme={updateTheme} />
+            ) : (
+              <Redirect to='/' />
+            )}
+          </Route>
+          <Route exact path='/chat'>
+            {user || localStorage.getItem('userWillSignIn') ? (
+              <Chat />
+            ) : (
+              <Redirect to='/' />
+            )}
+          </Route>
+          <Route path='/:username'>
+            {user || localStorage.getItem('userWillSignIn') ? (
+              <Profile />
+            ) : (
+              <Redirect to='/' />
+            )}
+          </Route>
+          {/* </Switch> */}
         </Switch>
         {background && (
           <Route path='/:username/:postId'>

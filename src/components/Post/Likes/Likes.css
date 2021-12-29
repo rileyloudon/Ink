@@ -1,4 +1,5 @@
 .likes p {
+  color: var(--text);
   margin: 0;
   padding: 8px 0;
 }

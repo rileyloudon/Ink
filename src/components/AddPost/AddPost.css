@@ -36,10 +36,12 @@
   text-align: center;
   font-weight: 300;
   background-color: var(--background);
+  color: var(--text);
   border-radius: 12px;
 }
 
 .modal .close {
+  color: var(--text);
   position: absolute;
   right: 0;
   cursor: pointer;

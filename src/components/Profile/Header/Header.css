@@ -30,6 +30,7 @@
 }
 
 .profile-header .right .top h3 {
+  color: var(--text);
   display: inline-block;
   font-weight: 300;
   font-size: 28px;
@@ -57,11 +58,13 @@
 }
 
 .profile-header .right .info h4 {
+  color: var(--text);
   margin: 8px 0;
   padding: 0;
 }
 
 .profile-header .right .info p {
+  color: var(--text);
   white-space: pre;
   margin: 0;
 }

@@ -39,10 +39,14 @@
 .set-caption .form .poster {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  color: var(--text);
 }
 
 .set-caption .form .poster img {
   width: 28px;
+  height: 28px;
+  border-radius: 50%;
   padding-right: 5px;
   margin: 0;
 }
@@ -55,6 +59,7 @@
   line-height: 24px;
   margin: 0;
   color: var(--text);
+  background-color: var(--background);
 }
 
 .set-caption .form textarea:focus {
@@ -62,6 +67,7 @@
 }
 
 .set-caption .form label {
+  color: var(--text);
   display: flex;
   align-items: center;
   position: relative;
@@ -70,15 +76,14 @@
 }
 
 .set-caption .form label input {
+  cursor: pointer;
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
   border-radius: 15px;
-  border: 1px solid var(--text);
+  border: 1px solid var(--button);
   position: absolute;
   right: 0;
-  margin-top: auto;
-  margin-bottom: auto;
 }
 
 .set-caption .form label input:checked {

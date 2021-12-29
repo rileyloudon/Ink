@@ -69,6 +69,7 @@
 
 .header-container .nav svg,
 .header-container .nav .profile-picture {
+  fill: var(--svg);
   margin: 0 10px;
   width: 26px;
   height: 26px;

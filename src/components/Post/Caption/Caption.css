@@ -23,6 +23,7 @@
 }
 
 .caption .post-caption {
+  color: var(--text);
   word-break: break-all;
   word-wrap: break-word;
 }

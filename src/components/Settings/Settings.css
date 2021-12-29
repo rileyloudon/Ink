@@ -14,6 +14,7 @@
 }
 
 .profile-settings button {
+  color: var(--text);
   background: 0 0;
   border: 0;
   cursor: pointer;
@@ -52,6 +53,7 @@
 }
 
 .profile-settings label p {
+  color: var(--text);
   display: inline-block;
   width: 100px;
   text-align: center;
@@ -60,8 +62,11 @@
 
 .profile-settings input,
 .profile-settings textarea {
+  color: var(--text);
+  background-color: var(--background);
   font-size: 16px;
-  width: 355px;
+  max-width: 355px;
+  width: 50vw;
   border: 1px solid var(--border);
   padding: 6px 10px;
   border-radius: 3px;
@@ -84,8 +89,33 @@
 }
 
 .profile-settings .save:disabled {
-  cursor: initial;
+  cursor: not-allowed;
   background-color: var(--button-disabled);
+}
+
+.profile-settings .toggle-theme {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  position: relative;
+  user-select: none;
+  margin: 16px 0;
+}
+
+.profile-settings .toggle-theme input {
+  cursor: pointer;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+
+  border-radius: 15px;
+  border: 1px solid var(--button);
+  position: absolute;
+  right: 0;
+}
+
+.profile-settings .toggle-theme input:checked {
+  background: var(--button);
 }
 
 .profile-settings .error {

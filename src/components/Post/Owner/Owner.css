@@ -4,6 +4,7 @@
   align-items: center;
   border-bottom: 1px solid var(--border);
   padding: 14px 4px 14px 16px;
+  background-color: var(--background);
 }
 
 .owner img {
