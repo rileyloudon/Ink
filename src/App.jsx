@@ -17,14 +17,17 @@ function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
 
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const fallbackTheme = window.matchMedia('(prefers-color-scheme: dark)')
+    .matches
+    ? 'dark'
+    : 'light';
   const [theme, setTheme] = useState(
-    JSON.parse(localStorage.getItem('theme')) || prefersDark ? 'dark' : 'light'
+    localStorage.getItem('theme') || fallbackTheme
   );
 
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(
-    JSON.parse(localStorage.getItem('userWillSignIn') || false)
+    localStorage.getItem('userWillSignIn') || false
   );
 
   const [showAddModal, setShowAddModal] = useState(false);
