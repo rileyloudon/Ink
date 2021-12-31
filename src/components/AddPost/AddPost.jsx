@@ -20,9 +20,10 @@ const AddPost = ({ updateAddModal }) => {
 
     document.addEventListener('mousedown', handleClickOutside);
 
-    URL.revokeObjectURL(image.url);
-
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      URL.revokeObjectURL(image.url);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [updateAddModal, image]);
 
   return (
