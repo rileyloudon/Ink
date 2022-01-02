@@ -10,6 +10,7 @@ import AddPost from './components/AddPost/AddPost';
 import HorizontalPost from './components/Post/HorizontalPost/HorizontalPost';
 import LikedFeed from './components/LikedFeed/LikedFeed';
 import UserContext from './Context/UserContext';
+import ThemeContext from './Context/ThemeContext';
 import Settings from './components/Settings/Settings';
 import './App.css';
 
@@ -26,13 +27,13 @@ function App() {
   );
 
   const [user, setUser] = useState();
+
   const [loading, setLoading] = useState(
     localStorage.getItem('userWillSignIn') || false
   );
 
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const updateTheme = (value) => setTheme(value);
   const updateLoading = (value) => setLoading(value);
   const updateAddModal = (value) => setShowAddModal(value);
 
@@ -59,82 +60,85 @@ function App() {
 
   useEffect(() => {
     document.querySelector('html').style.backgroundColor =
-      theme === 'dark' ? 'rgb(44, 44, 44)' : 'rgb(250, 250, 250)';
+      theme === 'dark' ? 'rgb(34, 34, 34)' : 'rgb(250, 250, 250)';
   }, [theme]);
 
   return (
     <div className='App' data-theme={theme}>
-      <UserContext.Provider value={{ user, setUser }}>
-        {user && (
-          <Header updateAddModal={updateAddModal} showAddModal={showAddModal} />
-        )}
-        {showAddModal && <AddPost updateAddModal={updateAddModal} />}
-        <Switch location={background || location}>
-          <Route path='/:username/liked'>
-            {user || localStorage.getItem('userWillSignIn') ? (
-              <LikedFeed />
-            ) : (
-              <Redirect to='/' />
-            )}
-          </Route>
-          <Route exact path='/:username/:postId'>
-            {user || localStorage.getItem('userWillSignIn') ? (
-              <HorizontalPost />
-            ) : (
-              <Redirect to='/' />
-            )}
-          </Route>
-          {/* <Switch> */}
-          <Route
-            exact
-            path='/'
-            render={() => (
-              <Home
-                updateLoading={updateLoading}
-                loading={loading}
-                signInGuest={signInGuest}
-              />
-            )}
-          />
-          <Route
-            exact
-            path='/register'
-            render={() => (
-              <Register
-                updateLoading={updateLoading}
-                signInGuest={signInGuest}
-              />
-            )}
-          />
-          <Route exact path='/settings'>
-            {user || localStorage.getItem('userWillSignIn') ? (
-              <Settings theme={theme} updateTheme={updateTheme} />
-            ) : (
-              <Redirect to='/' />
-            )}
-          </Route>
-          <Route exact path='/chat'>
-            {user || localStorage.getItem('userWillSignIn') ? (
-              <Chat />
-            ) : (
-              <Redirect to='/' />
-            )}
-          </Route>
-          <Route path='/:username'>
-            {user || localStorage.getItem('userWillSignIn') ? (
-              <Profile />
-            ) : (
-              <Redirect to='/' />
-            )}
-          </Route>
-          {/* </Switch> */}
-        </Switch>
-        {background && (
-          <Route path='/:username/:postId'>
-            <HorizontalPost modal />
-          </Route>
-        )}
-      </UserContext.Provider>
+      <ThemeContext.Provider value={{ theme, setTheme }}>
+        <UserContext.Provider value={{ user, setUser }}>
+          {user && (
+            <Header
+              updateAddModal={updateAddModal}
+              showAddModal={showAddModal}
+            />
+          )}
+          {showAddModal && <AddPost updateAddModal={updateAddModal} />}
+          <Switch location={background || location}>
+            <Route path='/:username/liked'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <LikedFeed />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+            <Route exact path='/:username/:postId'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <HorizontalPost />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+            <Route
+              exact
+              path='/'
+              render={() => (
+                <Home
+                  updateLoading={updateLoading}
+                  loading={loading}
+                  signInGuest={signInGuest}
+                />
+              )}
+            />
+            <Route
+              exact
+              path='/register'
+              render={() => (
+                <Register
+                  updateLoading={updateLoading}
+                  signInGuest={signInGuest}
+                />
+              )}
+            />
+            <Route exact path='/settings'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <Settings />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+            <Route exact path='/chat'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <Chat />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+            <Route path='/:username'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <Profile />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+          </Switch>
+          {background && (
+            <Route path='/:username/:postId'>
+              <HorizontalPost modal />
+            </Route>
+          )}
+        </UserContext.Provider>
+      </ThemeContext.Provider>
     </div>
   );
 }
