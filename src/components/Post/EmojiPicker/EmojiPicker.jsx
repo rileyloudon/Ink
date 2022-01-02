@@ -1,9 +1,11 @@
 import { Picker } from 'emoji-mart';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import ThemeContext from '../../../Context/ThemeContext';
 import './EmojiPicker.css';
 
 const EmojiPicker = ({ updateDisplayEmojiPicker, selectEmoji }) => {
+  const { theme } = useContext(ThemeContext);
   const picker = useRef();
 
   useEffect(() => {
@@ -33,6 +35,7 @@ const EmojiPicker = ({ updateDisplayEmojiPicker, selectEmoji }) => {
         sheetSize={16}
         perLine={7}
         onSelect={selectEmoji}
+        theme={theme}
       />
     </div>
   );
