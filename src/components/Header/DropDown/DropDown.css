@@ -8,11 +8,12 @@
   left: 13px;
   background-color: var(--background);
   border-radius: 6px;
-  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.0975);
+  box-shadow: 0 0 4px 1px var(--shadow);
   width: 200px;
 }
 
 .user-drop-down button {
+  color: var(--text);
   cursor: pointer;
   display: block;
   border: none;
