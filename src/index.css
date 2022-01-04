@@ -12,12 +12,14 @@
 
   --svg: rgb(38, 38, 38);
 
+  --shadow: rgba(0, 0, 0, 0.0975);
+
   --error: rgb(237, 73, 86);
 }
 
 [data-theme='dark'] {
-  --background: rgb(39, 39, 39);
-  --off-background: rgb(44, 44, 44);
+  --background: rgb(15, 15, 15);
+  --off-background: rgb(34, 34, 34);
   --border: rgb(82, 80, 79);
 
   --text: rgb(244, 235, 217);
@@ -29,7 +31,9 @@
 
   --svg: rgb(244, 235, 217);
 
-  --error: rgb(237, 73, 86);
+  --shadow: rgba(255, 255, 255, 0.05);
+
+  --error: rgb(218, 84, 95);
 }
 
 body {
