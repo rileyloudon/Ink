@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import PropTypes from 'prop-types';
 import UserContext from '../../Context/UserContext';
+import ThemeContext from '../../Context/ThemeContext';
 import { fetchUserData, updateUserSettings } from '../../firebase';
 import './Settings.css';
 
-const Settings = ({ theme, updateTheme }) => {
+const Settings = () => {
   // change full name
   // change profile picture
   // change bio
@@ -18,6 +18,7 @@ const Settings = ({ theme, updateTheme }) => {
   // change password (?)
   // private account (?)
   const { user, setUser } = useContext(UserContext);
+  const { theme, setTheme } = useContext(ThemeContext);
 
   const [userData, setUserData] = useState();
 
@@ -59,10 +60,10 @@ const Settings = ({ theme, updateTheme }) => {
   const changeTheme = (e) => {
     if (e.target.checked) {
       localStorage.setItem('theme', 'dark');
-      updateTheme('dark');
+      setTheme('dark');
     } else {
       localStorage.setItem('theme', 'light');
-      updateTheme('light');
+      setTheme('light');
     }
   };
 
@@ -159,7 +160,6 @@ const Settings = ({ theme, updateTheme }) => {
             />
           </label>
           <label htmlFor='toggle-theme' className='toggle-theme'>
-            <p>Dark Mode</p>
             <input
               type='checkbox'
               name='toggle-theme'
@@ -167,6 +167,7 @@ const Settings = ({ theme, updateTheme }) => {
               checked={theme === 'dark'}
               onChange={(e) => changeTheme(e)}
             />
+            <span className='slider' />
           </label>
         </form>
         {error && <p className='error'>{error}</p>}
@@ -182,11 +183,6 @@ const Settings = ({ theme, updateTheme }) => {
       </div>
     </>
   ) : null;
-};
-
-Settings.propTypes = {
-  theme: PropTypes.string.isRequired,
-  updateTheme: PropTypes.func.isRequired,
 };
 
 export default Settings;
