@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { signInUser } from '../../firebase';
 import { ReactComponent as AstronautSvg } from '../../img/misc/astronaut.svg';
-import './SignIn.css';
 import UserContext from '../../Context/UserContext';
+import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
+import './SignIn.css';
 
 const SignIn = ({ updateLoading, signInGuest }) => {
   const { user } = useContext(UserContext);
@@ -12,14 +13,19 @@ const SignIn = ({ updateLoading, signInGuest }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [signInError, setSignInError] = useState('');
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const isFormValid =
     /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g.test(email) &&
     password.length >= 6;
 
   const handleSignIn = () => {
+    setButtonLoading(true);
     signInUser(email, password).then((res) => {
-      if (typeof res === 'string') setSignInError(res);
+      if (typeof res === 'string') {
+        setSignInError(res);
+        setButtonLoading(false);
+      }
     });
   };
 
@@ -58,11 +64,10 @@ const SignIn = ({ updateLoading, signInGuest }) => {
               className='log-in-btn'
               type='submit'
               disabled={!isFormValid}
-              onClick={() => {
-                if (isFormValid) handleSignIn(email, password);
-              }}
+              onClick={handleSignIn}
             >
-              Log In
+              {!buttonLoading ? 'Log In' : `Logging In`}
+              {buttonLoading && <Spinner className='spinner' />}
             </button>
             <div className='or'>
               <div className='or-line' />

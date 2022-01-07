@@ -33,6 +33,9 @@
 }
 
 .sign-in .log-in-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 30px;
   margin: 8px 40px;
   border: 1px solid transparent;

@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import UserContext from '../../Context/UserContext';
 import ThemeContext from '../../Context/ThemeContext';
 import { fetchUserData, updateUserSettings } from '../../firebase';
+import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
 import './Settings.css';
 
 const Settings = () => {
@@ -28,6 +29,7 @@ const Settings = () => {
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
   const [error, setError] = useState();
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const changedData = userData
     ? newProfilePicture || userData.fullName !== name || userData.bio !== bio
@@ -73,7 +75,7 @@ const Settings = () => {
       name: userData.fullName !== name,
       bio: userData.bio !== bio,
     };
-
+    setButtonLoading(true);
     updateUserSettings(changed, newProfilePicture, name, bio).then((res) => {
       if (res.updated === true) {
         if (res.publicImageUrl) {
@@ -88,8 +90,10 @@ const Settings = () => {
           fullName: name,
           bio,
         }));
+        setButtonLoading(false);
       } else {
         setError(res.err);
+        setButtonLoading(false);
       }
     });
   };
@@ -177,7 +181,8 @@ const Settings = () => {
           disabled={!changedData}
           onClick={saveSettings}
         >
-          Save
+          {!buttonLoading ? 'Save' : 'Saving'}
+          {buttonLoading && <Spinner className='spinner' />}
         </button>
         <button type='button'>Delete Account</button>
       </div>
