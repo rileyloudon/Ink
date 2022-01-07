@@ -29,7 +29,7 @@ function App() {
   const [user, setUser] = useState();
 
   const [loading, setLoading] = useState(
-    localStorage.getItem('userWillSignIn') || false
+    JSON.parse(localStorage.getItem('userWillSignIn')) || false
   );
 
   const [showAddModal, setShowAddModal] = useState(false);
