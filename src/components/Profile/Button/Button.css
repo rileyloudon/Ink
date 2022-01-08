@@ -1,4 +1,8 @@
 .top button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 28px;
   margin-left: 20px;
   cursor: pointer;
   font-size: 14px;
@@ -14,6 +18,11 @@
   line-height: 26px;
 }
 
+.top .follow svg {
+  fill: var(--background);
+  margin-left: 0;
+}
+
 .top .unfollow {
   padding: 0px 16.5px;
   color: var(--error);
@@ -21,6 +30,11 @@
   border: 1px solid var(--border);
   border-radius: 3px;
   line-height: 26px;
+}
+
+.top .unfollow svg {
+  fill: var(--error);
+  margin-left: 0;
 }
 
 .top .edit {

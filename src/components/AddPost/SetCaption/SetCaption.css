@@ -91,6 +91,9 @@
 }
 
 .set-caption .form button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 14px;
   padding: 0 24px;
   color: var(--background);

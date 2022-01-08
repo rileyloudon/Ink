@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import UserContext from '../../../Context/UserContext';
 import { uploadNewPost } from '../../../firebase';
+import { ReactComponent as Spinner } from '../../../img/spinner/spinner.svg';
 import './SetCaption.css';
 
 const SetCaption = ({ image, updateAddModal }) => {
@@ -9,14 +10,18 @@ const SetCaption = ({ image, updateAddModal }) => {
 
   const [text, setText] = useState('');
   const [disableCommenting, setDisableCommenting] = useState(false);
-
   const [error, setError] = useState();
 
+  const [buttonLoading, setButtonLoading] = useState(false);
+
   const handleSubmit = (e) => {
+    setButtonLoading(true);
     e.preventDefault();
     uploadNewPost(image, text, disableCommenting).then((res) => {
-      if (typeof res === 'string') setError(res);
-      else updateAddModal(false);
+      if (typeof res === 'string') {
+        setError(res);
+        setButtonLoading(false);
+      } else updateAddModal(false);
     });
   };
 
@@ -49,7 +54,8 @@ const SetCaption = ({ image, updateAddModal }) => {
           />
         </label>
         <button type='submit' onClick={(e) => handleSubmit(e)}>
-          Share
+          {!buttonLoading ? 'Share' : 'Sharing'}
+          {buttonLoading && <Spinner className='spinner' />}
         </button>
         {error && <p>{error}</p>}
       </form>
