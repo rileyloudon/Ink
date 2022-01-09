@@ -47,11 +47,14 @@
 }
 
 .register .register-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   height: 30px;
   margin: 8px 40px;
   border: 1px solid transparent;
-  color: white;
+  color: var(--background);
   font-size: 14px;
   border-radius: 4px;
   background-color: var(--button);

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import { registerUser } from '../../firebase';
 import UserContext from '../../Context/UserContext';
-import astronaut from '../../img/misc/astronaut.svg';
+import { ReactComponent as AstronautSvg } from '../../img/misc/astronaut.svg';
+import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
 import './Register.css';
 
 const Register = ({ updateLoading, signInGuest }) => {
@@ -17,24 +18,28 @@ const Register = ({ updateLoading, signInGuest }) => {
   const [password, setPassword] = useState('');
   const [registerError, setRegisterError] = useState('');
 
+  const [buttonLoading, setButtonLoading] = useState(false);
+
   const isFormValid =
     /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g.test(email) &&
     fullName.length >= 1 &&
     /^[\w](?!.*?\.{2})[\w.]{0,14}[\w]$/.test(username) &&
     password.length >= 6;
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     updateLoading(true);
-    registerUser(email, password, username, fullName).then((res) => {
-      if (typeof res === 'string') setRegisterError(res);
-      else
-        setUser((prevState) => ({
-          ...prevState,
-          displayName: res.displayName,
-          photoURL: res.photoURL,
-        }));
-      updateLoading(false);
-    });
+    setButtonLoading(true);
+    const res = await registerUser(email, password, username, fullName);
+    if (typeof res === 'string') {
+      setRegisterError(res);
+      setButtonLoading(false);
+    } else
+      setUser((prevState) => ({
+        ...prevState,
+        displayName: res.displayName,
+        photoURL: res.photoURL,
+      }));
+    updateLoading(false);
   };
 
   useEffect(() => {
@@ -57,7 +62,7 @@ const Register = ({ updateLoading, signInGuest }) => {
               history.replace('/');
             }}
           >
-            <img src={astronaut} alt='' />
+            <AstronautSvg />
             Log In as Guest
           </button>
           <div className='or'>
@@ -114,11 +119,10 @@ const Register = ({ updateLoading, signInGuest }) => {
             className='register-btn'
             type='button'
             disabled={!isFormValid}
-            onClick={() => {
-              if (isFormValid) handleRegister();
-            }}
+            onClick={handleRegister}
           >
-            Sign Up
+            {!buttonLoading ? 'Sign Up' : 'Signing Up'}
+            {buttonLoading && <Spinner className='spinner' />}
           </button>
           <p className='register-error' role='alert'>
             {registerError}
