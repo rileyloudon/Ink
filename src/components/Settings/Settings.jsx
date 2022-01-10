@@ -5,6 +5,8 @@ import UserContext from '../../Context/UserContext';
 import ThemeContext from '../../Context/ThemeContext';
 import { fetchUserData, updateUserSettings } from '../../firebase';
 import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
+import { ReactComponent as Unchecked } from '../../img/checkbox/unchecked.svg';
+import { ReactComponent as Checked } from '../../img/checkbox/checked.svg';
 import './Settings.css';
 
 const Settings = () => {
@@ -163,16 +165,6 @@ const Settings = () => {
               }}
             />
           </label>
-          <label htmlFor='toggle-theme' className='toggle-theme'>
-            <input
-              type='checkbox'
-              name='toggle-theme'
-              id='toggle-theme'
-              checked={theme === 'dark'}
-              onChange={(e) => changeTheme(e)}
-            />
-            <span className='slider' />
-          </label>
         </form>
         {error && <p className='error'>{error}</p>}
         <button
@@ -184,6 +176,17 @@ const Settings = () => {
           {!buttonLoading ? 'Save' : 'Saving'}
           {buttonLoading && <Spinner className='spinner' />}
         </button>
+        <label htmlFor='toggle-theme' className='toggle-theme'>
+          Dark Mode
+          <input
+            type='checkbox'
+            name='toggle-theme'
+            id='toggle-theme'
+            checked={theme === 'dark'}
+            onChange={(e) => changeTheme(e)}
+          />
+          {theme === 'dark' ? <Checked /> : <Unchecked />}
+        </label>
         <button type='button'>Delete Account</button>
       </div>
     </>

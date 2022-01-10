@@ -3,6 +3,8 @@ import { useContext, useState } from 'react';
 import UserContext from '../../../Context/UserContext';
 import { uploadNewPost } from '../../../firebase';
 import { ReactComponent as Spinner } from '../../../img/spinner/spinner.svg';
+import { ReactComponent as Unchecked } from '../../../img/checkbox/unchecked.svg';
+import { ReactComponent as Checked } from '../../../img/checkbox/checked.svg';
 import './SetCaption.css';
 
 const SetCaption = ({ image, updateAddModal }) => {
@@ -52,6 +54,7 @@ const SetCaption = ({ image, updateAddModal }) => {
             checked={disableCommenting}
             onChange={(e) => setDisableCommenting(e.target.checked)}
           />
+          {disableCommenting ? <Checked /> : <Unchecked />}
         </label>
         <button type='submit' onClick={(e) => handleSubmit(e)}>
           {!buttonLoading ? 'Share' : 'Sharing'}

@@ -73,21 +73,17 @@
   position: relative;
   user-select: none;
   margin: 16px 0;
+  cursor: pointer;
 }
 
 .set-caption .form label input {
-  cursor: pointer;
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 15px;
-  border: 1px solid var(--button);
-  position: absolute;
-  right: 0;
+  display: none;
 }
 
-.set-caption .form label input:checked {
-  background: var(--button);
+.set-caption .form label svg {
+  fill: var(--text);
+  position: absolute;
+  right: 0;
 }
 
 .set-caption .form button {
