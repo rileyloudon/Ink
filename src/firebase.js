@@ -79,6 +79,8 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
     following: [],
     bio: '',
     postCount: 0,
+    private: false,
+    allowMessages: 'all',
   }).catch((err) => {
     return `Error updating profile, ${err}`;
   });
