@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchUserData } from '../../firebase';
+import { fetchUserProfileData } from '../../firebase';
 import Loading from '../Loading/Loading';
 import Bar from './Bar/Bar';
 import Header from './Header/Header';
@@ -22,7 +22,7 @@ const Profile = () => {
 
   useEffect(() => {
     let isSubscribed = true;
-    fetchUserData(username).then((res) => {
+    fetchUserProfileData(username).then((res) => {
       // res returns an object:
       // header: all data for the header
       // initialPosts: first 12 posts, fetch more on scroll
