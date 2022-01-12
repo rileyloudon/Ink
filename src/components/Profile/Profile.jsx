@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import UserContext from '../../Context/UserContext';
 import { fetchUserProfileData } from '../../firebase';
 import Loading from '../Loading/Loading';
 import Bar from './Bar/Bar';
@@ -8,6 +9,7 @@ import Posts from './Posts/Posts';
 import './Profile.css';
 
 const Profile = () => {
+  const { user } = useContext(UserContext);
   const { username } = useParams();
 
   const [profile, setProfile] = useState();
@@ -22,20 +24,21 @@ const Profile = () => {
 
   useEffect(() => {
     let isSubscribed = true;
-    fetchUserProfileData(username).then((res) => {
-      // res returns an object:
-      // header: all data for the header
-      // initialPosts: first 12 posts, fetch more on scroll
-      if (isSubscribed) {
-        setProfile(res);
-        setLoading(false);
-      }
-    });
+    if (user)
+      fetchUserProfileData(username).then((res) => {
+        // res returns an object OR 'User not found'
+        // header: all data for the header
+        // initialPosts: first 12 posts, fetch more on scroll OR 'private' if profile is private
+        if (isSubscribed) {
+          setProfile(res);
+          setLoading(false);
+        }
+      });
 
     return () => {
       isSubscribed = false;
     };
-  }, [username]);
+  }, [username, user]);
 
   const renderProflie = () => {
     return profile === 'User not found' ? (
@@ -46,11 +49,20 @@ const Profile = () => {
     ) : (
       <div className='profile'>
         <Header profile={profile} updateHeader={updateHeader} />
-        <Bar />
-        <Posts
-          username={profile.header.username}
-          initialPosts={profile.initialPosts}
-        />
+        {profile.initialPosts === 'private' ? (
+          <div className='private'>
+            <h3>This Account is Private</h3>
+            <p>Follow to see their posts.</p>
+          </div>
+        ) : (
+          <>
+            <Bar />
+            <Posts
+              username={profile.header.username}
+              initialPosts={profile.initialPosts}
+            />
+          </>
+        )}
       </div>
     );
   };

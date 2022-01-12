@@ -4,6 +4,32 @@
   margin: auto;
 }
 
+.profile .private {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  padding: 40px;
+}
+
+.profile .private h3,
+.profile .private p {
+  color: var(--text);
+  margin: 0;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.profile .private h3 {
+  font-weight: 600;
+}
+
+.profile .private p {
+  margin-top: 13px;
+}
+
 .no-user {
   text-align: center;
 }
