@@ -168,21 +168,29 @@ export const fetchUserData = async (username) => {
 };
 
 export const fetchUserProfileData = async (username) => {
+  const auth = getAuth();
   const docRef = doc(db, 'users', username);
   const docSnap = await getDoc(docRef);
 
-  const postsRef = query(
-    collection(db, 'users', username, 'posts'),
-    orderBy('timestamp', 'desc'),
-    limit(12)
-  );
-
-  const postsSnap = await getDocs(postsRef);
-
   if (docSnap.exists()) {
-    const posts = [];
-    postsSnap.forEach((post) => posts.push(post.data()));
-    return { header: docSnap.data(), initialPosts: posts };
+    if (
+      username === auth.currentUser.displayName ||
+      !docSnap.data().private ||
+      docSnap.data().followers.includes(auth.currentUser.displayName)
+    ) {
+      const postsRef = query(
+        collection(db, 'users', username, 'posts'),
+        orderBy('timestamp', 'desc'),
+        limit(12)
+      );
+
+      const postsSnap = await getDocs(postsRef);
+
+      const posts = [];
+      postsSnap.forEach((post) => posts.push(post.data()));
+      return { header: docSnap.data(), initialPosts: posts };
+    }
+    return { header: docSnap.data(), initialPosts: 'private' };
   }
   return 'User not found';
 };
