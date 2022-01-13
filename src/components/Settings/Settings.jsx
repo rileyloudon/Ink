@@ -10,6 +10,10 @@ import { ReactComponent as Checked } from '../../img/checkbox/checked.svg';
 import './Settings.css';
 
 const Settings = () => {
+  // Settings uses two copys of data:
+  // userData is the current values in the database
+  // useState data is the data in the form. It can be changed then saved to the database when ready
+
   // change full name
   // change profile picture
   // change bio
@@ -30,11 +34,15 @@ const Settings = () => {
 
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
+  const [privateAccount, setPrivateAccount] = useState(false);
   const [error, setError] = useState();
   const [buttonLoading, setButtonLoading] = useState(false);
 
   const changedData = userData
-    ? newProfilePicture || userData.fullName !== name || userData.bio !== bio
+    ? newProfilePicture ||
+      userData.fullName !== name ||
+      userData.bio !== bio ||
+      userData.private !== privateAccount
     : null;
 
   const onDropAccepted = useCallback((acceptedFiles) => {
@@ -76,9 +84,16 @@ const Settings = () => {
       profilePicture: newProfilePicture !== '',
       name: userData.fullName !== name,
       bio: userData.bio !== bio,
+      privateAccount: userData.private !== privateAccount,
     };
     setButtonLoading(true);
-    updateUserSettings(changed, newProfilePicture, name, bio).then((res) => {
+    updateUserSettings(
+      changed,
+      newProfilePicture,
+      name,
+      bio,
+      privateAccount
+    ).then((res) => {
       if (res.updated === true) {
         if (res.publicImageUrl) {
           setUser((prevData) => ({
@@ -108,6 +123,7 @@ const Settings = () => {
         if (isSubscribed) {
           setName(res.fullName);
           setBio(res.bio);
+          setPrivateAccount(res.private);
           setUserData(res);
 
           const textarea = document.getElementById('change-bio');
@@ -142,7 +158,18 @@ const Settings = () => {
           {pictureRejected && <p className='error'>{pictureRejected}</p>}
         </div>
         <form>
-          <label htmlFor='change-name'>
+          <label htmlFor='private-account' className='toggle-private'>
+            Private Account
+            <input
+              type='checkbox'
+              name='toggle-private'
+              id='private-account'
+              checked={privateAccount}
+              onChange={(e) => setPrivateAccount(e.target.checked)}
+            />
+            {privateAccount ? <Checked /> : <Unchecked />}
+          </label>
+          <label htmlFor='change-name' className='input'>
             <p>Name</p>
             <input
               type='text'
@@ -152,7 +179,7 @@ const Settings = () => {
               onChange={(e) => setName(e.target.value)}
             />
           </label>
-          <label htmlFor='change-bio'>
+          <label htmlFor='change-bio' className='input'>
             <p>Bio</p>
             <textarea
               name='bio'

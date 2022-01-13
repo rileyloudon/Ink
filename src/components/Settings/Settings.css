@@ -47,12 +47,12 @@
   font-size: 26px;
 }
 
-.profile-settings form label {
+.profile-settings form .input {
   display: block;
   margin: 20px 0;
 }
 
-.profile-settings form label p {
+.profile-settings form .input p {
   color: var(--text);
   display: inline-block;
   width: 100px;
@@ -96,7 +96,8 @@
   background-color: var(--button-disabled);
 }
 
-.toggle-theme {
+.toggle-theme,
+.toggle-private {
   cursor: pointer;
   color: var(--text);
   display: flex;
@@ -106,12 +107,14 @@
   margin: 16px 0;
 }
 
-.toggle-theme svg {
+.toggle-theme svg,
+.toggle-private svg {
   fill: var(--text);
   margin-left: 5px;
 }
 
-.toggle-theme input {
+.toggle-theme input,
+.toggle-private input {
   width: 0;
   display: none;
   padding: 0;
