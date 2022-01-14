@@ -106,6 +106,7 @@ const Settings = () => {
           ...prevData,
           fullName: name,
           bio,
+          private: privateAccount,
         }));
         setButtonLoading(false);
       } else {
