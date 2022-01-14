@@ -25,6 +25,7 @@ import {
   startAfter,
   limit,
   increment,
+  deleteDoc,
 } from 'firebase/firestore';
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -115,7 +116,13 @@ export const signOutUser = async () => {
   await signOut(auth).catch((err) => `Error signing out, ${err}`);
 };
 
-export const updateUserSettings = async (changed, profilePcture, name, bio) => {
+export const updateUserSettings = async (
+  changed,
+  profilePcture,
+  name,
+  bio,
+  privateAccount
+) => {
   const auth = getAuth();
   const docRef = doc(db, 'users', auth.currentUser.displayName);
 
@@ -129,6 +136,13 @@ export const updateUserSettings = async (changed, profilePcture, name, bio) => {
     if (changed.bio) {
       await updateDoc(docRef, {
         bio,
+      });
+    }
+
+    // if going from private -> unprivated, set all follow requests to follow
+    if (changed.privateAccount) {
+      await updateDoc(docRef, {
+        private: privateAccount,
       });
     }
 
@@ -190,7 +204,19 @@ export const fetchUserProfileData = async (username) => {
       postsSnap.forEach((post) => posts.push(post.data()));
       return { header: docSnap.data(), initialPosts: posts };
     }
-    return { header: docSnap.data(), initialPosts: 'private' };
+    const requestDocRef = doc(
+      db,
+      'users',
+      username,
+      'followRequests',
+      auth.currentUser.displayName
+    );
+    const followRequest = await getDoc(requestDocRef);
+    return {
+      header: docSnap.data(),
+      initialPosts: 'private',
+      followRequest: followRequest.exists(),
+    };
   }
   return 'User not found';
 };
@@ -241,40 +267,81 @@ export const fetchNextProfilePosts = async (username, start) => {
 //   return docSnap.data();
 // };
 
-export const followUser = async (userToFollow) => {
+export const followUser = async (followedUser) => {
   const auth = getAuth();
 
   const me = doc(db, 'users', auth.currentUser.displayName);
-  const otherUser = doc(db, 'users', userToFollow);
+  const otherUser = doc(db, 'users', followedUser);
 
   await updateDoc(me, {
-    following: arrayUnion(userToFollow),
+    following: arrayUnion(followedUser),
   });
 
   await updateDoc(otherUser, {
     followers: arrayUnion(auth.currentUser.displayName),
   });
 
-  const docSnap = await getDoc(doc(db, 'users', userToFollow));
+  const docSnap = await getDoc(doc(db, 'users', followedUser));
   return docSnap.data();
 };
 
-export const unfollowUser = async (userToUnfollow) => {
+export const unfollowUser = async (followedUser) => {
   const auth = getAuth();
 
   const currentUser = doc(db, 'users', auth.currentUser.displayName);
-  const otherUser = doc(db, 'users', userToUnfollow);
+  const otherUser = doc(db, 'users', followedUser);
 
   await updateDoc(currentUser, {
-    following: arrayRemove(userToUnfollow),
+    following: arrayRemove(followedUser),
   });
 
   await updateDoc(otherUser, {
     followers: arrayRemove(auth.currentUser.displayName),
   });
 
-  const docSnap = await getDoc(doc(db, 'users', userToUnfollow));
+  const docSnap = await getDoc(doc(db, 'users', followedUser));
   return docSnap.data();
+};
+
+export const sendFollowRequest = async (followedUser) => {
+  const auth = getAuth();
+  const docRef = doc(
+    db,
+    'users',
+    followedUser,
+    'followRequests',
+    auth.currentUser.displayName
+  );
+
+  await updateDoc(doc(db, 'users', followedUser), {
+    followRequests: increment(1),
+  });
+
+  await setDoc(docRef, {
+    username: auth.currentUser.displayName,
+    date: Timestamp.now(),
+  });
+
+  return true;
+};
+
+export const cancelFollowRequest = async (followedUser) => {
+  const auth = getAuth();
+  const docRef = doc(
+    db,
+    'users',
+    followedUser,
+    'followRequests',
+    auth.currentUser.displayName
+  );
+
+  await updateDoc(doc(db, 'users', followedUser), {
+    followRequests: increment(-1),
+  });
+
+  await deleteDoc(docRef);
+
+  return false;
 };
 
 export const uploadNewPost = async (image, caption, disableComments) => {
