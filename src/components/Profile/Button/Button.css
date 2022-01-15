@@ -37,7 +37,12 @@
   margin-left: 0;
 }
 
-.top .edit {
+.top .requested svg {
+  fill: var(--text);
+}
+
+.top .edit,
+.top .requested {
   padding: 5px 9px;
   color: var(--text);
   background-color: transparent;
