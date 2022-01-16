@@ -81,7 +81,10 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
     bio: '',
     postCount: 0,
     private: false,
+    followRequests: 0,
     allowMessages: 'all',
+    newFollowers: 0,
+    newLikes: 0,
   }).catch((err) => {
     return `Error updating profile, ${err}`;
   });
@@ -114,64 +117,6 @@ export const signInUser = async (email, password) => {
 export const signOutUser = async () => {
   const auth = getAuth();
   await signOut(auth).catch((err) => `Error signing out, ${err}`);
-};
-
-export const updateUserSettings = async (
-  changed,
-  profilePcture,
-  name,
-  bio,
-  privateAccount
-) => {
-  const auth = getAuth();
-  const docRef = doc(db, 'users', auth.currentUser.displayName);
-
-  try {
-    if (changed.name) {
-      await updateDoc(docRef, {
-        fullName: name,
-      });
-    }
-
-    if (changed.bio) {
-      await updateDoc(docRef, {
-        bio,
-      });
-    }
-
-    // if going from private -> unprivated, set all follow requests to follow
-    if (changed.privateAccount) {
-      await updateDoc(docRef, {
-        private: privateAccount,
-      });
-    }
-
-    if (changed.profilePicture) {
-      const storage = getStorage();
-
-      const storageRef = ref(
-        storage,
-        `${auth.currentUser.displayName}/profile-picture`
-      );
-
-      await uploadBytes(storageRef, profilePcture.properties);
-
-      const publicImageUrl = await getDownloadURL(storageRef);
-
-      await updateDoc(docRef, {
-        photoURL: publicImageUrl,
-      });
-      await updateProfile(auth.currentUser, {
-        photoURL: publicImageUrl,
-      });
-
-      return { updated: true, publicImageUrl };
-    }
-
-    return { updated: true };
-  } catch (err) {
-    return { updated: false, err };
-  }
 };
 
 export const fetchUserData = async (username) => {
@@ -270,10 +215,10 @@ export const fetchNextProfilePosts = async (username, start) => {
 export const followUser = async (followedUser) => {
   const auth = getAuth();
 
-  const me = doc(db, 'users', auth.currentUser.displayName);
+  const currentUser = doc(db, 'users', auth.currentUser.displayName);
   const otherUser = doc(db, 'users', followedUser);
 
-  await updateDoc(me, {
+  await updateDoc(currentUser, {
     following: arrayUnion(followedUser),
   });
 
@@ -342,6 +287,107 @@ export const cancelFollowRequest = async (followedUser) => {
   await deleteDoc(docRef);
 
   return false;
+};
+
+export const acceptFollowRequest = async (requestedUser) => {
+  const auth = getAuth();
+
+  const currentUser = doc(db, 'users', auth.currentUser.displayName);
+  const otherUser = doc(db, 'users', requestedUser);
+
+  await updateDoc(currentUser, {
+    followers: arrayUnion(requestedUser),
+  });
+
+  await updateDoc(otherUser, {
+    following: arrayUnion(auth.currentUser.displayName),
+  });
+
+  await deleteDoc(
+    doc(
+      db,
+      'users',
+      auth.currentUser.displayName,
+      'followRequests',
+      requestedUser
+    )
+  );
+};
+
+export const updateUserSettings = async (
+  changed,
+  profilePcture,
+  name,
+  bio,
+  privateAccount
+) => {
+  const auth = getAuth();
+  const docRef = doc(db, 'users', auth.currentUser.displayName);
+
+  try {
+    if (changed.name) {
+      await updateDoc(docRef, {
+        fullName: name,
+      });
+    }
+
+    if (changed.bio) {
+      await updateDoc(docRef, {
+        bio,
+      });
+    }
+
+    // if going from private -> unprivated, set all follow requests to follow
+    if (changed.privateAccount) {
+      await updateDoc(docRef, {
+        private: privateAccount,
+      });
+      if (!privateAccount) {
+        const docSnap = await getDoc(docRef);
+        if (docSnap.data().followRequests >= 1) {
+          const requestsRef = collection(
+            db,
+            'users',
+            auth.currentUser.displayName,
+            'followRequests'
+          );
+          const requestSnap = await getDocs(requestsRef);
+          requestSnap.forEach((user) =>
+            acceptFollowRequest(user.data().username)
+          );
+          await updateDoc(docRef, {
+            followRequests: 0,
+          });
+        }
+      }
+    }
+
+    if (changed.profilePicture) {
+      const storage = getStorage();
+
+      const storageRef = ref(
+        storage,
+        `${auth.currentUser.displayName}/profile-picture`
+      );
+
+      await uploadBytes(storageRef, profilePcture.properties);
+
+      const publicImageUrl = await getDownloadURL(storageRef);
+
+      await updateDoc(docRef, {
+        photoURL: publicImageUrl,
+      });
+      await updateProfile(auth.currentUser, {
+        photoURL: publicImageUrl,
+      });
+
+      return { updated: true, publicImageUrl };
+    }
+
+    return { updated: true };
+  } catch (err) {
+    return { updated: false, err };
+  }
 };
 
 export const uploadNewPost = async (image, caption, disableComments) => {
