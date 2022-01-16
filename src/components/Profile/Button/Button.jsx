@@ -18,9 +18,6 @@ const Button = ({ profile, updateHeader }) => {
   const [buttonLoading, setButtonLoading] = useState(false);
 
   if (user && profile.header.username !== user.displayName) {
-    // need to also check follow requests of current profile
-    // set userFollowsProfile TRUE if requested
-    // if follow requested, display text: 'Requested' in grey
     const userFollowsProfile = profile.header.followers.includes(
       user.displayName
     );
@@ -42,19 +39,19 @@ const Button = ({ profile, updateHeader }) => {
     const handleClick = async () => {
       setButtonLoading(true);
       if (!userFollowsProfile && !userRequestToFollow) {
-        if (!profile.header.private) {
-          const newData = await followUser(profile.header.username);
-          updateHeader(newData, false);
-        } else {
+        if (profile.header.private) {
           const newData = await sendFollowRequest(profile.header.username);
           updateHeader(newData, true);
+        } else {
+          const newData = await followUser(profile.header.username);
+          updateHeader(newData, false);
         }
-      } else if (!profile.header.private) {
-        const newData = await unfollowUser(profile.header.username);
-        updateHeader(newData, false);
-      } else {
+      } else if (userRequestToFollow) {
         const newData = await cancelFollowRequest(profile.header.username);
         updateHeader(newData, true);
+      } else {
+        const newData = await unfollowUser(profile.header.username);
+        updateHeader(newData, false);
       }
       setButtonLoading(false);
     };
