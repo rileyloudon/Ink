@@ -15,11 +15,17 @@ const Profile = () => {
   const [profile, setProfile] = useState();
   const [loading, setLoading] = useState(true);
 
-  const updateHeader = (newHeader) => {
-    setProfile((oldProfile) => ({
-      ...oldProfile,
-      header: newHeader,
-    }));
+  const updateHeader = (newData, updateFollowRequest) => {
+    if (updateFollowRequest)
+      setProfile((oldProfile) => ({
+        ...oldProfile,
+        followRequest: newData,
+      }));
+    else
+      setProfile((oldProfile) => ({
+        ...oldProfile,
+        header: newData,
+      }));
   };
 
   useEffect(() => {
@@ -29,6 +35,7 @@ const Profile = () => {
         // res returns an object OR 'User not found'
         // header: all data for the header
         // initialPosts: first 12 posts, fetch more on scroll OR 'private' if profile is private
+        // if above is 'private', also includes followRequest true/false
         if (isSubscribed) {
           setProfile(res);
           setLoading(false);
