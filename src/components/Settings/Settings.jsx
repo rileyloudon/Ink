@@ -5,8 +5,6 @@ import UserContext from '../../Context/UserContext';
 import ThemeContext from '../../Context/ThemeContext';
 import { fetchUserData, updateUserSettings } from '../../firebase';
 import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
-import { ReactComponent as Unchecked } from '../../img/checkbox/unchecked.svg';
-import { ReactComponent as Checked } from '../../img/checkbox/checked.svg';
 import './Settings.css';
 
 const Settings = () => {
@@ -159,16 +157,17 @@ const Settings = () => {
           {pictureRejected && <p className='error'>{pictureRejected}</p>}
         </div>
         <form>
-          <label htmlFor='private-account' className='toggle-private'>
-            Private Account
+          <label htmlFor='toggle-private' className='private-account'>
+            <span>Private Account</span>
             <input
               type='checkbox'
               name='toggle-private'
-              id='private-account'
+              id='toggle-private'
               checked={privateAccount}
               onChange={(e) => setPrivateAccount(e.target.checked)}
             />
-            {privateAccount ? <Checked /> : <Unchecked />}
+            <span className='checkmark' />
+            {/* {privateAccount ? <Checked /> : <Unchecked />} */}
           </label>
           <label htmlFor='change-name' className='input'>
             <p>Name</p>
@@ -193,19 +192,19 @@ const Settings = () => {
               }}
             />
           </label>
+          {error && <p className='error'>{error}</p>}
+          <button
+            className='save'
+            type='button'
+            disabled={!changedData}
+            onClick={saveSettings}
+          >
+            {!buttonLoading ? 'Save' : 'Saving'}
+            {buttonLoading && <Spinner className='spinner' />}
+          </button>
         </form>
-        {error && <p className='error'>{error}</p>}
-        <button
-          className='save'
-          type='button'
-          disabled={!changedData}
-          onClick={saveSettings}
-        >
-          {!buttonLoading ? 'Save' : 'Saving'}
-          {buttonLoading && <Spinner className='spinner' />}
-        </button>
-        <label htmlFor='toggle-theme' className='toggle-theme'>
-          Dark Mode
+        <label htmlFor='toggle-theme' className='dark-mode'>
+          <span>Dark Mode</span>
           <input
             type='checkbox'
             name='toggle-theme'
@@ -213,8 +212,9 @@ const Settings = () => {
             checked={theme === 'dark'}
             onChange={(e) => changeTheme(e)}
           />
-          {theme === 'dark' ? <Checked /> : <Unchecked />}
+          <span className='checkmark' />
         </label>
+        {/* {theme === 'dark' ? <Checked /> : <Unchecked />} */}
         <button type='button'>Delete Account</button>
       </div>
     </>
