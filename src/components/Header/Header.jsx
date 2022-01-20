@@ -1,7 +1,8 @@
 import { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import DropDown from './DropDown/DropDown';
+import FavoriteDropDown from './FavoriteDropDown/FavoriteDropDown';
+import UserDropDown from './UserDropDown/UserDropDown';
 import { ReactComponent as HomeOutline } from '../../img/home/home-outline.svg';
 import { ReactComponent as HomeFilled } from '../../img/home/home-filled.svg';
 import { ReactComponent as ChatOutline } from '../../img/chat/chat-outline.svg';
@@ -10,7 +11,6 @@ import { ReactComponent as AddOutline } from '../../img/add/add-outline.svg';
 import { ReactComponent as AddFilled } from '../../img/add/add-filled.svg';
 import { ReactComponent as FavoriteOutline } from '../../img/favorite/favorite-outline.svg';
 import { ReactComponent as FavoriteFilled } from '../../img/favorite/favorite-filled.svg';
-
 import UserContext from '../../Context/UserContext';
 import './header.css';
 
@@ -21,7 +21,10 @@ const Header = ({ updateAddModal, showAddModal }) => {
   const [activeTab] = useState();
 
   const [displayUserDropdown, setDisplayUserDropdown] = useState(false);
-  const closeDropDown = () => setDisplayUserDropdown(false);
+  const [displayFavoriteDropdown, setDisplayFavoriteDropdown] = useState(false);
+
+  const closeUserDropDown = () => setDisplayUserDropdown(false);
+  const closeFavoriteDropdown = () => setDisplayFavoriteDropdown(false);
 
   return (
     <header>
@@ -72,23 +75,39 @@ const Header = ({ updateAddModal, showAddModal }) => {
             </button>
 
             {/* onClick -> Display follow requests, likes, setActiveTab('favorite') */}
-            {activeTab === 'favorite' ? (
-              <FavoriteFilled />
-            ) : (
-              <FavoriteOutline />
-            )}
+            <button
+              type='button'
+              className='favorite-dropdown'
+              onClick={() =>
+                displayFavoriteDropdown
+                  ? setDisplayFavoriteDropdown(false)
+                  : setDisplayFavoriteDropdown(true)
+              }
+            >
+              {activeTab === 'favorite' ? (
+                <FavoriteFilled />
+              ) : (
+                <FavoriteOutline />
+              )}
+            </button>
 
             <button
-              className='profile-border'
               type='button'
-              onClick={() => {
-                if (displayUserDropdown) setDisplayUserDropdown(false);
-                else setDisplayUserDropdown(true);
-              }}
+              className='profile-border'
+              onClick={() =>
+                displayUserDropdown
+                  ? setDisplayUserDropdown(false)
+                  : setDisplayUserDropdown(true)
+              }
             >
               <img className='profile-picture' src={user.photoURL} alt='' />
             </button>
-            {displayUserDropdown && <DropDown closeDropDown={closeDropDown} />}
+            {displayUserDropdown && (
+              <UserDropDown closeUserDropDown={closeUserDropDown} />
+            )}
+            {displayFavoriteDropdown && (
+              <FavoriteDropDown closeFavoriteDropdown={closeFavoriteDropdown} />
+            )}
           </div>
         </div>
       </div>

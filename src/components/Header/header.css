@@ -76,7 +76,8 @@
   cursor: pointer;
 }
 
-.header-container .nav .add {
+.header-container .nav .add,
+.header-container .nav .favorite-dropdown {
   border: none;
   background-color: transparent;
   padding: inherit;
