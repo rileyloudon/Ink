@@ -24,7 +24,7 @@ const Header = ({ updateAddModal, showAddModal }) => {
   const [displayFavoriteDropdown, setDisplayFavoriteDropdown] = useState(false);
 
   const closeUserDropDown = () => setDisplayUserDropdown(false);
-  const closeFavoriteDropdown = () => setDisplayFavoriteDropdown(false);
+  const closeFavoriteDropDown = () => setDisplayFavoriteDropdown(false);
 
   return (
     <header>
@@ -106,7 +106,7 @@ const Header = ({ updateAddModal, showAddModal }) => {
               <UserDropDown closeUserDropDown={closeUserDropDown} />
             )}
             {displayFavoriteDropdown && (
-              <FavoriteDropDown closeFavoriteDropdown={closeFavoriteDropdown} />
+              <FavoriteDropDown closeFavoriteDropDown={closeFavoriteDropDown} />
             )}
           </div>
         </div>
