@@ -13,6 +13,7 @@ import UserContext from './Context/UserContext';
 import ThemeContext from './Context/ThemeContext';
 import Settings from './components/Settings/Settings';
 import './App.css';
+import { fetchUserData } from './firebase';
 
 function App() {
   const location = useLocation();
@@ -45,7 +46,9 @@ function App() {
     const auth = getAuth();
     const unsub = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        setUser(currentUser);
+        fetchUserData(currentUser.displayName).then((res) => {
+          setUser(res);
+        });
         if (!localStorage.getItem('userWillSignIn'))
           localStorage.setItem('userWillSignIn', 'true');
         setLoading(false);
@@ -53,7 +56,6 @@ function App() {
         setUser();
         localStorage.removeItem('userWillSignIn');
       }
-
       return () => unsub;
     });
   }, []);
