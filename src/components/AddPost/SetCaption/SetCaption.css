@@ -76,24 +76,8 @@
   cursor: pointer;
 }
 
-.set-caption .form label input {
+.set-caption input[type='checkbox'] {
   display: none;
-}
-
-.set-caption .form label svg {
-  fill: var(--text);
-  position: absolute;
-  right: 0;
-}
-
-.set-caption .form label {
-  cursor: pointer;
-  color: var(--text);
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-  user-select: none;
-  margin: 16px 0;
 }
 
 .set-caption .form label span {

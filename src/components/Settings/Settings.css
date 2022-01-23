@@ -108,7 +108,7 @@
   color: var(--error);
 }
 
-input[type='checkbox'] {
+.profile-settings input[type='checkbox'] {
   display: none;
 }
 
@@ -116,7 +116,7 @@ input[type='checkbox'] {
 .profile-settings .private-account {
   cursor: pointer;
   color: var(--text);
-  display: inline-flex;
+  display: flex;
   align-items: center;
   position: relative;
   user-select: none;
