@@ -17,7 +17,7 @@ const Button = ({ profile, updateHeader }) => {
 
   const [buttonLoading, setButtonLoading] = useState(false);
 
-  if (user && profile.header.username !== user.displayName) {
+  if (user && profile.header.username !== user.username) {
     const userFollowsProfile = profile.header.followers.includes(
       user.displayName
     );

@@ -33,7 +33,7 @@ const SetCaption = ({ image, updateAddModal }) => {
       <form className='form'>
         <div className='poster'>
           <img src={user.photoURL} alt='' />
-          <h3>{user.displayName}</h3>
+          <h3>{user.username}</h3>
         </div>
         <textarea
           name='caption-text'
@@ -68,7 +68,7 @@ SetCaption.propTypes = {
   image: PropTypes.shape({
     url: PropTypes.string.isRequired,
     properties: PropTypes.shape({
-      name: PropTypes.string.isRequired,
+      name: PropTypes.string,
     }).isRequired,
   }).isRequired,
   updateAddModal: PropTypes.func.isRequired,

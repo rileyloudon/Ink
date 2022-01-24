@@ -20,7 +20,7 @@ const VerticalPost = ({ post }) => {
     user
       ? {
           likeCount: post.likes.length,
-          userLikes: post.likes.includes(user.displayName),
+          userLikes: post.likes.includes(user.username),
         }
       : null
   );

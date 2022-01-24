@@ -69,7 +69,7 @@ const LikedFeed = () => {
       return (
         <div className='no-liked-posts'>
           <h3>You can only view your own liked posts</h3>
-          <Link className='own-liked-posts' to={`/${user.displayName}/liked`}>
+          <Link className='own-liked-posts' to={`/${user.username}/liked`}>
             Click here to view them
           </Link>
         </div>

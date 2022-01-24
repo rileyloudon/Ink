@@ -32,7 +32,7 @@ const UserDropDown = ({ closeUserDropDown }) => {
           type='button'
           onClick={() => {
             closeUserDropDown();
-            history.push(`/${user.displayName}`);
+            history.push(`/${user.username}`);
           }}
         >
           Profile
@@ -41,7 +41,7 @@ const UserDropDown = ({ closeUserDropDown }) => {
           type='button'
           onClick={() => {
             closeUserDropDown();
-            history.push(`/${user.displayName}/liked`);
+            history.push(`/${user.username}/liked`);
           }}
         >
           Liked
