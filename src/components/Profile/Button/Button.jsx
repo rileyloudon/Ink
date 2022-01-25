@@ -18,9 +18,7 @@ const Button = ({ profile, updateHeader }) => {
   const [buttonLoading, setButtonLoading] = useState(false);
 
   if (user && profile.header.username !== user.username) {
-    const userFollowsProfile = profile.header.followers.includes(
-      user.displayName
-    );
+    const userFollowsProfile = profile.header.followers.includes(user.username);
     const userRequestToFollow = profile.header.private && profile.followRequest;
 
     const buttonText = () => {

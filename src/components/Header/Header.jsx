@@ -102,11 +102,11 @@ const Header = ({ updateAddModal, showAddModal }) => {
             >
               <img className='profile-picture' src={user.photoURL} alt='' />
             </button>
-            {displayUserDropdown && (
-              <UserDropDown closeUserDropDown={closeUserDropDown} />
-            )}
             {displayFavoriteDropdown && (
               <FavoriteDropDown closeFavoriteDropDown={closeFavoriteDropDown} />
+            )}
+            {displayUserDropdown && (
+              <UserDropDown closeUserDropDown={closeUserDropDown} />
             )}
           </div>
         </div>
