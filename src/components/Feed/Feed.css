@@ -1,3 +1,8 @@
 .no-feed-posts {
   text-align: center;
 }
+
+.no-feed-posts h3,
+.no-feed-posts p {
+  color: var(--text);
+}

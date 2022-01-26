@@ -33,3 +33,8 @@
 .no-user {
   text-align: center;
 }
+
+.no-user h2,
+.no-user p {
+  color: var(--text);
+}
