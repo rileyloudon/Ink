@@ -35,7 +35,8 @@ const FavoriteDropDown = ({ closeFavoriteDropDown }) => {
               // history.push(Follower Requests URL);
             }}
           >
-            {user.followRequests} Follow Requests
+            {user.followRequests} Follow Request
+            {user.followRequests === 1 ? '' : 's'}
           </button>
         )}
         <button
@@ -45,7 +46,7 @@ const FavoriteDropDown = ({ closeFavoriteDropDown }) => {
             // history.push(`New Likes since last login (?)`);
           }}
         >
-          {user.newLikes} New Likes
+          {user.newLikes} New Like{user.newLikes === 1 ? '' : 's'}
         </button>
         <button
           type='button'
@@ -54,7 +55,7 @@ const FavoriteDropDown = ({ closeFavoriteDropDown }) => {
             // history.push('New Followers since last login');
           }}
         >
-          {user.newFollowers} New Followers
+          {user.newFollowers} New Follower{user.newFollowers === 1 ? '' : 's'}
         </button>
       </div>
     </div>
