@@ -1,0 +1,29 @@
+.favorite-drop-down-container {
+  position: absolute;
+}
+
+.favorite-drop-down {
+  position: relative;
+  top: 65px;
+  left: 13px;
+  background-color: var(--background);
+  border-radius: 6px;
+  box-shadow: 0 0 4px 1px var(--shadow);
+  width: 200px;
+}
+
+.favorite-drop-down button {
+  color: var(--text);
+  cursor: pointer;
+  display: block;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  padding: 8px 16px;
+  width: 100%;
+  text-align: left;
+}
+
+.favorite-drop-down button:hover {
+  background-color: var(--off-background);
+}
