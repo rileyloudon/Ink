@@ -21,18 +21,19 @@ const LikedFeed = () => {
     // prevents seeing no posts message if you click the link when viewing another persons liked posts.
     if (!setLoading) setLoading(true);
 
-    fetchLikedPosts().then((res) => {
-      if (isSubscribed) {
-        setDisplayedPosts(res.slice(0, 10));
-        setNextPosts(res.slice(10));
-        setLoading(false);
-      }
-    });
+    if (user)
+      fetchLikedPosts().then((res) => {
+        if (isSubscribed) {
+          setDisplayedPosts(res.slice(0, 10));
+          setNextPosts(res.slice(10));
+          setLoading(false);
+        }
+      });
 
     return () => {
       isSubscribed = false;
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     let isSubscribed = true;
