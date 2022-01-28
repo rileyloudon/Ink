@@ -12,6 +12,7 @@ import LikedFeed from './components/LikedFeed/LikedFeed';
 import UserContext from './Context/UserContext';
 import ThemeContext from './Context/ThemeContext';
 import Settings from './components/Settings/Settings';
+import FollowRequests from './components/FollowRequests/FollowRequests';
 import './App.css';
 import { fetchUserData } from './firebase';
 
@@ -77,6 +78,13 @@ function App() {
           )}
           {showAddModal && <AddPost updateAddModal={updateAddModal} />}
           <Switch location={background || location}>
+            <Route exact path='/settings/followrequests'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <FollowRequests />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
             <Route path='/:username/liked'>
               {user || localStorage.getItem('userWillSignIn') ? (
                 <LikedFeed />
