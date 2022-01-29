@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import UserContext from '../../Context/UserContext';
 import ThemeContext from '../../Context/ThemeContext';
-import { fetchUserData, updateUserSettings } from '../../firebase';
+import { updateUserSettings } from '../../firebase';
 import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
 import './Settings.css';
 
@@ -25,8 +25,6 @@ const Settings = () => {
   const { user, setUser } = useContext(UserContext);
   const { theme, setTheme } = useContext(ThemeContext);
 
-  const [userData, setUserData] = useState();
-
   const [newProfilePicture, setNewProfilePicture] = useState('');
   const [pictureRejected, setPictureRejected] = useState(false);
 
@@ -36,11 +34,11 @@ const Settings = () => {
   const [error, setError] = useState();
   const [buttonLoading, setButtonLoading] = useState(false);
 
-  const changedData = userData
+  const changedData = user
     ? newProfilePicture ||
-      userData.fullName !== name ||
-      userData.bio !== bio ||
-      userData.private !== privateAccount
+      user.fullName !== name ||
+      user.bio !== bio ||
+      user.private !== privateAccount
     : null;
 
   const onDropAccepted = useCallback((acceptedFiles) => {
@@ -80,10 +78,11 @@ const Settings = () => {
   const saveSettings = () => {
     const changed = {
       profilePicture: newProfilePicture !== '',
-      name: userData.fullName !== name,
-      bio: userData.bio !== bio,
-      privateAccount: userData.private !== privateAccount,
+      name: user.fullName !== name,
+      bio: user.bio !== bio,
+      privateAccount: user.private !== privateAccount,
     };
+
     setButtonLoading(true);
     updateUserSettings(
       changed,
@@ -100,7 +99,7 @@ const Settings = () => {
           }));
           setNewProfilePicture('');
         }
-        setUserData((prevData) => ({
+        setUser((prevData) => ({
           ...prevData,
           fullName: name,
           bio,
@@ -115,23 +114,11 @@ const Settings = () => {
   };
 
   useEffect(() => {
-    let isSubscribed = true;
-
-    if (user)
-      fetchUserData(user.displayName).then((res) => {
-        if (isSubscribed) {
-          setName(res.fullName);
-          setBio(res.bio);
-          setPrivateAccount(res.private);
-          setUserData(res);
-
-          const textarea = document.getElementById('change-bio');
-          textarea.style.height = `${textarea.scrollHeight}px`;
-        }
-      });
-    return () => {
-      isSubscribed = false;
-    };
+    if (user) {
+      setName(user.fullName);
+      setBio(user.bio);
+      setPrivateAccount(user.private);
+    }
   }, [user]);
 
   useEffect(() => {
@@ -185,6 +172,10 @@ const Settings = () => {
               name='bio'
               id='change-bio'
               value={bio}
+              onClick={(e) => {
+                e.target.style.height = 'inherit';
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
               onChange={(e) => {
                 e.target.style.height = 'inherit';
                 e.target.style.height = `${e.target.scrollHeight}px`;
