@@ -314,6 +314,10 @@ export const acceptFollowRequest = async (requestedUser) => {
   );
 };
 
+// export const denyFollowRequest = () => {
+
+// }
+
 export const updateUserSettings = async (
   changed,
   profilePcture,
@@ -560,11 +564,30 @@ export const fetchNextFeedPosts = async (type, start) => {
     );
 
     const querySnapshot = await getDocs(q);
-    const likedPosts = [];
-    querySnapshot.forEach((post) => likedPosts.push(post.data()));
-    return likedPosts;
+    const posts = [];
+    querySnapshot.forEach((post) => posts.push(post.data()));
+    return posts;
   } catch (e) {
     console.log(e);
     return [];
   }
+};
+
+export const fetchFollowRequests = async () => {
+  const auth = getAuth();
+  const querySnapshot = await getDocs(
+    collection(db, 'users', auth.currentUser.displayName, 'followRequests')
+  );
+
+  const requests = [];
+  const pictures = [];
+
+  querySnapshot.forEach((user) => {
+    const profilePicture = fetchProfilePicture(user.data().username);
+    pictures.push(profilePicture);
+    requests.push(user.data());
+  });
+
+  const profilePictures = await Promise.all(pictures);
+  return { requests, profilePictures };
 };
