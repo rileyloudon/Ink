@@ -280,11 +280,18 @@ export const cancelFollowRequest = async (followedUser) => {
     auth.currentUser.displayName
   );
 
-  await updateDoc(doc(db, 'users', followedUser), {
-    followRequests: increment(-1),
-  });
+  const docSnap = await getDoc(docRef);
 
-  await deleteDoc(docRef);
+  // Check if request currently exists, if not, unfollow.
+  if (docSnap.exists()) {
+    await updateDoc(doc(db, 'users', followedUser), {
+      followRequests: increment(-1),
+    });
+
+    await deleteDoc(docRef);
+  } else {
+    unfollowUser(followedUser);
+  }
 
   return false;
 };
@@ -295,15 +302,7 @@ export const acceptFollowRequest = async (requestedUser) => {
   const currentUser = doc(db, 'users', auth.currentUser.displayName);
   const otherUser = doc(db, 'users', requestedUser);
 
-  await updateDoc(currentUser, {
-    followers: arrayUnion(requestedUser),
-  });
-
-  await updateDoc(otherUser, {
-    following: arrayUnion(auth.currentUser.displayName),
-  });
-
-  await deleteDoc(
+  const requestExists = await getDoc(
     doc(
       db,
       'users',
@@ -312,11 +311,60 @@ export const acceptFollowRequest = async (requestedUser) => {
       requestedUser
     )
   );
+
+  if (requestExists.exists()) {
+    await updateDoc(currentUser, {
+      followers: arrayUnion(requestedUser),
+      followRequests: increment(-1),
+    });
+
+    await updateDoc(otherUser, {
+      following: arrayUnion(auth.currentUser.displayName),
+    });
+
+    await deleteDoc(
+      doc(
+        db,
+        'users',
+        auth.currentUser.displayName,
+        'followRequests',
+        requestedUser
+      )
+    );
+  }
 };
 
-// export const denyFollowRequest = () => {
+export const denyFollowRequest = async (requestedUser) => {
+  const auth = getAuth();
 
-// }
+  const currentUser = doc(db, 'users', auth.currentUser.displayName);
+
+  const requestExists = await getDoc(
+    doc(
+      db,
+      'users',
+      auth.currentUser.displayName,
+      'followRequests',
+      requestedUser
+    )
+  );
+
+  if (requestExists.exists()) {
+    await updateDoc(currentUser, {
+      followRequests: increment(-1),
+    });
+
+    await deleteDoc(
+      doc(
+        db,
+        'users',
+        auth.currentUser.displayName,
+        'followRequests',
+        requestedUser
+      )
+    );
+  }
+};
 
 export const updateUserSettings = async (
   changed,
@@ -579,15 +627,15 @@ export const fetchFollowRequests = async () => {
     collection(db, 'users', auth.currentUser.displayName, 'followRequests')
   );
 
-  const requests = [];
+  const users = [];
   const pictures = [];
 
   querySnapshot.forEach((user) => {
     const profilePicture = fetchProfilePicture(user.data().username);
     pictures.push(profilePicture);
-    requests.push(user.data());
+    users.push(user.data());
   });
 
   const profilePictures = await Promise.all(pictures);
-  return { requests, profilePictures };
+  return { users, profilePictures };
 };
