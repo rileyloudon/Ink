@@ -1,0 +1,58 @@
+.no-requests {
+  color: var(--text);
+  text-align: center;
+}
+
+.request {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border);
+  padding: 14px 4px 14px 16px;
+  background-color: var(--background);
+  margin: auto;
+}
+
+.request a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 15px;
+}
+
+.request img {
+  margin-right: 15px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.request span {
+  margin-right: 4px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.request button {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.request .accept-request {
+  padding: 0 24px;
+  color: var(--background);
+  background-color: var(--button);
+  border: 1px solid var(--button);
+  border-radius: 3px;
+  line-height: 26px;
+}
+
+.request .deny-request {
+  padding: 0 24px;
+  color: var(--text);
+  background-color: transparent;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  line-height: 26px;
+}
