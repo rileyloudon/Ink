@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { Link } from 'react-router-dom';
 import UserContext from '../../Context/UserContext';
 import ThemeContext from '../../Context/ThemeContext';
 import { updateUserSettings } from '../../firebase';
@@ -154,8 +155,13 @@ const Settings = () => {
               onChange={(e) => setPrivateAccount(e.target.checked)}
             />
             <span className='checkmark' />
-            {/* {privateAccount ? <Checked /> : <Unchecked />} */}
           </label>
+          {user.followRequests >= 1 && (
+            <Link to='/settings/followrequests' className='follow-requests'>
+              {user.followRequests} follow request
+              {user.followRequests === 1 ? '' : 's'}
+            </Link>
+          )}
           <label htmlFor='change-name' className='input'>
             <p>Name</p>
             <input
@@ -205,7 +211,6 @@ const Settings = () => {
           />
           <span className='checkmark' />
         </label>
-        {/* {theme === 'dark' ? <Checked /> : <Unchecked />} */}
         <button type='button'>Delete Account</button>
       </div>
     </>

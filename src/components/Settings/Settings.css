@@ -165,3 +165,9 @@ input:checked ~ .checkmark:after {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+
+.profile-settings .follow-requests {
+  padding-top: 5px;
+  color: var(--button);
+  text-decoration: none;
+}
