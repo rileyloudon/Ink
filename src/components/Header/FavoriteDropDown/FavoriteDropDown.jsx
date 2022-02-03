@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import './FavoriteDropDown.css';
 import UserContext from '../../../Context/UserContext';
 
 const FavoriteDropDown = ({ closeFavoriteDropDown }) => {
-  // const history = useHistory();
+  const history = useHistory();
   const { user } = useContext(UserContext);
 
   const favoriteDropDown = useRef();
@@ -32,7 +32,7 @@ const FavoriteDropDown = ({ closeFavoriteDropDown }) => {
             type='button'
             onClick={() => {
               closeFavoriteDropDown();
-              // history.push(Follower Requests URL);
+              history.push('/settings/followrequests');
             }}
           >
             {user.followRequests} Follow Request
