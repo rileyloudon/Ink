@@ -528,19 +528,20 @@ export const addComment = async (post, comment) => {
   const auth = getAuth();
   const postRef = doc(db, 'users', postOwner, 'posts', post.id);
 
+  const newComment = {
+    comment,
+    by: auth.currentUser.displayName,
+    timestamp: Timestamp.now(),
+    likes: [],
+    replies: [],
+    key: uuidv4(),
+  };
+
   await updateDoc(postRef, {
-    comments: arrayUnion({
-      comment,
-      by: auth.currentUser.displayName,
-      timestamp: Timestamp.now(),
-      likes: [],
-      replies: [],
-      key: uuidv4(),
-    }),
+    comments: arrayUnion(newComment),
   });
 
-  const docSnap = await getDoc(doc(db, 'users', postOwner, 'posts', post.id));
-  return docSnap.data().comments;
+  return newComment;
 };
 
 export const fetchProfilePicture = async (user) => {
