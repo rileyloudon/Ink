@@ -15,7 +15,8 @@ const VerticalPost = ({ post }) => {
   const { user } = useContext(UserContext);
 
   const [profilePicture, setProfilePicture] = useState();
-  const [postComments, setPostComments] = useState(post.comments);
+  const [postComments] = useState(post.comments);
+  const [newComments, setNewComments] = useState([]);
   const [likeStatus, setLikeStatus] = useState(
     user
       ? {
@@ -25,7 +26,8 @@ const VerticalPost = ({ post }) => {
       : null
   );
 
-  const updateCommentsArray = (comments) => setPostComments(comments);
+  const addNewComment = (comment) =>
+    setNewComments((prevState) => [...prevState, comment]);
 
   const likePost = () => {
     toggleLikePost(post).then((res) => {
@@ -79,9 +81,13 @@ const VerticalPost = ({ post }) => {
               includePicture={false}
             />
           ))}
+          {newComments &&
+            newComments.map((commentObj) => (
+              <Comment key={commentObj.key} commentObj={commentObj} />
+            ))}
           <DatePosted marginBottom={16} timestamp={post.timestamp} />
         </section>
-        <AddComment updateCommentsArray={updateCommentsArray} post={post} />
+        <AddComment addNewComment={addNewComment} post={post} />
       </section>
     </div>
   );

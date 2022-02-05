@@ -19,17 +19,11 @@ const HorizontalPost = ({ modal }) => {
   const history = useHistory();
 
   const [postData, setPostData] = useState();
+  const [newComments, setNewComments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const updateCommentsArray = (comments) => {
-    setPostData((prevState) => ({
-      ...prevState,
-      post: {
-        ...prevState.post,
-        comments,
-      },
-    }));
-  };
+  const addNewComment = (comment) =>
+    setNewComments((prevState) => [...prevState, comment]);
 
   const likePost = () => {
     toggleLikePost(postData.post).then((res) => {
@@ -104,6 +98,10 @@ const HorizontalPost = ({ modal }) => {
               {postData.post.comments.map((commentObj) => (
                 <Comment key={commentObj.key} commentObj={commentObj} />
               ))}
+              {newComments &&
+                newComments.map((commentObj) => (
+                  <Comment key={commentObj.key} commentObj={commentObj} />
+                ))}
             </section>
             <section className='interact'>
               <ButtonBar
@@ -115,10 +113,7 @@ const HorizontalPost = ({ modal }) => {
               <Likes likeCount={postData.likeCount} />
               <DatePosted timestamp={postData.post.timestamp} />
             </section>
-            <AddComment
-              updateCommentsArray={updateCommentsArray}
-              post={postData.post}
-            />
+            <AddComment addNewComment={addNewComment} post={postData.post} />
           </section>
         </div>
       </>

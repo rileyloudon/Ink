@@ -6,25 +6,23 @@ import { addComment } from '../../../firebase';
 import './AddComment.css';
 import 'emoji-mart/css/emoji-mart.css';
 
-const AddComment = ({ updateCommentsArray, post }) => {
+const AddComment = ({ addNewComment, post }) => {
   const [comment, setComment] = useState('');
   const [displayEmojiPicker, setDisplayEmojiPicker] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     if (comment.trim().length >= 1) {
       e.preventDefault();
-      addComment(post, comment).then((res) => {
-        setComment('');
-        updateCommentsArray(res);
-      });
+      const newComment = await addComment(post, comment);
+      setComment('');
+      addNewComment(newComment);
     }
   };
 
   const updateDisplayEmojiPicker = (value) => setDisplayEmojiPicker(value);
 
-  const selectEmoji = (emojiObject) => {
+  const selectEmoji = (emojiObject) =>
     setComment((currentComment) => currentComment + emojiObject.native);
-  };
 
   return post.disableComments ? null : (
     <section className='comment-box'>
@@ -73,7 +71,7 @@ const AddComment = ({ updateCommentsArray, post }) => {
 };
 
 AddComment.propTypes = {
-  updateCommentsArray: PropTypes.func.isRequired,
+  addNewComment: PropTypes.func.isRequired,
   post: PropTypes.shape({
     id: PropTypes.string,
     disableComments: PropTypes.bool,
