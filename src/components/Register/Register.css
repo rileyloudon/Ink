@@ -44,6 +44,7 @@
   border: 1px solid var(--border);
   border-radius: 3px;
   margin: 0 40px 6px;
+  color: var(--text);
 }
 
 .register .register-btn {
@@ -88,7 +89,7 @@
 .register .guest-btn {
   margin: 8px 40px;
   border: 0;
-  color: #385185;
+  color: var(--login-help-text);
   padding: 0;
   background: 0 0;
   cursor: pointer;

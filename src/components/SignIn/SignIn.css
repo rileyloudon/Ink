@@ -30,6 +30,7 @@
   border: 1px solid var(--border);
   border-radius: 3px;
   margin: 0 40px 6px;
+  color: var(--text);
 }
 
 .sign-in .log-in-btn {
