@@ -86,9 +86,9 @@ const SignIn = ({ updateLoading, signInGuest }) => {
           <p className='sign-in-error' role='alert'>
             {signInError}
           </p>
-          <a href='/' className='reset-password'>
+          <Link to='/reset-password' className='reset-password'>
             Forgot password?
-          </a>
+          </Link>
         </form>
       </div>
 
