@@ -157,7 +157,7 @@ const Settings = () => {
             <span className='checkmark' />
           </label>
           {user.followRequests >= 1 && (
-            <Link to='/settings/followrequests' className='follow-requests'>
+            <Link to='/settings/follow-requests' className='follow-requests'>
               {user.followRequests} follow request
               {user.followRequests === 1 ? '' : 's'}
             </Link>

@@ -32,7 +32,7 @@ const FavoriteDropDown = ({ closeFavoriteDropDown }) => {
             type='button'
             onClick={() => {
               closeFavoriteDropDown();
-              history.push('/settings/followrequests');
+              history.push('/settings/follow-requests');
             }}
           >
             {user.followRequests} Follow Request
