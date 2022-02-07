@@ -13,8 +13,9 @@ import UserContext from './Context/UserContext';
 import ThemeContext from './Context/ThemeContext';
 import Settings from './components/Settings/Settings';
 import FollowRequests from './components/FollowRequests/FollowRequests';
-import './App.css';
+import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import { fetchUserData } from './firebase';
+import './App.css';
 
 function App() {
   const location = useLocation();
@@ -78,7 +79,7 @@ function App() {
           )}
           {showAddModal && <AddPost updateAddModal={updateAddModal} />}
           <Switch location={background || location}>
-            <Route exact path='/settings/followrequests'>
+            <Route exact path='/settings/follow-requests'>
               {user || localStorage.getItem('userWillSignIn') ? (
                 <FollowRequests />
               ) : (
@@ -99,6 +100,11 @@ function App() {
                 <Redirect to='/' />
               )}
             </Route>
+            <Route
+              exact
+              path='/reset-password'
+              render={() => <ForgotPassword />}
+            />
             <Route
               exact
               path='/'
