@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   signOut,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -639,4 +640,21 @@ export const fetchFollowRequests = async () => {
 
   const profilePictures = await Promise.all(pictures);
   return { users, profilePictures };
+};
+
+export const forgotPassword = async (email) => {
+  const auth = getAuth();
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (e) {
+    switch (e.code) {
+      case 'auth/invalid-email':
+        return 'Enter a valid email address.';
+      case 'auth/user-not-found':
+        return "The email you entered doesn't belong to an account.";
+      default:
+        return 'Error';
+    }
+  }
+  return 'Email sent';
 };
