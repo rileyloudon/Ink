@@ -7,6 +7,9 @@ import {
   updateProfile,
   signOut,
   sendPasswordResetEmail,
+  // updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -107,7 +110,7 @@ export const signInUser = async (email, password) => {
       case 'auth/user-not-found':
         return "The email you entered doesn't belong to an account.";
       case 'auth/wrong-password':
-        return 'Sorry, your password was incorrect. Please double-check your password.';
+        return 'Your password was incorrect. Please double-check your password.';
       default:
         return 'Error';
     }
@@ -373,6 +376,7 @@ export const updateUserSettings = async (
   name,
   bio,
   privateAccount
+  // newPassword
 ) => {
   const auth = getAuth();
   const docRef = doc(db, 'users', auth.currentUser.displayName);
@@ -436,6 +440,10 @@ export const updateUserSettings = async (
 
       return { updated: true, publicImageUrl };
     }
+
+    // if(changed.password){
+    //   await updatePassword(auth.currentUser, newPassword);
+    // }
 
     return { updated: true };
   } catch (err) {
@@ -657,4 +665,21 @@ export const forgotPassword = async (email) => {
     }
   }
   return 'Email sent';
+};
+
+export const reauthenticateUser = async (password) => {
+  const auth = getAuth();
+  const { email } = auth.currentUser;
+  const crediential = EmailAuthProvider.credential(email, password);
+  try {
+    await reauthenticateWithCredential(auth.currentUser, crediential);
+  } catch (e) {
+    switch (e.code) {
+      case 'auth/wrong-password':
+        return 'Your password was incorrect. Please double-check your password.';
+      default:
+        return 'Error';
+    }
+  }
+  return true;
 };
