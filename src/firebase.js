@@ -7,7 +7,7 @@ import {
   updateProfile,
   signOut,
   sendPasswordResetEmail,
-  // updatePassword,
+  updatePassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
 } from 'firebase/auth';
@@ -376,7 +376,6 @@ export const updateUserSettings = async (
   name,
   bio,
   privateAccount
-  // newPassword
 ) => {
   const auth = getAuth();
   const docRef = doc(db, 'users', auth.currentUser.displayName);
@@ -440,10 +439,6 @@ export const updateUserSettings = async (
 
       return { updated: true, publicImageUrl };
     }
-
-    // if(changed.password){
-    //   await updatePassword(auth.currentUser, newPassword);
-    // }
 
     return { updated: true };
   } catch (err) {
@@ -667,16 +662,19 @@ export const forgotPassword = async (email) => {
   return 'Email sent';
 };
 
-export const reauthenticateUser = async (password) => {
+export const changePassword = async (currentPassword, newPassword) => {
   const auth = getAuth();
   const { email } = auth.currentUser;
-  const crediential = EmailAuthProvider.credential(email, password);
+  const crediential = EmailAuthProvider.credential(email, currentPassword);
   try {
     await reauthenticateWithCredential(auth.currentUser, crediential);
+    await updatePassword(auth.currentUser, newPassword);
   } catch (e) {
     switch (e.code) {
       case 'auth/wrong-password':
-        return 'Your password was incorrect. Please double-check your password.';
+        return 'Your current password was incorrect.';
+      case 'auth/weak-password':
+        return 'Please enter a stronger password';
       default:
         return 'Error';
     }
