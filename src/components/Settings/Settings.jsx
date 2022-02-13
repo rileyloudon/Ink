@@ -1,12 +1,12 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserContext from '../../Context/UserContext';
 import ThemeContext from '../../Context/ThemeContext';
 import { updateUserSettings } from '../../firebase';
 import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
+import ChangePicture from './ChangePicture/ChangePicture';
 import './Settings.css';
+import ChangePassword from './ChangePassword/ChangePassword';
 
 const Settings = () => {
   // Settings uses two copys of data:
@@ -27,7 +27,6 @@ const Settings = () => {
   const { theme, setTheme } = useContext(ThemeContext);
 
   const [newProfilePicture, setNewProfilePicture] = useState('');
-  const [pictureRejected, setPictureRejected] = useState(false);
 
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
@@ -42,29 +41,7 @@ const Settings = () => {
       user.private !== privateAccount
     : null;
 
-  const onDropAccepted = useCallback((acceptedFiles) => {
-    setNewProfilePicture({
-      properties: acceptedFiles[0],
-      url: URL.createObjectURL(acceptedFiles[0]),
-    });
-  }, []);
-
-  const onDropRejected = useCallback((rejectedFile) => {
-    if (rejectedFile[0].file.size > 5000000)
-      setPictureRejected('Please select a picture that is less than 5MB');
-    else setPictureRejected('Please select a .jpeg or .png file');
-  }, []);
-
-  const { getRootProps, getInputProps, open } = useDropzone({
-    multiple: false,
-    accept: 'image/jpeg, image/png',
-    maxSize: 5000000, // 5MB
-    noClick: true,
-    noKeyboard: true,
-    noDrag: true,
-    onDropAccepted,
-    onDropRejected,
-  });
+  const updateNewProfilePicture = (value) => setNewProfilePicture(value);
 
   const changeTheme = (e) => {
     if (e.target.checked) {
@@ -133,17 +110,7 @@ const Settings = () => {
           <img src={newProfilePicture.url || user.photoURL} alt='' />
           <span>{user.displayName}</span>
         </section>
-        <div {...getRootProps({ className: 'dropzone' })}>
-          <input {...getInputProps()} />
-          <button
-            className='change-profile-picture'
-            type='button'
-            onClick={open}
-          >
-            Change Profile Picture
-          </button>
-          {pictureRejected && <p className='error'>{pictureRejected}</p>}
-        </div>
+        <ChangePicture updateNewProfilePicture={updateNewProfilePicture} />
         <form>
           <label htmlFor='toggle-private' className='private-account'>
             <span>Private Account</span>
@@ -211,8 +178,11 @@ const Settings = () => {
           />
           <span className='checkmark' />
         </label>
-        <button type='button'>Delete Account</button>
+        <button type='button' className='delete-account'>
+          Delete Account
+        </button>
       </div>
+      <ChangePassword />
     </>
   ) : null;
 };
