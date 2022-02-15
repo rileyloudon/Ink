@@ -32,6 +32,7 @@ const Settings = () => {
   const [bio, setBio] = useState('');
   const [privateAccount, setPrivateAccount] = useState(false);
   const [error, setError] = useState();
+  const [profileUpdated, setProfileUpdated] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
 
   const changedData = user
@@ -83,11 +84,12 @@ const Settings = () => {
           bio,
           private: privateAccount,
         }));
-        setButtonLoading(false);
+        setProfileUpdated(true);
       } else {
         setError(res.err);
-        setButtonLoading(false);
+        setProfileUpdated(false);
       }
+      setButtonLoading(false);
     });
   };
 
@@ -103,12 +105,16 @@ const Settings = () => {
     return () => URL.revokeObjectURL(newProfilePicture.url);
   }, [newProfilePicture]);
 
+  useEffect(() => {
+    if (changedData) setProfileUpdated(false);
+  }, [changedData]);
+
   return user ? (
     <>
       <div className='profile-settings'>
         <section>
           <img src={newProfilePicture.url || user.photoURL} alt='' />
-          <span>{user.displayName}</span>
+          <span>{user.username}</span>
         </section>
         <ChangePicture updateNewProfilePicture={updateNewProfilePicture} />
         <form>
@@ -156,6 +162,7 @@ const Settings = () => {
               }}
             />
           </label>
+          {profileUpdated && <p className='profile-updated'>Profile Updated</p>}
           {error && <p className='error'>{error}</p>}
           <button
             className='save'
