@@ -14,17 +14,13 @@
 }
 
 .profile-settings button {
-  color: var(--text);
   background: 0 0;
   border: 0;
   cursor: pointer;
 }
 
-.profile-settings .change-profile-picture {
-  font-size: 14px;
-  color: var(--button);
-  font-weight: 600;
-  text-overflow: ellipsis;
+.profile-settings .delete-account {
+  color: var(--error);
 }
 
 .profile-settings section {
@@ -170,4 +166,9 @@ input:checked ~ .checkmark:after {
   padding-top: 5px;
   color: var(--button);
   text-decoration: none;
+}
+
+.profile-settings .profile-updated {
+  margin: 0;
+  color: var(--green);
 }
