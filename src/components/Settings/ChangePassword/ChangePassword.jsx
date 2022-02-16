@@ -1,16 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { changePassword } from '../../../firebase';
 import { ReactComponent as Spinner } from '../../../img/spinner/spinner.svg';
 import './ChangePassword.css';
 
 const ChangePassword = () => {
-  const [currentPassword, setCurrentPassword] = useState();
-  const [newPassword, setNewPassword] = useState();
-  const [newPassword2, setNewPassword2] = useState();
-  const [passwordUpdated, setPasswordUpdated] = useState(true);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPassword2, setNewPassword2] = useState('');
+  const [passwordUpdated, setPasswordUpdated] = useState(false);
   const [error, setError] = useState();
 
   const [buttonLoading, setButtonLoading] = useState(false);
+
+  const changedData =
+    currentPassword !== '' || newPassword !== '' || newPassword2 !== '';
 
   const formValid =
     currentPassword && newPassword && newPassword2 && newPassword.length >= 6;
@@ -23,25 +26,27 @@ const ChangePassword = () => {
     } else {
       const status = await changePassword(currentPassword, newPassword);
       if (status === true) {
-        setCurrentPassword();
-        setNewPassword();
-        setNewPassword2();
-        setError();
+        setCurrentPassword('');
+        setNewPassword('');
+        setNewPassword2('');
+        setError('');
         setPasswordUpdated(true);
       } else {
         setError(status);
+        setPasswordUpdated(false);
       }
       setButtonLoading(false);
     }
   };
 
+  useEffect(() => {
+    if (changedData) setPasswordUpdated(false);
+  }, [changedData]);
+
   return (
     <div className='change-password'>
       <form>
         <h3>Change Password</h3>
-        {passwordUpdated && (
-          <p className='password-updated'>Password Updated</p>
-        )}
         <label htmlFor='current-password' className='input'>
           <p>Current Password</p>
           <input
@@ -73,6 +78,9 @@ const ChangePassword = () => {
           />
         </label>
         {error && <p className='error'>{error}</p>}
+        {passwordUpdated && (
+          <p className='password-updated'>Password Updated</p>
+        )}
         <button
           className='save'
           type='button'
