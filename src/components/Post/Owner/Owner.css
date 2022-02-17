@@ -23,3 +23,10 @@
 .owner a {
   text-decoration: inherit;
 }
+
+.owner .dots {
+  cursor: pointer;
+  margin-left: auto;
+  padding-right: 15px;
+  fill: var(--text);
+}
