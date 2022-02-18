@@ -16,6 +16,7 @@
   --backdrop: rgba(0, 0, 0, 0.65);
 
   --error: rgb(237, 73, 86);
+  --green: #009000;
 }
 
 [data-theme='dark'] {
@@ -36,6 +37,7 @@
   --backdrop: rgba(255, 255, 255, 0.05);
 
   --error: rgb(218, 84, 95);
+  --green: #32de84;
 }
 
 body {
