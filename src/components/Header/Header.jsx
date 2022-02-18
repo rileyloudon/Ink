@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import FavoriteDropDown from './FavoriteDropDown/FavoriteDropDown';
-import UserDropDown from './UserDropDown/UserDropDown';
+import FavoriteDropdown from './FavoriteDropdown/FavoriteDropdown';
+import UserDropdown from './UserDropdown/UserDropdown';
 import { ReactComponent as HomeOutline } from '../../img/home/home-outline.svg';
 import { ReactComponent as HomeFilled } from '../../img/home/home-filled.svg';
 import { ReactComponent as ChatOutline } from '../../img/chat/chat-outline.svg';
@@ -23,13 +23,13 @@ const Header = ({ updateAddModal, showAddModal }) => {
   const [displayUserDropdown, setDisplayUserDropdown] = useState(false);
   const [displayFavoriteDropdown, setDisplayFavoriteDropdown] = useState(false);
 
-  const closeUserDropDown = () => setDisplayUserDropdown(false);
-  const closeFavoriteDropDown = () => setDisplayFavoriteDropdown(false);
+  const closeUserDropdown = () => setDisplayUserDropdown(false);
+  const closeFavoriteDropdown = () => setDisplayFavoriteDropdown(false);
 
   return (
     <header>
       <div className='center-header'>
-        <div className='header-white-background' />
+        <div className='header-background' />
         <div className='header-container'>
           <Link to='/' className='title'>
             <p className='ink'>Ink</p>
@@ -103,10 +103,10 @@ const Header = ({ updateAddModal, showAddModal }) => {
               <img className='profile-picture' src={user.photoURL} alt='' />
             </button>
             {displayFavoriteDropdown && (
-              <FavoriteDropDown closeFavoriteDropDown={closeFavoriteDropDown} />
+              <FavoriteDropdown closeFavoriteDropdown={closeFavoriteDropdown} />
             )}
             {displayUserDropdown && (
-              <UserDropDown closeUserDropDown={closeUserDropDown} />
+              <UserDropdown closeUserDropdown={closeUserDropdown} />
             )}
           </div>
         </div>

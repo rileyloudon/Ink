@@ -1,37 +1,37 @@
 import { useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import './FavoriteDropDown.css';
 import UserContext from '../../../Context/UserContext';
+import './FavoriteDropdown.css';
 
-const FavoriteDropDown = ({ closeFavoriteDropDown }) => {
+const FavoriteDropdown = ({ closeFavoriteDropdown }) => {
   const history = useHistory();
   const { user } = useContext(UserContext);
 
-  const favoriteDropDown = useRef();
+  const favoriteDropdown = useRef();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
-        favoriteDropDown.current &&
-        !favoriteDropDown.current.contains(e.target)
+        favoriteDropdown.current &&
+        !favoriteDropdown.current.contains(e.target)
       )
-        closeFavoriteDropDown();
+        closeFavoriteDropdown();
     };
 
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [closeFavoriteDropDown]);
+  }, [closeFavoriteDropdown]);
 
   return (
-    <div className='favorite-drop-down-container'>
-      <div ref={favoriteDropDown} className='favorite-drop-down'>
+    <div className='favorite-dropdown-container'>
+      <div ref={favoriteDropdown} className='favorite-dropdown'>
         {user.private && (
           <button
             type='button'
             onClick={() => {
-              closeFavoriteDropDown();
+              closeFavoriteDropdown();
               history.push('/settings/follow-requests');
             }}
           >
@@ -42,7 +42,7 @@ const FavoriteDropDown = ({ closeFavoriteDropDown }) => {
         <button
           type='button'
           onClick={() => {
-            closeFavoriteDropDown();
+            closeFavoriteDropdown();
             // history.push(`New Likes since last login (?)`);
           }}
         >
@@ -51,7 +51,7 @@ const FavoriteDropDown = ({ closeFavoriteDropDown }) => {
         <button
           type='button'
           onClick={() => {
-            closeFavoriteDropDown();
+            closeFavoriteDropdown();
             // history.push('New Followers since last login');
           }}
         >
@@ -62,8 +62,8 @@ const FavoriteDropDown = ({ closeFavoriteDropDown }) => {
   );
 };
 
-FavoriteDropDown.propTypes = {
-  closeFavoriteDropDown: PropTypes.func.isRequired,
+FavoriteDropdown.propTypes = {
+  closeFavoriteDropdown: PropTypes.func.isRequired,
 };
 
-export default FavoriteDropDown;
+export default FavoriteDropdown;

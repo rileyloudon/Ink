@@ -1,8 +1,8 @@
-.user-drop-down-container {
+.user-dropdown-container {
   position: absolute;
 }
 
-.user-drop-down {
+.user-dropdown {
   position: relative;
   top: 99px;
   left: 13px;
@@ -12,7 +12,7 @@
   width: 200px;
 }
 
-.user-drop-down button {
+.user-dropdown button {
   color: var(--text);
   cursor: pointer;
   display: block;
@@ -24,10 +24,10 @@
   text-align: left;
 }
 
-.user-drop-down button:hover {
+.user-dropdown button:hover {
   background-color: var(--off-background);
 }
 
-.user-drop-down .sign-out {
+.user-dropdown .sign-out {
   border-top: 1px solid var(--border);
 }

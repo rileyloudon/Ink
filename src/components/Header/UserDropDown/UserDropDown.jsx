@@ -2,10 +2,10 @@ import { useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { signOutUser } from '../../../firebase';
-import './UserDropDown.css';
 import UserContext from '../../../Context/UserContext';
+import './UserDropdown.css';
 
-const UserDropDown = ({ closeUserDropDown }) => {
+const UserDropdown = ({ closeUserDropdown }) => {
   const history = useHistory();
   const { user } = useContext(UserContext);
   const dropDown = useRef();
@@ -17,21 +17,21 @@ const UserDropDown = ({ closeUserDropDown }) => {
         !dropDown.current.contains(e.target) &&
         e.target.className !== 'profile-picture'
       )
-        closeUserDropDown();
+        closeUserDropdown();
     };
 
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [closeUserDropDown]);
+  }, [closeUserDropdown]);
 
   return (
-    <div className='user-drop-down-container'>
-      <div ref={dropDown} className='user-drop-down'>
+    <div className='user-dropdown-container'>
+      <div ref={dropDown} className='user-dropdown'>
         <button
           type='button'
           onClick={() => {
-            closeUserDropDown();
+            closeUserDropdown();
             history.push(`/${user.username}`);
           }}
         >
@@ -40,7 +40,7 @@ const UserDropDown = ({ closeUserDropDown }) => {
         <button
           type='button'
           onClick={() => {
-            closeUserDropDown();
+            closeUserDropdown();
             history.push(`/${user.username}/liked`);
           }}
         >
@@ -49,7 +49,7 @@ const UserDropDown = ({ closeUserDropDown }) => {
         <button
           type='button'
           onClick={() => {
-            closeUserDropDown();
+            closeUserDropdown();
             history.push('/settings');
           }}
         >
@@ -70,8 +70,8 @@ const UserDropDown = ({ closeUserDropDown }) => {
   );
 };
 
-UserDropDown.propTypes = {
-  closeUserDropDown: PropTypes.func.isRequired,
+UserDropdown.propTypes = {
+  closeUserDropdown: PropTypes.func.isRequired,
 };
 
-export default UserDropDown;
+export default UserDropdown;
