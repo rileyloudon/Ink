@@ -1,15 +1,9 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { ReactComponent as Dots } from '../../../img/dots/dots.svg';
-import PostDropDown from '../PostDropDown/PostDropDown';
+import PostDropdown from '../PostDropDown/PostDropdown';
 import './Owner.css';
 
-const Owner = ({ owner, profilePicture }) => {
-  const [displayPostDropdown, setDisplayPostDropdown] = useState(false);
-
-  const closePostDropdown = () => setDisplayPostDropdown(false);
-
+const Owner = ({ owner, profilePicture, id }) => {
   return (
     <section className='owner'>
       <Link to={`/${owner}`}>
@@ -18,17 +12,7 @@ const Owner = ({ owner, profilePicture }) => {
       <Link to={`/${owner}`}>
         <span>{owner}</span>
       </Link>
-      <Dots
-        className='dots'
-        onClick={() =>
-          displayPostDropdown
-            ? setDisplayPostDropdown(false)
-            : setDisplayPostDropdown(true)
-        }
-      />
-      {displayPostDropdown && (
-        <PostDropDown closePostDropdown={closePostDropdown} />
-      )}
+      <PostDropdown id={id} />
     </section>
   );
 };
@@ -40,6 +24,7 @@ Owner.defaultProps = {
 Owner.propTypes = {
   owner: PropTypes.string.isRequired,
   profilePicture: PropTypes.string,
+  id: PropTypes.string.isRequired,
 };
 
 export default Owner;
