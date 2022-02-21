@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import UserContext from '../../../Context/UserContext';
 import PostDropdown from '../PostDropDown/PostDropdown';
 import './Owner.css';
 
 const Owner = ({ owner, profilePicture, id }) => {
+  const location = useLocation();
+  const { user } = useContext(UserContext);
+
   return (
     <section className='owner'>
       <Link to={`/${owner}`}>
@@ -12,7 +17,9 @@ const Owner = ({ owner, profilePicture, id }) => {
       <Link to={`/${owner}`}>
         <span>{owner}</span>
       </Link>
-      <PostDropdown id={id} />
+      {(location.pathname === '/' || owner === user.username) && (
+        <PostDropdown owner={owner} id={id} />
+      )}
     </section>
   );
 };
