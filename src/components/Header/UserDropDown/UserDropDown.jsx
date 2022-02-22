@@ -1,37 +1,51 @@
-import { useContext, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import { useContext, useRef } from 'react';
+// import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { signOutUser } from '../../../firebase';
 import UserContext from '../../../Context/UserContext';
 import './UserDropdown.css';
 
-const UserDropdown = ({ closeUserDropdown }) => {
+const UserDropdown = () => {
   const history = useHistory();
   const { user } = useContext(UserContext);
-  const dropDown = useRef();
+  const userDropDown = useRef();
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (
-        dropDown.current &&
-        !dropDown.current.contains(e.target) &&
-        e.target.className !== 'profile-picture'
-      )
-        closeUserDropdown();
-    };
+  const handleClickOutside = (e) => {
+    if (
+      userDropDown.current &&
+      !userDropDown.current.contains(e.target) &&
+      e.target.className !== 'profile-picture' &&
+      document.getElementById(`user-dropdown`).classList.contains('displayed')
+    ) {
+      document.getElementById(`user-dropdown`).classList.remove('displayed');
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+  };
 
-    document.addEventListener('mousedown', handleClickOutside);
+  const handleClick = () => {
+    const post = document.getElementById(`user-dropdown`);
 
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [closeUserDropdown]);
+    if (post.classList.contains('displayed'))
+      document.removeEventListener('mousedown', handleClickOutside);
+    else document.addEventListener('mousedown', handleClickOutside);
+    post.classList.toggle('displayed');
+  };
+
+  const removeEverything = () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+    document.getElementById(`user-dropdown`).classList.remove('displayed');
+  };
 
   return (
     <div className='user-dropdown-container'>
-      <div ref={dropDown} className='user-dropdown'>
+      <button type='button' className='profile-border' onClick={handleClick}>
+        <img className='profile-picture' src={user.photoURL} alt='' />
+      </button>
+      <div ref={userDropDown} id='user-dropdown'>
         <button
           type='button'
           onClick={() => {
-            closeUserDropdown();
+            removeEverything();
             history.push(`/${user.username}`);
           }}
         >
@@ -40,7 +54,7 @@ const UserDropdown = ({ closeUserDropdown }) => {
         <button
           type='button'
           onClick={() => {
-            closeUserDropdown();
+            removeEverything();
             history.push(`/${user.username}/liked`);
           }}
         >
@@ -49,7 +63,7 @@ const UserDropdown = ({ closeUserDropdown }) => {
         <button
           type='button'
           onClick={() => {
-            closeUserDropdown();
+            removeEverything();
             history.push('/settings');
           }}
         >
@@ -59,6 +73,7 @@ const UserDropdown = ({ closeUserDropdown }) => {
           <button
             type='button'
             onClick={() => {
+              removeEverything();
               signOutUser().then(() => history.push('/'));
             }}
           >
@@ -70,8 +85,8 @@ const UserDropdown = ({ closeUserDropdown }) => {
   );
 };
 
-UserDropdown.propTypes = {
-  closeUserDropdown: PropTypes.func.isRequired,
-};
+// UserDropdown.propTypes = {
+//   closeUserDropdown: PropTypes.func.isRequired,
+// };
 
 export default UserDropdown;
