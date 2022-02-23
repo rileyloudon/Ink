@@ -67,8 +67,7 @@
   align-items: center;
 }
 
-.header-container .nav svg,
-.header-container .nav .profile-picture {
+.header-container .nav svg {
   fill: var(--svg);
   margin: 0 10px;
   width: 26px;
@@ -76,26 +75,9 @@
   cursor: pointer;
 }
 
-.header-container .nav .add,
-.header-container .nav > .favorite-dropdown {
+.header-container .nav .add {
   border: none;
   background-color: transparent;
   padding: inherit;
-  margin: 0;
-}
-
-.header-container .nav .profile-border {
-  padding: 0;
-  margin: 0 10px;
-  display: inline-flex;
-  border: 1px solid rgba(0, 0, 0, 0.0975);
-  background-color: var(--off-background);
-  border-radius: 50%;
-  width: max-content;
-  height: max-content;
-  overflow: hidden;
-}
-
-.header-container .nav .profile-picture {
   margin: 0;
 }

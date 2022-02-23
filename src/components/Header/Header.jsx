@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import FavoriteDropdown from './FavoriteDropdown/FavoriteDropdown';
@@ -9,22 +9,13 @@ import { ReactComponent as ChatOutline } from '../../img/chat/chat-outline.svg';
 import { ReactComponent as ChatFilled } from '../../img/chat/chat-filled.svg';
 import { ReactComponent as AddOutline } from '../../img/add/add-outline.svg';
 import { ReactComponent as AddFilled } from '../../img/add/add-filled.svg';
-import { ReactComponent as FavoriteOutline } from '../../img/favorite/favorite-outline.svg';
-import { ReactComponent as FavoriteFilled } from '../../img/favorite/favorite-filled.svg';
-import UserContext from '../../Context/UserContext';
 import './header.css';
 
 const Header = ({ updateAddModal, showAddModal }) => {
   const location = useLocation();
-  const { user } = useContext(UserContext);
+  const [favoriteDropdownOpen, setFavoriteDropdownOpen] = useState(false);
 
-  const [activeTab] = useState();
-
-  const [displayUserDropdown, setDisplayUserDropdown] = useState(false);
-  const [displayFavoriteDropdown, setDisplayFavoriteDropdown] = useState(false);
-
-  const closeUserDropdown = () => setDisplayUserDropdown(false);
-  const closeFavoriteDropdown = () => setDisplayFavoriteDropdown(false);
+  const changeFavoriteDropdownOpen = (value) => setFavoriteDropdownOpen(value);
 
   return (
     <header>
@@ -45,8 +36,8 @@ const Header = ({ updateAddModal, showAddModal }) => {
           <div className='nav'>
             <Link to='/'>
               {location.pathname === '/' &&
-              !displayUserDropdown &&
-              !showAddModal ? (
+              !showAddModal &&
+              !favoriteDropdownOpen ? (
                 <HomeFilled />
               ) : (
                 <HomeOutline />
@@ -54,8 +45,8 @@ const Header = ({ updateAddModal, showAddModal }) => {
             </Link>
             <Link to='/chat'>
               {location.pathname === '/chat' &&
-              !displayUserDropdown &&
-              !showAddModal ? (
+              !showAddModal &&
+              !favoriteDropdownOpen ? (
                 <ChatFilled />
               ) : (
                 <ChatOutline />
@@ -67,47 +58,15 @@ const Header = ({ updateAddModal, showAddModal }) => {
               className='add'
               onClick={() => updateAddModal(true)}
             >
-              {!displayUserDropdown && showAddModal ? (
-                <AddFilled />
-              ) : (
-                <AddOutline />
-              )}
+              {showAddModal ? <AddFilled /> : <AddOutline />}
             </button>
 
             {/* onClick -> Display follow requests, likes, setActiveTab('favorite') */}
-            <button
-              type='button'
-              className='favorite-dropdown'
-              onClick={() =>
-                displayFavoriteDropdown
-                  ? setDisplayFavoriteDropdown(false)
-                  : setDisplayFavoriteDropdown(true)
-              }
-            >
-              {activeTab === 'favorite' ? (
-                <FavoriteFilled />
-              ) : (
-                <FavoriteOutline />
-              )}
-            </button>
-
-            <button
-              type='button'
-              className='profile-border'
-              onClick={() =>
-                displayUserDropdown
-                  ? setDisplayUserDropdown(false)
-                  : setDisplayUserDropdown(true)
-              }
-            >
-              <img className='profile-picture' src={user.photoURL} alt='' />
-            </button>
-            {displayFavoriteDropdown && (
-              <FavoriteDropdown closeFavoriteDropdown={closeFavoriteDropdown} />
-            )}
-            {displayUserDropdown && (
-              <UserDropdown closeUserDropdown={closeUserDropdown} />
-            )}
+            <FavoriteDropdown
+              favoriteDropdownOpen={favoriteDropdownOpen}
+              changeFavoriteDropdownOpen={changeFavoriteDropdownOpen}
+            />
+            <UserDropdown />
           </div>
         </div>
       </div>
