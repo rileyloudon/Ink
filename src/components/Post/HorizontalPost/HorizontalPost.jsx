@@ -88,6 +88,7 @@ const HorizontalPost = ({ modal }) => {
             <Owner
               owner={postData.post.owner}
               profilePicture={postData.photoURL}
+              id={postData.post.id}
             />
             <section className='comments'>
               <Caption
