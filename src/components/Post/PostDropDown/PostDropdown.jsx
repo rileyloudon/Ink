@@ -16,7 +16,6 @@ const PostDropdown = ({ owner, id }) => {
       !postDropDown.current.contains(e.target) &&
       e.target.tagName !== 'svg' &&
       e.target.tagName !== 'path' &&
-      e.target.tagName !== 'BUTTON' &&
       document.getElementById(`${id}-dropdown`).classList.contains('displayed')
     ) {
       document.getElementById(`${id}-dropdown`).classList.remove('displayed');
@@ -25,12 +24,17 @@ const PostDropdown = ({ owner, id }) => {
   };
 
   const handleClick = () => {
-    const post = document.getElementById(`${id}-dropdown`);
+    const dropdown = document.getElementById(`${id}-dropdown`);
 
-    if (post.classList.contains('displayed'))
+    if (dropdown.classList.contains('displayed'))
       document.removeEventListener('mousedown', handleClickOutside);
     else document.addEventListener('mousedown', handleClickOutside);
-    post.classList.toggle('displayed');
+    dropdown.classList.toggle('displayed');
+  };
+
+  const removeEverything = () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+    document.getElementById(`${id}-dropdown`).classList.remove('displayed');
   };
 
   return (
@@ -42,8 +46,8 @@ const PostDropdown = ({ owner, id }) => {
             <button
               type='button'
               onClick={() => {
-                document.removeEventListener('mousedown', handleClickOutside);
-                history.push(`Edit`);
+                removeEverything();
+                // history.push(`Edit`);
               }}
             >
               Edit Post
@@ -51,7 +55,7 @@ const PostDropdown = ({ owner, id }) => {
             <button
               type='button'
               onClick={() => {
-                document.removeEventListener('mousedown', handleClickOutside);
+                removeEverything();
                 // history.push('');
               }}
             >
@@ -62,7 +66,7 @@ const PostDropdown = ({ owner, id }) => {
           <button
             type='button'
             onClick={() => {
-              document.removeEventListener('mousedown', handleClickOutside);
+              removeEverything();
               history.push(`/${owner}/${id}`);
             }}
           >
