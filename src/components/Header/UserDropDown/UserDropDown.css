@@ -1,6 +1,7 @@
 .user-dropdown-container {
   position: relative;
   float: right;
+  user-select: none;
 }
 
 .user-dropdown-container .profile-border {
@@ -21,6 +22,7 @@
   width: 26px;
   height: 26px;
   cursor: pointer;
+  user-select: none;
 }
 
 #user-dropdown {
