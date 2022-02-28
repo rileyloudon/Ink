@@ -14,6 +14,7 @@ import ThemeContext from './Context/ThemeContext';
 import Settings from './components/Settings/Settings';
 import FollowRequests from './components/FollowRequests/FollowRequests';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
+import EditPost from './components/Post/EditPost/EditPost';
 import { fetchUserData } from './firebase';
 import './App.css';
 
@@ -100,6 +101,14 @@ function App() {
                 <Redirect to='/' />
               )}
             </Route>
+            <Route exact path='/:username/:postId/edit'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <EditPost />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+
             <Route
               exact
               path='/reset-password'
