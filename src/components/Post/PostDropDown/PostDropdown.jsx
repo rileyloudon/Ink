@@ -47,7 +47,7 @@ const PostDropdown = ({ owner, id }) => {
               type='button'
               onClick={() => {
                 removeEverything();
-                // history.push(`Edit`);
+                history.push(`/${owner}/${id}/edit`);
               }}
             >
               Edit Post
