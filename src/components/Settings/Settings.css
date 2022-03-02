@@ -51,7 +51,9 @@
 }
 
 .profile-settings form .input {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 20px 0;
 }
 
@@ -60,7 +62,7 @@
   display: inline-block;
   width: 100px;
   text-align: center;
-  font-weight: bold;
+  margin: 10px 5px;
 }
 
 .profile-settings input,
