@@ -446,6 +446,47 @@ export const updateUserSettings = async (
   }
 };
 
+export const updatePost = async (
+  postId,
+  changed,
+  caption,
+  disableComments,
+  hideComments
+) => {
+  const auth = getAuth();
+  const docRef = doc(
+    db,
+    'users',
+    auth.currentUser.displayName,
+    'posts',
+    postId
+  );
+
+  try {
+    if (changed.caption) {
+      await updateDoc(docRef, {
+        caption,
+      });
+    }
+
+    if (changed.disableComments) {
+      await updateDoc(docRef, {
+        disableComments,
+      });
+    }
+
+    if (changed.hideComments) {
+      await updateDoc(docRef, {
+        hideComments,
+      });
+    }
+
+    return { updated: true };
+  } catch (err) {
+    return { updated: false, err };
+  }
+};
+
 export const uploadNewPost = async (image, caption, disableComments) => {
   try {
     const auth = getAuth();
