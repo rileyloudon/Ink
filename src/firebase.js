@@ -487,6 +487,22 @@ export const updatePost = async (
   }
 };
 
+export const deletePost = async (postId) => {
+  const auth = getAuth();
+  try {
+    await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
+      postCount: increment(-1),
+    });
+
+    await deleteDoc(
+      doc(db, 'users', auth.currentUser.displayName, 'posts', postId)
+    );
+    return { deleted: true };
+  } catch (err) {
+    return { deleted: false, err };
+  }
+};
+
 export const uploadNewPost = async (image, caption, disableComments) => {
   try {
     const auth = getAuth();
