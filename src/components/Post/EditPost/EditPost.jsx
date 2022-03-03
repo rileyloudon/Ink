@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ReactComponent as Spinner } from '../../../img/spinner/spinner.svg';
 import UserContext from '../../../Context/UserContext';
-import { fetchIndividualPost, updatePost } from '../../../firebase';
+import { deletePost, fetchIndividualPost, updatePost } from '../../../firebase';
 import './EditPost.css';
 
 const EditPost = () => {
@@ -11,18 +11,19 @@ const EditPost = () => {
 
   const [postData, setPostData] = useState();
   const [caption, setCaption] = useState('');
-  const [disableComments, setDisableComments] = useState();
-  const [hideComments, setHideComments] = useState();
+  const [disableComments, setDisableComments] = useState(false);
+  const [hideComments, setHideComments] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [error, setError] = useState();
 
-  const [postUpdated, setPostUpdeated] = useState(false);
+  const [postUpdated, setPostUpdated] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
 
   const changedData =
     typeof postData === 'object'
-      ? postData.caption !== caption ||
-        postData.disableComments !== disableComments ||
-        postData.hideComments !== hideComments
+      ? postData.post.caption !== caption ||
+        postData.post.disableComments !== disableComments ||
+        postData.post.hideComments !== hideComments
       : null;
 
   const savePost = () => {
@@ -33,21 +34,29 @@ const EditPost = () => {
     };
 
     setButtonLoading(true);
-    updatePost(changed, caption, disableComments, hideComments).then((res) => {
-      if (res.updated === true) {
-        setPostData((prevData) => ({
-          ...prevData,
-          caption,
-          disableComments,
-          hideComments,
-        }));
-        setPostUpdeated(true);
-      } else {
-        setError(res.err);
-        setPostUpdeated(false);
+    updatePost(postId, changed, caption, disableComments, hideComments).then(
+      (res) => {
+        if (res.updated === true) {
+          setPostData((prevData) => ({
+            ...prevData,
+            caption,
+            disableComments,
+            hideComments,
+          }));
+          setPostUpdated('Post Updated');
+        } else {
+          setError(res.err);
+          setPostUpdated(false);
+        }
+        setButtonLoading(false);
       }
-      setButtonLoading(false);
-    });
+    );
+  };
+
+  const handleDelete = async () => {
+    const status = await deletePost(postId);
+    if (status.deleted === true) setPostUpdated('Post Deleted');
+    else setError(status.err.message);
   };
 
   useEffect(() => {
@@ -56,9 +65,9 @@ const EditPost = () => {
       if (isSubscribed) {
         setPostData(res);
         if (typeof res === 'object') {
-          setCaption(res.caption);
-          setDisableComments(res.disableComments);
-          setHideComments(res.hideComments);
+          setCaption(res.post.caption);
+          setDisableComments(res.post.disableComments);
+          setHideComments(res.post.hideComments);
         }
       }
     });
@@ -72,23 +81,41 @@ const EditPost = () => {
   }
 
   if (postData === 'Post not found' || postData === 'User not found')
-    <div className='post-error'>
-      <h2>{postData}.</h2>
-      <p>Please double check the URL to make sure it&#39;s correct.</p>
-    </div>;
+    return (
+      <div className='edit-post-error'>
+        <h2>{postData}.</h2>
+        <p>Please double check the URL to make sure it&#39;s correct.</p>
+      </div>
+    );
 
-  return (
+  return postData ? (
     <>
+      <div className='post-preview'>
+        <figure className='post-image'>
+          <img src={postData.post.imageUrl} alt='' />
+        </figure>
+        <div className='stats'>
+          <p>Likes: {postData.likeCount}</p>
+          <p>Comments: {postData.post.comments.length}</p>
+        </div>
+      </div>
       <div className='post-settings'>
         <form>
           <label htmlFor='change-caption' className='input'>
             <p>Caption</p>
-            <input
-              type='text'
-              id='change-caption'
-              name='change-caption'
+            <textarea
+              name='bio'
+              id='change-bio'
               value={caption}
-              onChange={(e) => setCaption(e.target.value)}
+              onClick={(e) => {
+                e.target.style.height = 'inherit';
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+              onChange={(e) => {
+                e.target.style.height = 'inherit';
+                e.target.style.height = `${e.target.scrollHeight}px`;
+                setCaption(e.target.value);
+              }}
             />
           </label>
           <label htmlFor='toggle-disable-comments' className='disable-comments'>
@@ -113,7 +140,7 @@ const EditPost = () => {
             />
             <span className='checkmark' />
           </label>
-          {postUpdated && <p className='profile-updated'>Profile Updated</p>}
+          {postUpdated && <p className='post-updated'>{postUpdated}</p>}
           {error && <p className='error'>{error}</p>}
           <button
             className='save'
@@ -125,12 +152,33 @@ const EditPost = () => {
             {buttonLoading && <Spinner className='spinner' />}
           </button>
         </form>
-        <button type='button' className='delete-post'>
-          Delete Post
-        </button>
+        {!confirmDelete && (
+          <button
+            type='button'
+            className='delete-post'
+            onClick={() => setConfirmDelete(true)}
+          >
+            Delete Post
+          </button>
+        )}
+        {confirmDelete && (
+          <div className='confirm-delete'>
+            <p>Are you sure you wish the delete this post?</p>
+            <button type='button' className='delete' onClick={handleDelete}>
+              Delete
+            </button>
+            <button
+              type='button'
+              className='cancel'
+              onClick={() => setConfirmDelete(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
     </>
-  );
+  ) : null;
 };
 
 export default EditPost;
