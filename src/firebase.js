@@ -616,21 +616,21 @@ export const fetchFeed = async () => {
   const userRef = doc(db, 'users', auth.currentUser.displayName);
   const docSnap = await getDoc(userRef);
 
-  if (docSnap.data().following.length > 0) {
-    const q = query(
-      collectionGroup(db, 'posts'),
-      where('owner', 'in', docSnap.data().following),
-      orderBy('timestamp', 'desc'),
-      limit(20)
-    );
+  const q = query(
+    collectionGroup(db, 'posts'),
+    where('owner', 'in', [
+      ...docSnap.data().following,
+      auth.currentUser.displayName,
+    ]),
+    orderBy('timestamp', 'desc'),
+    limit(20)
+  );
 
-    const querySnapshot = await getDocs(q);
+  const querySnapshot = await getDocs(q);
 
-    const followingUsersPosts = [];
-    querySnapshot.forEach((post) => followingUsersPosts.push(post.data()));
-    return followingUsersPosts;
-  }
-  return [];
+  const followingUsersPosts = [];
+  querySnapshot.forEach((post) => followingUsersPosts.push(post.data()));
+  return followingUsersPosts;
 };
 
 export const fetchLikedPosts = async () => {
@@ -666,7 +666,10 @@ export const fetchNextFeedPosts = async (type, start) => {
     const q = query(
       collectionGroup(db, 'posts'),
       type === 'main'
-        ? where('owner', 'in', docSnap.data().following)
+        ? where('owner', 'in', [
+            ...docSnap.data().following,
+            auth.currentUser.displayName,
+          ])
         : where('likes', 'array-contains', auth.currentUser.displayName),
       orderBy('timestamp', 'desc'),
       startAfter(start),
