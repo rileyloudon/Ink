@@ -47,19 +47,19 @@ const PostDropdown = ({ owner, id }) => {
               type='button'
               onClick={() => {
                 removeEverything();
-                history.push(`/${owner}/${id}/edit`);
+                history.push(`/${owner}/${id}`);
               }}
             >
-              Edit Post
+              View Post
             </button>
             <button
               type='button'
               onClick={() => {
                 removeEverything();
-                // history.push('');
+                history.push(`/${owner}/${id}/edit`);
               }}
             >
-              Delete Post
+              Edit Post
             </button>
           </>
         ) : (
