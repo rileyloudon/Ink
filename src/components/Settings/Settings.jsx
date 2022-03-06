@@ -5,8 +5,8 @@ import ThemeContext from '../../Context/ThemeContext';
 import { updateUserSettings } from '../../firebase';
 import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
 import ChangePicture from './ChangePicture/ChangePicture';
-import './Settings.css';
 import ChangePassword from './ChangePassword/ChangePassword';
+import './Settings.css';
 
 const Settings = () => {
   // Settings uses two copys of data:
@@ -86,7 +86,7 @@ const Settings = () => {
         }));
         setProfileUpdated(true);
       } else {
-        setError(res.err);
+        setError(res.err.message);
         setProfileUpdated(false);
       }
       setButtonLoading(false);
