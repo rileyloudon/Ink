@@ -41,36 +41,24 @@ const PostDropdown = ({ owner, id }) => {
     <div ref={postDropDown} className='post-dropdown-container'>
       <Dots className='dots' onClick={handleClick} />
       <div id={`${id}-dropdown`} className='post-dropdown'>
-        {owner === user.username ? (
-          <>
-            <button
-              type='button'
-              onClick={() => {
-                removeEverything();
-                history.push(`/${owner}/${id}`);
-              }}
-            >
-              View Post
-            </button>
-            <button
-              type='button'
-              onClick={() => {
-                removeEverything();
-                history.push(`/${owner}/${id}/edit`);
-              }}
-            >
-              Edit Post
-            </button>
-          </>
-        ) : (
+        <button
+          type='button'
+          onClick={() => {
+            removeEverything();
+            history.push(`/${owner}/${id}`);
+          }}
+        >
+          View Post
+        </button>
+        {owner === user.username && (
           <button
             type='button'
             onClick={() => {
               removeEverything();
-              history.push(`/${owner}/${id}`);
+              history.push(`/${owner}/${id}/edit`);
             }}
           >
-            View Post
+            Edit Post
           </button>
         )}
       </div>
