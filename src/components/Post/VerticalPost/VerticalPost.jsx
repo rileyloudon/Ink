@@ -8,8 +8,8 @@ import ButtonBar from '../ButtonBar/ButtonBar';
 import Likes from '../Likes/Likes';
 import DatePosted from '../DatePosted/DatePosted';
 import Caption from '../Caption/Caption';
-import './VerticalPost.css';
 import Owner from '../Owner/Owner';
+import './VerticalPost.css';
 
 const VerticalPost = ({ post }) => {
   const { user } = useContext(UserContext);
@@ -58,7 +58,7 @@ const VerticalPost = ({ post }) => {
 
   return (
     <div className='vertical-view'>
-      <Owner owner={post.owner} profilePicture={profilePicture} />
+      <Owner owner={post.owner} profilePicture={profilePicture} id={post.id} />
       <figure className='post-image' onDoubleClick={likePost}>
         <img src={post.imageUrl} alt='' />
       </figure>
