@@ -43,23 +43,6 @@
   font-size: 42px;
 }
 
-.header-container input {
-  background-color: var(--off-background);
-  border: 1px solid var(--border);
-  cursor: text;
-  width: 199px;
-  height: 12px;
-  padding: 7px;
-  border-radius: 3px;
-  font-weight: 300;
-  font-size: 14px;
-  text-align: center;
-}
-
-.header-container input::placeholder {
-  color: rgb(142, 142, 142);
-}
-
 .header-container .nav {
   flex: 1;
   display: flex;

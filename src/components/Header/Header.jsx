@@ -9,6 +9,7 @@ import { ReactComponent as ChatOutline } from '../../img/chat/chat-outline.svg';
 import { ReactComponent as ChatFilled } from '../../img/chat/chat-filled.svg';
 import { ReactComponent as AddOutline } from '../../img/add/add-outline.svg';
 import { ReactComponent as AddFilled } from '../../img/add/add-filled.svg';
+import Search from './Search/Search';
 import './header.css';
 
 const Header = ({ updateAddModal, showAddModal }) => {
@@ -25,14 +26,7 @@ const Header = ({ updateAddModal, showAddModal }) => {
           <Link to='/' className='title'>
             <p className='ink'>Ink</p>
           </Link>
-
-          <input
-            className='search-box'
-            type='text'
-            placeholder='Search'
-            autoCapitalize='none'
-          />
-
+          <Search />
           <div className='nav'>
             <Link to='/'>
               {location.pathname === '/' &&
