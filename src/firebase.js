@@ -616,6 +616,7 @@ export const fetchFeed = async () => {
   const userRef = doc(db, 'users', auth.currentUser.displayName);
   const docSnap = await getDoc(userRef);
 
+  // Need to test when user has no posts. If [] will return or if it'll cause an error
   const q = query(
     collectionGroup(db, 'posts'),
     where('owner', 'in', [
@@ -740,4 +741,22 @@ export const changePassword = async (currentPassword, newPassword) => {
     }
   }
   return true;
+};
+
+export const searchUsers = async (searchString) => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'users'));
+
+    const allUsers = [];
+    querySnapshot.forEach((user) => allUsers.push(user.data()));
+
+    const matchingUsers = allUsers.filter((user) =>
+      user.username.includes(searchString)
+    );
+
+    return matchingUsers;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
 };
