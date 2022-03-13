@@ -70,7 +70,7 @@ const HorizontalPost = ({ modal }) => {
 
   const renderPost = () => {
     return postData === 'Post not found' || postData === 'User not found' ? (
-      <div className='post-error'>
+      <div className='horizontal-post-error'>
         <h2>{postData}.</h2>
         <p>Please double check the URL to make sure it&#39;s correct.</p>
       </div>
