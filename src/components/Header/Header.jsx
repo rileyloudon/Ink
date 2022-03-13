@@ -23,9 +23,11 @@ const Header = ({ updateAddModal, showAddModal }) => {
       <div className='center-header'>
         <div className='header-background' />
         <div className='header-container'>
-          <Link to='/' className='title'>
-            <p className='ink'>Ink</p>
-          </Link>
+          <div className='title'>
+            <Link to='/' className='ink'>
+              Ink
+            </Link>
+          </div>
           <Search />
           <div className='nav'>
             <Link to='/'>

@@ -35,12 +35,12 @@
   cursor: default;
   flex: 1;
   color: initial;
-  text-decoration: none;
 }
 
-.header-container p {
+.header-container .title .ink {
   margin: 0;
   font-size: 42px;
+  text-decoration: none;
 }
 
 .header-container .nav {
