@@ -15,7 +15,7 @@
   font-size: 14px;
 }
 
-.search #search-results {
+.search .search-results {
   position: absolute;
   display: none;
   flex-direction: column;
@@ -26,11 +26,11 @@
   width: 100%;
 }
 
-.search #search-results.displayed {
+.search .search-results.displayed {
   display: flex;
 }
 
-.search #search-results a {
+.search .search-results a {
   border: 1px solid var(--border);
   width: 100%;
   padding: 8px 0;
@@ -41,14 +41,14 @@
   text-decoration: none;
 }
 
-.search #search-results img {
+.search .search-results img {
   margin-right: 15px;
   width: 28px;
   height: 28px;
   border-radius: 50%;
 }
 
-.search #search-results span {
+.search .search-results span {
   margin-right: 4px;
   color: var(--text);
   font-weight: 600;
