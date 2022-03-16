@@ -743,18 +743,14 @@ export const changePassword = async (currentPassword, newPassword) => {
   return true;
 };
 
-export const searchUsers = async (searchString) => {
+export const getUsers = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, 'users'));
 
     const allUsers = [];
     querySnapshot.forEach((user) => allUsers.push(user.data()));
 
-    const matchingUsers = allUsers.filter((user) =>
-      user.username.includes(searchString)
-    );
-
-    return matchingUsers;
+    return allUsers;
   } catch (err) {
     console.log(err);
     return [];

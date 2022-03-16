@@ -1,21 +1,32 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { searchUsers } from '../../../firebase';
+import { getUsers } from '../../../firebase';
 import './Search.css';
 
 const Search = () => {
   const searchResultsRef = useRef();
   const [searchString, setSearchString] = useState('');
+  const [allUsers, setAllUsers] = useState();
   const [results, setResults] = useState();
   const [resultsOpen, setResultsOpen] = useState(false);
 
-  const handleClick = () => setResultsOpen(!resultsOpen);
+  const handleClick = async () => {
+    if (!allUsers) {
+      const res = await getUsers();
+      setAllUsers(res);
+    }
+
+    setResultsOpen(!resultsOpen);
+  };
 
   const handleSearch = (e) => {
     setSearchString(e.target.value);
-    searchUsers(e.target.value).then((res) => {
-      setResults(res);
-    });
+
+    const matchingUsers = allUsers.filter((user) =>
+      user.username.includes(e.target.value)
+    );
+
+    setResults(matchingUsers);
   };
 
   useEffect(() => {
