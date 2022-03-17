@@ -3,7 +3,7 @@
   float: right;
 }
 
-.favorite-dropdown-container #favorite-dropdown {
+.favorite-dropdown-container .favorite-dropdown {
   position: absolute;
   display: none;
   background-color: var(--background);
@@ -14,7 +14,7 @@
   right: 0;
 }
 
-.favorite-dropdown-container #favorite-dropdown button {
+.favorite-dropdown-container .favorite-dropdown button {
   color: var(--text);
   cursor: pointer;
   display: block;
@@ -26,10 +26,10 @@
   text-align: left;
 }
 
-.favorite-dropdown-container #favorite-dropdown button:hover {
+.favorite-dropdown-container .favorite-dropdown button:hover {
   background-color: var(--off-background);
 }
 
-#favorite-dropdown.displayed {
+.favorite-dropdown.displayed {
   display: block;
 }

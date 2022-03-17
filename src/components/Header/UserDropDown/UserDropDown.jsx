@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { signOutUser } from '../../../firebase';
 import UserContext from '../../../Context/UserContext';
@@ -7,74 +7,50 @@ import './UserDropdown.css';
 const UserDropdown = () => {
   const history = useHistory();
   const { user } = useContext(UserContext);
-  const userDropdown = useRef();
+  const userDropdownRef = useRef(null);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
-  const handleClickOutside = (e) => {
-    if (
-      userDropdown.current &&
-      !userDropdown.current.contains(e.target) &&
-      e.target.className !== 'profile-picture' &&
-      document.getElementById(`user-dropdown`).classList.contains('displayed')
-    ) {
-      document.getElementById(`user-dropdown`).classList.remove('displayed');
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-  };
+  const handleClick = () => setUserDropdownOpen(!userDropdownOpen);
 
-  const handleClick = () => {
-    const dropdown = document.getElementById(`user-dropdown`);
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        userDropdownRef.current !== null &&
+        !userDropdownRef.current.contains(e.traget)
+      ) {
+        setUserDropdownOpen(!userDropdownOpen);
+      }
+    };
 
-    if (dropdown.classList.contains('displayed'))
-      document.removeEventListener('mousedown', handleClickOutside);
-    else document.addEventListener('mousedown', handleClickOutside);
-    dropdown.classList.toggle('displayed');
-  };
-
-  const removeEverything = () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-    document.getElementById(`user-dropdown`).classList.remove('displayed');
-  };
+    if (userDropdownOpen) window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
+  }, [userDropdownOpen]);
 
   return (
-    <div ref={userDropdown} className='user-dropdown-container'>
+    <div className='user-dropdown-container'>
       <button type='button' className='profile-border' onClick={handleClick}>
         <img className='profile-picture' src={user.photoURL} alt='' />
       </button>
-      <div id='user-dropdown'>
-        <button
-          type='button'
-          onClick={() => {
-            removeEverything();
-            history.push(`/${user.username}`);
-          }}
-        >
+      <div
+        ref={userDropdownRef}
+        className={`user-dropdown ${userDropdownOpen ? 'displayed' : ''}`}
+      >
+        <button type='button' onClick={() => history.push(`/${user.username}`)}>
           Profile
         </button>
         <button
           type='button'
-          onClick={() => {
-            removeEverything();
-            history.push(`/${user.username}/liked`);
-          }}
+          onClick={() => history.push(`/${user.username}/liked`)}
         >
           Liked
         </button>
-        <button
-          type='button'
-          onClick={() => {
-            removeEverything();
-            history.push('/settings');
-          }}
-        >
+        <button type='button' onClick={() => history.push('/settings')}>
           Settings
         </button>
         <div className='sign-out'>
           <button
             type='button'
-            onClick={() => {
-              removeEverything();
-              signOutUser().then(() => history.push('/'));
-            }}
+            onClick={() => signOutUser().then(() => history.push('/'))}
           >
             Log Out
           </button>

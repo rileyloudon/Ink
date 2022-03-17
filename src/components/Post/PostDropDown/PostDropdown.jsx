@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import UserContext from '../../../Context/UserContext';
 import { ReactComponent as Dots } from '../../../img/dots/dots.svg';
@@ -8,44 +8,37 @@ import './PostDropdown.css';
 const PostDropdown = ({ owner, id }) => {
   const { user } = useContext(UserContext);
   const history = useHistory();
-  const postDropDown = useRef();
+  const postDropDownRef = useRef(null);
+  const [postDropdownOpen, setPostDropdownOpen] = useState(false);
 
-  const handleClickOutside = (e) => {
-    if (
-      postDropDown.current &&
-      !postDropDown.current.contains(e.target) &&
-      e.target.tagName !== 'svg' &&
-      e.target.tagName !== 'path' &&
-      document.getElementById(`${id}-dropdown`).classList.contains('displayed')
-    ) {
-      document.getElementById(`${id}-dropdown`).classList.remove('displayed');
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-  };
+  const handleClick = () => setPostDropdownOpen(!postDropdownOpen);
 
-  const handleClick = () => {
-    const dropdown = document.getElementById(`${id}-dropdown`);
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        postDropDownRef.current !== null &&
+        !postDropDownRef.current.contains(e.traget)
+      ) {
+        setPostDropdownOpen(!postDropdownOpen);
+      }
+    };
 
-    if (dropdown.classList.contains('displayed'))
-      document.removeEventListener('mousedown', handleClickOutside);
-    else document.addEventListener('mousedown', handleClickOutside);
-    dropdown.classList.toggle('displayed');
-  };
-
-  const removeEverything = () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-    document.getElementById(`${id}-dropdown`).classList.remove('displayed');
-  };
+    if (postDropdownOpen) window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
+  }, [postDropdownOpen]);
 
   return (
-    <div ref={postDropDown} className='post-dropdown-container'>
+    <div className='post-dropdown-container'>
       <Dots className='dots' onClick={handleClick} />
-      <div id={`${id}-dropdown`} className='post-dropdown'>
+      <div
+        ref={postDropDownRef}
+        className={`post-dropdown ${postDropdownOpen ? 'displayed' : ''}`}
+      >
         <button
           type='button'
           onClick={() => {
-            removeEverything();
             history.push(`/${owner}/${id}`);
+            window.scrollTo(0, 0);
           }}
         >
           View Post
@@ -53,10 +46,7 @@ const PostDropdown = ({ owner, id }) => {
         {owner === user.username && (
           <button
             type='button'
-            onClick={() => {
-              removeEverything();
-              history.push(`/${owner}/${id}/edit`);
-            }}
+            onClick={() => history.push(`/${owner}/${id}/edit`)}
           >
             Edit Post
           </button>

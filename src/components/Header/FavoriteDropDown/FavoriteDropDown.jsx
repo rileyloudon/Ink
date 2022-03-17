@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import UserContext from '../../../Context/UserContext';
@@ -12,62 +12,44 @@ const FavoriteDropdown = ({
 }) => {
   const history = useHistory();
   const { user } = useContext(UserContext);
-  const favoriteDropdown = useRef();
+  const favoriteDropdownRef = useRef(null);
 
-  const handleClickOutside = (e) => {
-    console.log('Post Dropdown Closed');
-    if (
-      favoriteDropdown.current &&
-      !favoriteDropdown.current.contains(e.target) &&
-      e.target.tagName !== 'svg' &&
-      e.target.tagName !== 'path' &&
-      document
-        .getElementById(`favorite-dropdown`)
-        .classList.contains('displayed')
-    ) {
-      document
-        .getElementById(`favorite-dropdown`)
-        .classList.remove('displayed');
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-  };
+  const handleClick = () => changeFavoriteDropdownOpen(!favoriteDropdownOpen);
 
-  const handleClick = () => {
-    // Copy and pasted from the other dropdowns but this one doesnt work.
-    // once: true helps fix the problem for now
-    // event listener doesn't get deleted when clicking the icon or a dropdown button
-    // but does when clicking outside using handleClickOutside
-    const dropdown = document.getElementById(`favorite-dropdown`);
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        favoriteDropdownRef.current !== null &&
+        !favoriteDropdownRef.current.contains(e.traget)
+      ) {
+        changeFavoriteDropdownOpen(!favoriteDropdownOpen);
+      }
+    };
 
-    if (dropdown.classList.contains('displayed')) {
-      document.removeEventListener('mousedown', handleClickOutside);
-    } else
-      document.addEventListener('mousedown', handleClickOutside, {
-        once: true,
-      });
-    dropdown.classList.toggle('displayed');
-    changeFavoriteDropdownOpen((oldState) => !oldState);
-  };
-
-  const removeEverything = () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-    document.getElementById(`favorite-dropdown`).classList.remove('displayed');
-    changeFavoriteDropdownOpen(false);
-  };
+    if (favoriteDropdownOpen)
+      window.addEventListener('click', handleClickOutside);
+    return () => {
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, [favoriteDropdownOpen, changeFavoriteDropdownOpen]);
 
   return (
-    <div ref={favoriteDropdown} className='favorite-dropdown-container'>
+    <div className='favorite-dropdown-container'>
       {favoriteDropdownOpen ? (
         <FavoriteFilled onClick={handleClick} />
       ) : (
         <FavoriteOutline onClick={handleClick} />
       )}
-      <div id='favorite-dropdown'>
+      <div
+        ref={favoriteDropdownRef}
+        className={`favorite-dropdown ${
+          favoriteDropdownOpen ? 'displayed' : ''
+        }`}
+      >
         {user.private && (
           <button
             type='button'
             onClick={() => {
-              removeEverything();
               history.push('/settings/follow-requests');
             }}
           >
@@ -78,7 +60,6 @@ const FavoriteDropdown = ({
         <button
           type='button'
           onClick={() => {
-            removeEverything();
             // history.push(`New Likes since last login (?)`);
           }}
         >
@@ -87,7 +68,6 @@ const FavoriteDropdown = ({
         <button
           type='button'
           onClick={() => {
-            removeEverything();
             // history.push('New Followers since last login');
           }}
         >
