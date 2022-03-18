@@ -4,7 +4,7 @@ import { getUsers } from '../../../firebase';
 import './Search.css';
 
 const Search = () => {
-  const searchResultsRef = useRef();
+  const searchResultsRef = useRef(null);
   const [searchString, setSearchString] = useState('');
   const [allUsers, setAllUsers] = useState();
   const [results, setResults] = useState();
@@ -16,14 +16,14 @@ const Search = () => {
       setAllUsers(res);
     }
 
-    setResultsOpen(!resultsOpen);
+    setResultsOpen(true);
   };
 
   const handleSearch = (e) => {
     setSearchString(e.target.value);
 
     const matchingUsers = allUsers.filter((user) =>
-      user.username.includes(e.target.value)
+      user.username.includes(e.target.value.toLowerCase())
     );
 
     setResults(matchingUsers);
@@ -33,9 +33,10 @@ const Search = () => {
     const handleClickOutside = (e) => {
       if (
         searchResultsRef.current !== null &&
-        !searchResultsRef.current.contains(e.traget)
+        !searchResultsRef.current.contains(e.traget) &&
+        e.target.className !== 'search-box'
       ) {
-        setResultsOpen(!resultsOpen);
+        setResultsOpen(false);
       }
     };
 
