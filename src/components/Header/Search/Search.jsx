@@ -1,31 +1,20 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getUsers } from '../../../firebase';
+import { searchUsers } from '../../../firebase';
 import './Search.css';
 
 const Search = () => {
   const searchResultsRef = useRef(null);
   const [searchString, setSearchString] = useState('');
-  const [allUsers, setAllUsers] = useState();
   const [results, setResults] = useState();
   const [resultsOpen, setResultsOpen] = useState(false);
 
-  const handleClick = async () => {
-    if (!allUsers) {
-      const res = await getUsers();
-      setAllUsers(res);
-    }
+  const handleClick = async () => setResultsOpen(true);
 
-    setResultsOpen(true);
-  };
-
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     setSearchString(e.target.value);
 
-    const matchingUsers = allUsers.filter((user) =>
-      user.username.includes(e.target.value.toLowerCase())
-    );
-
+    const matchingUsers = await searchUsers(e.target.value);
     setResults(matchingUsers);
   };
 
@@ -41,9 +30,7 @@ const Search = () => {
     };
 
     if (resultsOpen) window.addEventListener('click', handleClickOutside);
-    return () => {
-      window.removeEventListener('click', handleClickOutside);
-    };
+    return () => window.removeEventListener('click', handleClickOutside);
   }, [resultsOpen]);
 
   const displaySearchResult = (user) => {
