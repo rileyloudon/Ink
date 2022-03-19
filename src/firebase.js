@@ -30,6 +30,8 @@ import {
   limit,
   increment,
   deleteDoc,
+  startAt,
+  endAt,
 } from 'firebase/firestore';
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -743,14 +745,20 @@ export const changePassword = async (currentPassword, newPassword) => {
   return true;
 };
 
-export const getUsers = async () => {
+export const searchUsers = async (searchTerm) => {
   try {
-    const querySnapshot = await getDocs(collection(db, 'users'));
+    const searchRef = query(
+      collection(db, 'users'),
+      orderBy('username'),
+      startAt(searchTerm),
+      endAt(`${searchTerm}~`),
+      limit(5)
+    );
 
-    const allUsers = [];
-    querySnapshot.forEach((user) => allUsers.push(user.data()));
-
-    return allUsers;
+    const searchSnap = await getDocs(searchRef);
+    const matchingUsers = [];
+    searchSnap.forEach((user) => matchingUsers.push(user.data()));
+    return matchingUsers;
   } catch (err) {
     console.log(err);
     return [];
