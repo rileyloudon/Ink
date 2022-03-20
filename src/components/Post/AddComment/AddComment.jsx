@@ -24,7 +24,7 @@ const AddComment = ({ addNewComment, post }) => {
   const selectEmoji = (emojiObject) =>
     setComment((currentComment) => currentComment + emojiObject.native);
 
-  return post.disableComments ? null : (
+  return (
     <section className='comment-box'>
       {displayEmojiPicker && (
         <EmojiPicker
@@ -74,7 +74,6 @@ AddComment.propTypes = {
   addNewComment: PropTypes.func.isRequired,
   post: PropTypes.shape({
     id: PropTypes.string,
-    disableComments: PropTypes.bool,
   }).isRequired,
 };
 
