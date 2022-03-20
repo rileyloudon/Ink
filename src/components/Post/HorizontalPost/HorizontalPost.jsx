@@ -96,10 +96,17 @@ const HorizontalPost = ({ modal }) => {
                 photoURL={postData.photoURL}
                 caption={postData.post.caption}
               />
-              {postData.post.comments.map((commentObj) => (
-                <Comment key={commentObj.key} commentObj={commentObj} />
-              ))}
-              {newComments &&
+              {postData.post.hideComments ? (
+                <span className='comments-hidden'>
+                  {postData.post.owner} has hidden the comments
+                </span>
+              ) : (
+                postData.post.comments.map((commentObj) => (
+                  <Comment key={commentObj.key} commentObj={commentObj} />
+                ))
+              )}
+              {!postData.post.hideComments &&
+                newComments &&
                 newComments.map((commentObj) => (
                   <Comment key={commentObj.key} commentObj={commentObj} />
                 ))}
@@ -114,7 +121,9 @@ const HorizontalPost = ({ modal }) => {
               <Likes likeCount={postData.likeCount} />
               <DatePosted timestamp={postData.post.timestamp} />
             </section>
-            <AddComment addNewComment={addNewComment} post={postData.post} />
+            {!postData.post.disableComments && (
+              <AddComment addNewComment={addNewComment} post={postData.post} />
+            )}
           </section>
         </div>
       </>

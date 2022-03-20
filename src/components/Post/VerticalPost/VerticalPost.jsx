@@ -74,20 +74,29 @@ const VerticalPost = ({ post }) => {
         </section>
         <section className='comments'>
           <Caption owner={post.owner} caption={post.caption} />
-          {postComments.map((commentObj) => (
-            <Comment
-              key={commentObj.key}
-              commentObj={commentObj}
-              includePicture={false}
-            />
-          ))}
-          {newComments &&
+          {post.hideComments ? (
+            <span className='comments-hidden'>
+              {post.owner} has hidden the comments
+            </span>
+          ) : (
+            postComments.map((commentObj) => (
+              <Comment
+                key={commentObj.key}
+                commentObj={commentObj}
+                includePicture={false}
+              />
+            ))
+          )}
+          {!post.hideComments &&
+            newComments &&
             newComments.map((commentObj) => (
               <Comment key={commentObj.key} commentObj={commentObj} />
             ))}
           <DatePosted marginBottom={16} timestamp={post.timestamp} />
         </section>
-        <AddComment addNewComment={addNewComment} post={post} />
+        {!post.disableComments && (
+          <AddComment addNewComment={addNewComment} post={post} />
+        )}
       </section>
     </div>
   );
@@ -100,6 +109,7 @@ VerticalPost.propTypes = {
     owner: PropTypes.string,
     id: PropTypes.string,
     disableComments: PropTypes.bool,
+    hideComments: PropTypes.bool,
     likes: PropTypes.arrayOf(PropTypes.string),
     comments: PropTypes.arrayOf(
       PropTypes.shape({
