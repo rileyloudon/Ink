@@ -15,7 +15,12 @@ const VerticalPost = ({ post }) => {
   const { user } = useContext(UserContext);
 
   const [profilePicture, setProfilePicture] = useState();
-  const [postComments] = useState(post.comments);
+  const [displayedPostComments, setDisplayedPostComments] = useState(
+    post.comments.slice(-3)
+  );
+  const [hiddenPostComments, setHiddenPostComments] = useState(
+    post.comments.length > 3 ? post.comments.slice(0, -3) : null
+  );
   const [newComments, setNewComments] = useState([]);
   const [likeStatus, setLikeStatus] = useState(
     user
@@ -46,6 +51,15 @@ const VerticalPost = ({ post }) => {
     });
   };
 
+  const loadMoreComments = () => {
+    setDisplayedPostComments((currentComments) => [
+      ...hiddenPostComments.slice(-3),
+      ...currentComments,
+    ]);
+
+    setHiddenPostComments(hiddenPostComments.slice(0, -3));
+  };
+
   useEffect(() => {
     let isSubscribed = true;
     fetchProfilePicture(post.owner).then((res) => {
@@ -74,19 +88,30 @@ const VerticalPost = ({ post }) => {
         </section>
         <section className='comments'>
           <Caption owner={post.owner} caption={post.caption} />
-          {post.hideComments ? (
+          {post.hideComments && (
             <span className='comments-hidden'>
               {post.owner} has hidden the comments
             </span>
-          ) : (
-            postComments.map((commentObj) => (
+          )}
+          {!post.hideComments &&
+            hiddenPostComments &&
+            hiddenPostComments.length !== 0 && (
+              <button
+                type='button'
+                className='more-comments'
+                onClick={loadMoreComments}
+              >
+                View more comments
+              </button>
+            )}
+          {!post.hideComments &&
+            displayedPostComments.map((commentObj) => (
               <Comment
                 key={commentObj.key}
                 commentObj={commentObj}
                 includePicture={false}
               />
-            ))
-          )}
+            ))}
           {!post.hideComments &&
             newComments &&
             newComments.map((commentObj) => (
