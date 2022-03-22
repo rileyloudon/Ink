@@ -41,6 +41,17 @@
   font-weight: 300;
 }
 
+.vertical-view .bottom-bar .comments .more-comments {
+  border: none;
+  background: none;
+  color: var(--button);
+  text-align: left;
+  margin: 0 0 4px 0;
+  padding: 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 .vertical-view .bottom-bar .comments {
   padding: 0;
   margin: 0 16px;
