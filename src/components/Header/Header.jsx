@@ -24,13 +24,13 @@ const Header = ({ updateAddModal, showAddModal }) => {
         <div className='header-background' />
         <div className='header-container'>
           <div className='title'>
-            <Link to='/' className='ink'>
+            <Link to='/' className='ink' onClick={window.scrollTo(0, 0)}>
               Ink
             </Link>
           </div>
           <Search />
           <div className='nav'>
-            <Link to='/'>
+            <Link to='/' onClick={window.scrollTo(0, 0)}>
               {location.pathname === '/' &&
               !showAddModal &&
               !favoriteDropdownOpen ? (
@@ -39,7 +39,7 @@ const Header = ({ updateAddModal, showAddModal }) => {
                 <HomeOutline />
               )}
             </Link>
-            <Link to='/chat'>
+            <Link to='/chat' onClick={window.scrollTo(0, 0)}>
               {location.pathname === '/chat' &&
               !showAddModal &&
               !favoriteDropdownOpen ? (

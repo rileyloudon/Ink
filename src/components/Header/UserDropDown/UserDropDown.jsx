@@ -35,16 +35,31 @@ const UserDropdown = () => {
         ref={userDropdownRef}
         className={`user-dropdown ${userDropdownOpen ? 'displayed' : ''}`}
       >
-        <button type='button' onClick={() => history.push(`/${user.username}`)}>
+        <button
+          type='button'
+          onClick={() => {
+            history.push(`/${user.username}`);
+            window.scrollTo(0, 0);
+          }}
+        >
           Profile
         </button>
         <button
           type='button'
-          onClick={() => history.push(`/${user.username}/liked`)}
+          onClick={() => {
+            history.push(`/${user.username}/liked`);
+            window.scrollTo(0, 0);
+          }}
         >
           Liked
         </button>
-        <button type='button' onClick={() => history.push('/settings')}>
+        <button
+          type='button'
+          onClick={() => {
+            history.push('/settings');
+            window.scrollTo(0, 0);
+          }}
+        >
           Settings
         </button>
         <div className='sign-out'>
