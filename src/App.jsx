@@ -51,10 +51,10 @@ function App() {
       if (currentUser) {
         fetchUserData(currentUser.displayName).then((res) => {
           setUser(res);
+          setLoading(false);
         });
         if (!localStorage.getItem('userWillSignIn'))
           localStorage.setItem('userWillSignIn', 'true');
-        setLoading(false);
       } else {
         setUser();
         localStorage.removeItem('userWillSignIn');
