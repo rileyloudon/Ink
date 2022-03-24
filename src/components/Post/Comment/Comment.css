@@ -12,8 +12,9 @@
   color: var(--text);
   margin: 0;
   line-height: 18px;
-  word-break: break-all;
+  word-break: break-word;
   word-wrap: break-word;
+  font-weight: 400;
 }
 
 .commenter img {
