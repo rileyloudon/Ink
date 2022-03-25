@@ -10,6 +10,7 @@ import {
   updatePassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
+  signInAnonymously,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -48,9 +49,8 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 const db = getFirestore();
 
-export const registerUser = async (email, password, tempUsername, fullName) => {
+export const registerUser = async (email, password, tempUsername) => {
   const username = tempUsername.toLowerCase();
-  const usersProfilePicture = `https://source.boringavatars.com/beam/150/${username}?colors=FFABAB,FFDAAB,DDFFAB,ABE4FF,D9ABFF`;
   const docRef = doc(db, 'users', username);
   const docSnap = await getDoc(docRef);
 
@@ -70,6 +70,13 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
         return 'Error';
     }
   });
+
+  return 'Done';
+};
+
+export const setupUser = async ({ username, fullName }) => {
+  const auth = getAuth();
+  const usersProfilePicture = `https://source.boringavatars.com/beam/150/${username}?colors=FFABAB,FFDAAB,DDFFAB,ABE4FF,D9ABFF`;
 
   await updateProfile(auth.currentUser, {
     displayName: username,
@@ -94,8 +101,6 @@ export const registerUser = async (email, password, tempUsername, fullName) => {
   }).catch((err) => {
     return `Error updating profile, ${err}`;
   });
-
-  return { displayName: username, photoURL: usersProfilePicture };
 };
 
 export const signInUser = async (email, password) => {
@@ -120,13 +125,37 @@ export const signInUser = async (email, password) => {
   return credential;
 };
 
+export const signInAnon = async () => {
+  const auth = getAuth();
+  await signInAnonymously(auth);
+};
+
+export const setupAnon = async () => {
+  const auth = getAuth();
+  await updateProfile(auth.currentUser, {
+    displayName: 'guest',
+    photoURL: `https://source.boringavatars.com/beam/150/guest?colors=FFABAB,FFDAAB,DDFFAB,ABE4FF,D9ABFF`,
+  }).catch((err) => {
+    return `Error updating profile, ${err}`;
+  });
+};
+
 export const signOutUser = async () => {
   const auth = getAuth();
   await signOut(auth).catch((err) => `Error signing out, ${err}`);
 };
 
-export const fetchUserData = async (username) => {
-  const docRef = doc(db, 'users', username);
+export const fetchUserData = async (anon) => {
+  if (anon) {
+    const docRef = doc(db, 'users', 'guest');
+    const docSnap = await getDoc(docRef);
+
+    return docSnap.data();
+  }
+
+  const auth = getAuth();
+
+  const docRef = doc(db, 'users', auth.currentUser.displayName);
   const docSnap = await getDoc(docRef);
 
   return docSnap.data();

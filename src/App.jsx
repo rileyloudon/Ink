@@ -15,7 +15,7 @@ import Settings from './components/Settings/Settings';
 import FollowRequests from './components/FollowRequests/FollowRequests';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import EditPost from './components/Post/EditPost/EditPost';
-import { fetchUserData } from './firebase';
+import { fetchUserData, setupAnon, setupUser, signInAnon } from './firebase';
 import './App.css';
 
 function App() {
@@ -31,6 +31,7 @@ function App() {
   );
 
   const [user, setUser] = useState();
+  const [newUserData, setNewUserData] = useState(false);
 
   const [loading, setLoading] = useState(
     JSON.parse(localStorage.getItem('userWillSignIn')) || false
@@ -38,21 +39,27 @@ function App() {
 
   const [showAddModal, setShowAddModal] = useState(false);
 
+  const updatenewUserData = (value) => setNewUserData(value);
   const updateLoading = (value) => setLoading(value);
   const updateAddModal = (value) => setShowAddModal(value);
 
-  const signInGuest = () => {
-    // Sign In Guest -> account named @Guest
+  const signInGuest = async () => {
+    setLoading(true);
+    await signInAnon();
   };
 
   useEffect(() => {
     const auth = getAuth();
-    const unsub = onAuthStateChanged(auth, (currentUser) => {
+    const unsub = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        fetchUserData(currentUser.displayName).then((res) => {
-          setUser(res);
-          setLoading(false);
-        });
+        if (newUserData) await setupUser(newUserData);
+        if (currentUser.isAnonymous) await setupAnon();
+
+        const res = await fetchUserData(currentUser.isAnonymous);
+
+        setLoading(false);
+        setUser(res);
+
         if (!localStorage.getItem('userWillSignIn'))
           localStorage.setItem('userWillSignIn', 'true');
       } else {
@@ -61,7 +68,7 @@ function App() {
       }
       return () => unsub;
     });
-  }, []);
+  }, [newUserData]);
 
   useEffect(() => {
     document.querySelector('html').style.backgroundColor =
@@ -132,6 +139,7 @@ function App() {
                 <Register
                   updateLoading={updateLoading}
                   signInGuest={signInGuest}
+                  updatenewUserData={updatenewUserData}
                 />
               )}
             />
