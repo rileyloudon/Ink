@@ -39,7 +39,7 @@ function App() {
 
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const updatenewUserData = (value) => setNewUserData(value);
+  const updateNewUserData = (value) => setNewUserData(value);
   const updateLoading = (value) => setLoading(value);
   const updateAddModal = (value) => setShowAddModal(value);
 
@@ -139,7 +139,7 @@ function App() {
                 <Register
                   updateLoading={updateLoading}
                   signInGuest={signInGuest}
-                  updatenewUserData={updatenewUserData}
+                  updateNewUserData={updateNewUserData}
                 />
               )}
             />
