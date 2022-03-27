@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Header from './components/Header/Header';
@@ -31,7 +31,7 @@ function App() {
   );
 
   const [user, setUser] = useState();
-  const [newUserData, setNewUserData] = useState(false);
+  const newUserData = useRef(null);
 
   const [loading, setLoading] = useState(
     JSON.parse(localStorage.getItem('userWillSignIn')) || false
@@ -39,7 +39,9 @@ function App() {
 
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const updateNewUserData = (value) => setNewUserData(value);
+  const updateNewUserData = (value) => {
+    newUserData.current = value;
+  };
   const updateLoading = (value) => setLoading(value);
   const updateAddModal = (value) => setShowAddModal(value);
 
@@ -52,7 +54,10 @@ function App() {
     const auth = getAuth();
     const unsub = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        if (newUserData) await setupUser(newUserData);
+        if (newUserData.current) {
+          await setupUser(newUserData.current);
+          newUserData.current = null;
+        }
         if (currentUser.isAnonymous) await setupAnon();
 
         const res = await fetchUserData(currentUser.isAnonymous);
