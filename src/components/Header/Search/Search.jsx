@@ -9,7 +9,14 @@ const Search = () => {
   const [results, setResults] = useState();
   const [resultsOpen, setResultsOpen] = useState(false);
 
-  const handleClick = async () => setResultsOpen(true);
+  const handleClick = async () => {
+    setResultsOpen(true);
+
+    if (!results) {
+      const matchingUsers = await searchUsers('');
+      setResults(matchingUsers);
+    }
+  };
 
   const handleSearch = async (e) => {
     setSearchString(e.target.value);
