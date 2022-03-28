@@ -21,7 +21,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--off-background);
   margin: auto;
   width: 100%;
 }
@@ -32,13 +31,19 @@
 
 .search .search-results a {
   border: 1px solid var(--border);
-  width: 100%;
-  padding: 8px 0;
+  background-color: var(--background);
+  min-width: 100%;
+  max-width: max-content;
+  padding: 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   text-decoration: none;
+}
+
+.search .search-results a:hover {
+  background-color: var(--off-background);
 }
 
 .search .search-results img {
