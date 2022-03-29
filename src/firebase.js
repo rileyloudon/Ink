@@ -74,7 +74,8 @@ export const registerUser = async (email, password, tempUsername) => {
   return 'Done';
 };
 
-export const setupUser = async ({ username, fullName }) => {
+export const setupUser = async ({ tempUsername, fullName }) => {
+  const username = tempUsername.toLowerCase();
   const auth = getAuth();
   const usersProfilePicture = `https://source.boringavatars.com/beam/150/${username}?colors=FFABAB,FFDAAB,DDFFAB,ABE4FF,D9ABFF`;
 
@@ -145,14 +146,7 @@ export const signOutUser = async () => {
   await signOut(auth).catch((err) => `Error signing out, ${err}`);
 };
 
-export const fetchUserData = async (anon) => {
-  if (anon) {
-    const docRef = doc(db, 'users', 'guest');
-    const docSnap = await getDoc(docRef);
-
-    return docSnap.data();
-  }
-
+export const fetchUserData = async () => {
   const auth = getAuth();
 
   const docRef = doc(db, 'users', auth.currentUser.displayName);

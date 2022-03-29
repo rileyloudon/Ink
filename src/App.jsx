@@ -73,7 +73,7 @@ function App() {
       }
       return () => unsub;
     });
-  }, [newUserData]);
+  }, []);
 
   useEffect(() => {
     document.querySelector('html').style.backgroundColor =
