@@ -7,8 +7,8 @@ import { ReactComponent as AstronautSvg } from '../../img/misc/astronaut.svg';
 import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
 import './Register.css';
 
-const Register = ({ updateLoading, signInGuest }) => {
-  const { user, setUser } = useContext(UserContext);
+const Register = ({ updateLoading, signInGuest, updateNewUserData }) => {
+  const { user } = useContext(UserContext);
 
   const history = useHistory();
 
@@ -29,16 +29,12 @@ const Register = ({ updateLoading, signInGuest }) => {
   const handleRegister = async () => {
     updateLoading(true);
     setButtonLoading(true);
-    const res = await registerUser(email, password, username, fullName);
-    if (typeof res === 'string') {
+    updateNewUserData({ tempUsername: username, fullName });
+    const res = await registerUser(email, password, username);
+    if (res !== 'Done') {
       setRegisterError(res);
       setButtonLoading(false);
-    } else
-      setUser((prevState) => ({
-        ...prevState,
-        displayName: res.displayName,
-        photoURL: res.photoURL,
-      }));
+    }
     updateLoading(false);
   };
 
@@ -51,9 +47,7 @@ const Register = ({ updateLoading, signInGuest }) => {
       <div className='register'>
         <h1 className='ink'>Ink</h1>
         <form className='register-form'>
-          <p className='pitch'>
-            Sign up to see photos and videos from your friends.
-          </p>
+          <p className='pitch'>Sign up to see photos from your friends.</p>
           <button
             className='guest-btn'
             type='button'
@@ -142,6 +136,7 @@ const Register = ({ updateLoading, signInGuest }) => {
 Register.propTypes = {
   updateLoading: PropTypes.func.isRequired,
   signInGuest: PropTypes.func.isRequired,
+  updateNewUserData: PropTypes.func.isRequired,
 };
 
 export default Register;
