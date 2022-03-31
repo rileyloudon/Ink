@@ -63,7 +63,7 @@ const FavoriteDropdown = ({
             // history.push(`New Likes since last login (?)`);
           }}
         >
-          {user.newLikes} New Like{user.newLikes === 1 ? '' : 's'}
+          {user.newLikes.length} New Like{user.newLikes.length === 1 ? '' : 's'}
         </button>
         <button
           type='button'
@@ -71,7 +71,8 @@ const FavoriteDropdown = ({
             // history.push('New Followers since last login');
           }}
         >
-          {user.newFollowers} New Follower{user.newFollowers === 1 ? '' : 's'}
+          {user.newFollowers.length} New Follower
+          {user.newFollowers.length === 1 ? '' : 's'}
         </button>
       </div>
     </div>
