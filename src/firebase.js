@@ -58,7 +58,11 @@ export const registerUser = async (email, password, tempUsername) => {
 
   const auth = getAuth();
 
-  await createUserWithEmailAndPassword(auth, email, password).catch((err) => {
+  const register = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  ).catch((err) => {
     switch (err.code) {
       case 'auth/email-already-in-use':
         return `A user with that email already exists.`;
@@ -71,7 +75,7 @@ export const registerUser = async (email, password, tempUsername) => {
     }
   });
 
-  return 'Done';
+  return register;
 };
 
 export const setupUser = async ({ tempUsername, fullName }) => {
@@ -97,8 +101,8 @@ export const setupUser = async ({ tempUsername, fullName }) => {
     private: false,
     followRequests: 0,
     allowMessages: 'all',
-    newFollowers: 0,
-    newLikes: 0,
+    newFollowers: [],
+    newLikes: [],
   }).catch((err) => {
     return `Error updating profile, ${err}`;
   });
@@ -107,23 +111,22 @@ export const setupUser = async ({ tempUsername, fullName }) => {
 export const signInUser = async (email, password) => {
   const auth = getAuth();
 
-  const credential = await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-  ).catch((err) => {
-    switch (err.code) {
-      case 'auth/invalid-email':
-        return 'Enter a valid email address.';
-      case 'auth/user-not-found':
-        return "The email you entered doesn't belong to an account.";
-      case 'auth/wrong-password':
-        return 'Your password was incorrect. Please double-check your password.';
-      default:
-        return 'Error';
+  const signIn = await signInWithEmailAndPassword(auth, email, password).catch(
+    (err) => {
+      switch (err.code) {
+        case 'auth/invalid-email':
+          return 'Enter a valid email address.';
+        case 'auth/user-not-found':
+          return "The email you entered doesn't belong to an account.";
+        case 'auth/wrong-password':
+          return 'Your password was incorrect. Please double-check your password.';
+        default:
+          return 'Error';
+      }
     }
-  });
-  return credential;
+  );
+
+  return signIn;
 };
 
 export const signInAnon = async () => {
@@ -151,6 +154,12 @@ export const fetchUserData = async () => {
 
   const docRef = doc(db, 'users', auth.currentUser.displayName);
   const docSnap = await getDoc(docRef);
+
+  if (docSnap.data().newFollowers.length >= 1) {
+    await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
+      newFollowers: [],
+    });
+  }
 
   return docSnap.data();
 };
@@ -253,6 +262,7 @@ export const followUser = async (followedUser) => {
 
   await updateDoc(otherUser, {
     followers: arrayUnion(auth.currentUser.displayName),
+    newFollowers: arrayUnion(auth.currentUser.displayName),
   });
 
   const docSnap = await getDoc(doc(db, 'users', followedUser));
@@ -271,6 +281,7 @@ export const unfollowUser = async (followedUser) => {
 
   await updateDoc(otherUser, {
     followers: arrayRemove(auth.currentUser.displayName),
+    newFollowers: arrayRemove(auth.currentUser.displayName),
   });
 
   const docSnap = await getDoc(doc(db, 'users', followedUser));
