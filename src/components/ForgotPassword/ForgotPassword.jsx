@@ -55,7 +55,7 @@ const SignIn = () => {
           </form>
         ) : (
           <div className='email-sent'>
-            <h2>Email sent</h2>
+            <h3>Email sent</h3>
             <Link to='/'>Go Back</Link>
           </div>
         )}
