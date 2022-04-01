@@ -27,11 +27,12 @@ const Register = ({ updateLoading, signInGuest, updateNewUserData }) => {
     password.length >= 6;
 
   const handleRegister = async () => {
+    // Using numbers for a username fails? 123 = error
     updateLoading(true);
     setButtonLoading(true);
     updateNewUserData({ tempUsername: username, fullName });
     const res = await registerUser(email, password, username);
-    if (res !== 'Done') {
+    if (typeof res === 'string') {
       setRegisterError(res);
       setButtonLoading(false);
     }
