@@ -60,7 +60,7 @@ function App() {
         }
         if (currentUser.isAnonymous) await setupAnon();
 
-        const res = await fetchUserData(currentUser.isAnonymous);
+        const res = await fetchUserData();
 
         setLoading(false);
         setUser(res);
@@ -77,7 +77,7 @@ function App() {
 
   useEffect(() => {
     document.querySelector('html').style.backgroundColor =
-      theme === 'dark' ? 'rgb(34, 34, 34)' : 'rgb(250, 250, 250)';
+      theme === 'dark' ? 'rgb(18, 18, 18)' : 'rgb(250, 250, 250)';
   }, [theme]);
 
   return (
@@ -90,7 +90,6 @@ function App() {
               showAddModal={showAddModal}
             />
           )}
-          {showAddModal && <AddPost updateAddModal={updateAddModal} />}
           <Switch location={background || location}>
             <Route exact path='/settings/follow-requests'>
               {user || localStorage.getItem('userWillSignIn') ? (
@@ -170,6 +169,7 @@ function App() {
               )}
             </Route>
           </Switch>
+          {showAddModal && <AddPost updateAddModal={updateAddModal} />}
           {background && (
             <Route path='/:username/:postId'>
               <HorizontalPost modal />
