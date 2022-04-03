@@ -13,16 +13,6 @@ const Settings = () => {
   // userData is the current values in the database
   // useState data is the data in the form. It can be changed then saved to the database when ready
 
-  // change full name
-  // change profile picture
-  // change bio
-  // delete account
-  // dark mode -> save in localstorage, check preference on load
-
-  // edit posts -> change caption, disable comments, hide current comments
-
-  // change password (?)
-  // private account (?)
   const { user, setUser } = useContext(UserContext);
   const { theme, setTheme } = useContext(ThemeContext);
 
@@ -54,7 +44,7 @@ const Settings = () => {
     }
   };
 
-  const saveSettings = () => {
+  const saveSettings = async () => {
     const changed = {
       profilePicture: newProfilePicture !== '',
       name: user.fullName !== name,
@@ -63,34 +53,34 @@ const Settings = () => {
     };
 
     setButtonLoading(true);
-    updateUserSettings(
+    const res = await updateUserSettings(
       changed,
       newProfilePicture,
       name,
       bio,
       privateAccount
-    ).then((res) => {
-      if (res.updated === true) {
-        if (res.publicImageUrl) {
-          setUser((prevData) => ({
-            ...prevData,
-            photoURL: res.publicImageUrl,
-          }));
-          setNewProfilePicture('');
-        }
+    );
+
+    if (res.updated === true) {
+      if (res.publicImageUrl) {
         setUser((prevData) => ({
           ...prevData,
-          fullName: name,
-          bio,
-          private: privateAccount,
+          photoURL: res.publicImageUrl,
         }));
-        setProfileUpdated(true);
-      } else {
-        setError(res.err.message);
-        setProfileUpdated(false);
+        setNewProfilePicture('');
       }
-      setButtonLoading(false);
-    });
+      setUser((prevData) => ({
+        ...prevData,
+        fullName: name,
+        bio,
+        private: privateAccount,
+      }));
+      setProfileUpdated(true);
+    } else {
+      setError(res.err.message);
+      setProfileUpdated(false);
+    }
+    setButtonLoading(false);
   };
 
   useEffect(() => {
@@ -189,7 +179,7 @@ const Settings = () => {
           Delete Account
         </button>
       </div>
-      <ChangePassword />
+      {user.username !== 'guest' && <ChangePassword />}
     </>
   ) : null;
 };
