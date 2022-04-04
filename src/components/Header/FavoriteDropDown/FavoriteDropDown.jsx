@@ -68,7 +68,7 @@ const FavoriteDropdown = ({
         <button
           type='button'
           onClick={() => {
-            // history.push('New Followers since last login');
+            history.push(`${user.username}/new-followers`);
           }}
         >
           {user.newFollowers.length} New Follower
