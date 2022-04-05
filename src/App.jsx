@@ -15,6 +15,7 @@ import Settings from './components/Settings/Settings';
 import FollowRequests from './components/FollowRequests/FollowRequests';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import EditPost from './components/Post/EditPost/EditPost';
+import NewFollowers from './components/NewFollowers/NewFollowers';
 import { fetchUserData, setupAnon, setupUser, signInAnon } from './firebase';
 import './App.css';
 
@@ -39,11 +40,14 @@ function App() {
 
   const [showAddModal, setShowAddModal] = useState(false);
 
+  const [scrollPosition, setScrollPosition] = useState(0);
+
   const updateNewUserData = (value) => {
     newUserData.current = value;
   };
   const updateLoading = (value) => setLoading(value);
   const updateAddModal = (value) => setShowAddModal(value);
+  const updateScrollPosition = (value) => setScrollPosition(value);
 
   const signInGuest = async () => {
     setLoading(true);
@@ -105,6 +109,14 @@ function App() {
                 <Redirect to='/' />
               )}
             </Route>
+            <Route path='/:username/new-followers'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <NewFollowers />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+
             <Route exact path='/:username/:postId'>
               {user || localStorage.getItem('userWillSignIn') ? (
                 <HorizontalPost />
@@ -163,7 +175,10 @@ function App() {
             </Route>
             <Route path='/:username'>
               {user || localStorage.getItem('userWillSignIn') ? (
-                <Profile />
+                <Profile
+                  scrollPosition={scrollPosition}
+                  updateScrollPosition={updateScrollPosition}
+                />
               ) : (
                 <Redirect to='/' />
               )}

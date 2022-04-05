@@ -6,7 +6,7 @@ import { ReactComponent as FavoriteFilled } from '../../../img/favorite/favorite
 import { ReactComponent as CommentFilled } from '../../../img/comment/comment-filled.svg';
 import './Posts.css';
 
-const Posts = ({ username, initialPosts }) => {
+const Posts = ({ username, initialPosts, updateScrollPosition }) => {
   const location = useLocation();
 
   const [displayedPosts, setDisplayedPosts] = useState();
@@ -22,6 +22,7 @@ const Posts = ({ username, initialPosts }) => {
           pathname: `/${username}/${post.id}`,
           state: { background: location },
         }}
+        onClick={() => updateScrollPosition(window.scrollY)}
       >
         <img className='post-image' src={post.imageUrl} alt='' />
         <div className='view-post'>
@@ -96,6 +97,7 @@ Posts.defaultProps = {
 Posts.propTypes = {
   username: PropTypes.string.isRequired,
   initialPosts: PropTypes.arrayOf(PropTypes.shape({})),
+  updateScrollPosition: PropTypes.func.isRequired,
 };
 
 export default Posts;

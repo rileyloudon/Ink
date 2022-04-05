@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import UserContext from '../../Context/UserContext';
 import { fetchUserProfileData } from '../../firebase';
@@ -8,7 +9,7 @@ import Header from './Header/Header';
 import Posts from './Posts/Posts';
 import './Profile.css';
 
-const Profile = () => {
+const Profile = ({ scrollPosition, updateScrollPosition }) => {
   const { user } = useContext(UserContext);
   const { username } = useParams();
 
@@ -27,6 +28,10 @@ const Profile = () => {
         header: newData,
       }));
   };
+
+  // scrollPosition restores scroll when opening or closing a post modal.
+  // Initial load always loads at the top
+  window.scrollTo(0, scrollPosition);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -50,8 +55,8 @@ const Profile = () => {
   const renderProflie = () => {
     return profile === 'User not found' ? (
       <div className='no-user'>
-        <h2>User Not Found.</h2>
-        <p>Please double check the URL to make sure it&#39;s correct.</p>
+        <h2>User Not Found</h2>
+        <p>Please double check the URL to make sure it&#39;s correct</p>
       </div>
     ) : (
       <div className='profile'>
@@ -59,7 +64,7 @@ const Profile = () => {
         {profile.initialPosts === 'private' ? (
           <div className='private'>
             <h3>This Account is Private</h3>
-            <p>Follow to see their posts.</p>
+            <p>Follow to see their posts</p>
           </div>
         ) : (
           <>
@@ -67,6 +72,7 @@ const Profile = () => {
             <Posts
               username={profile.header.username}
               initialPosts={profile.initialPosts}
+              updateScrollPosition={updateScrollPosition}
             />
           </>
         )}
@@ -75,6 +81,11 @@ const Profile = () => {
   };
 
   return loading ? <Loading /> : renderProflie();
+};
+
+Profile.propTypes = {
+  scrollPosition: PropTypes.number.isRequired,
+  updateScrollPosition: PropTypes.func.isRequired,
 };
 
 export default Profile;
