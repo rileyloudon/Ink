@@ -15,22 +15,16 @@ const Header = ({ profile, updateHeader }) => {
         </div>
         <ul className='stats'>
           <li>
-            <span>
-              <span>{profile.header.postCount}</span> post
-              {profile.header.postCount === 1 ? '' : 's'}
-            </span>
+            <span>{profile.header.postCount}</span>
+            {` post${profile.header.postCount === 1 ? '' : 's'}`}
           </li>
           <li>
-            <span>
-              <span>{profile.header.followers.length}</span> follower
-              {profile.header.followers.length === 1 ? '' : 's'}
-            </span>
+            <span>{profile.header.followers.length}</span>
+            {` follower${profile.header.followers.length === 1 ? '' : 's'}`}
           </li>
           <li>
-            <span>
-              <span>{profile.header.following.length}</span> follow
-              {profile.header.following.length === 1 ? '' : 'ing'}
-            </span>
+            <span>{profile.header.following.length}</span>
+            {` follow${profile.header.following.length === 1 ? '' : 'ing'}`}
           </li>
         </ul>
         <div className='info'>
