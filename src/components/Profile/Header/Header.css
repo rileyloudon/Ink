@@ -46,15 +46,15 @@
 }
 
 .profile-header .right .stats li {
-  display: inline;
+  display: inline-block;
   font-size: 16px;
-  margin-right: 45px;
+  margin-right: 40px;
   margin-left: 0;
+  color: var(--text);
 }
 
 .profile-header .right .stats li span {
   font-weight: 600;
-  color: var(--text);
 }
 
 .profile-header .right .info h4 {
