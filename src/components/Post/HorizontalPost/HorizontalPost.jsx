@@ -45,6 +45,13 @@ const HorizontalPost = ({ modal }) => {
   };
 
   useEffect(() => {
+    if (modal) document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [modal]);
+
+  useEffect(() => {
     let isSubscribed = true;
     fetchIndividualPost(username, postId).then((res) => {
       if (isSubscribed) {

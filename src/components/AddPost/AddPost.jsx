@@ -13,6 +13,13 @@ const AddPost = ({ updateAddModal }) => {
   };
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  useEffect(() => {
     const handleClickOutside = (e) => {
       if (modal.current && !modal.current.contains(e.target))
         updateAddModal(false);
