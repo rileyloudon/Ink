@@ -34,6 +34,10 @@ const Profile = ({ scrollPosition, updateScrollPosition }) => {
   window.scrollTo(0, scrollPosition);
 
   useEffect(() => {
+    document.title = `${username} - Ink`;
+  }, [username]);
+
+  useEffect(() => {
     let isSubscribed = true;
     if (user)
       fetchUserProfileData(username).then((res) => {

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import Feed from './Feed/Feed';
 import SignIn from './SignIn/SignIn';
 import Loading from './Loading/Loading';
@@ -7,6 +7,10 @@ import UserContext from '../Context/UserContext';
 
 const Home = ({ loading, updateLoading, signInGuest }) => {
   const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    document.title = 'Ink';
+  }, []);
 
   return (
     <>
