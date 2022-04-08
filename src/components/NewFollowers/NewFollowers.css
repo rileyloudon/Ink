@@ -1,0 +1,39 @@
+.no-new-followers,
+.new-followers {
+  color: var(--text);
+  text-align: center;
+}
+
+.new-followers h3,
+.new-followers p {
+  margin: 0;
+}
+
+.new-followers img {
+  margin-right: 15px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.new-followers span {
+  margin-right: 4px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.new-followers .title,
+.new-followers a {
+  border-bottom: 1px solid var(--border);
+  background-color: var(--background);
+  padding: 14px 4px;
+  margin: auto;
+  text-decoration: inherit;
+}
+
+.new-followers a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
