@@ -642,9 +642,34 @@ export const addComment = async (post, comment) => {
 };
 
 export const fetchProfilePicture = async (user) => {
-  const docRef = doc(db, 'users', user);
-  const docSnap = await getDoc(docRef);
-  return docSnap.data().photoURL;
+  if (typeof user === 'string') {
+    const docRef = doc(db, 'users', user);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data().photoURL;
+  }
+
+  // if user is an array, fetch all pictures
+  // returns both username and photoURL because 'in' doesn't keep array order
+  // (1 would match first because 1 is at the top in db, causing miss match)
+  const userCopy = [...user];
+  const batches = [];
+
+  while (userCopy.length) {
+    const batch = userCopy.splice(0, 10);
+    batches.push(
+      getDocs(
+        query(collection(db, 'users'), where('username', 'in', batch))
+      ).then((results) =>
+        results.docs.map((result) => ({
+          username: result.data().username,
+          photoURL: result.data().photoURL,
+        }))
+      )
+    );
+  }
+
+  const data = await Promise.all(batches);
+  return data.flat();
 };
 
 export const fetchFeed = async () => {
