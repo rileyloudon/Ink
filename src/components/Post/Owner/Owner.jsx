@@ -13,8 +13,6 @@ const Owner = ({ owner, profilePicture, id }) => {
     <section className='owner'>
       <Link to={`/${owner}`}>
         <img src={profilePicture} alt='' />
-      </Link>
-      <Link to={`/${owner}`}>
         <span>{owner}</span>
       </Link>
       {(location.pathname === '/' || owner === user.username) && (
