@@ -6,17 +6,11 @@ import './Caption.css';
 const Caption = ({ owner, photoURL, caption }) => {
   return caption.length > 1 ? (
     <div className='caption'>
-      {photoURL && (
-        <Link to={`/${owner}`}>
-          <img src={photoURL} alt='' />
-        </Link>
-      )}
-      <div>
-        <Link to={`/${owner}`}>
-          <span className='post-owner'>{owner}</span>
-        </Link>
-        <span className='post-caption'>{caption}</span>
-      </div>
+      <Link to={`/${owner}`}>
+        {photoURL && <img src={photoURL} alt='' />}
+        <span className='post-owner'>{owner}</span>
+      </Link>
+      <span className='post-caption'>{caption}</span>
     </div>
   ) : null;
 };

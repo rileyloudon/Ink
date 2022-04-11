@@ -21,17 +21,11 @@ const Comment = ({ commentObj, includePicture }) => {
 
   return (
     <div className='commenter'>
-      {includePicture && (
-        <Link to={`/${commentObj.by}`}>
-          <img src={profilePicture} alt='' />
-        </Link>
-      )}
-      <div>
-        <Link to={`/${commentObj.by}`}>
-          <span className='by'>{commentObj.by}</span>
-        </Link>
-        <span className='comment'>{commentObj.comment}</span>
-      </div>
+      <Link to={`/${commentObj.by}`}>
+        {includePicture && <img src={profilePicture} alt='' />}
+        <span className='by'>{commentObj.by}</span>
+      </Link>
+      <span className='comment'>{commentObj.comment}</span>
     </div>
   );
 };

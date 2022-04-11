@@ -19,6 +19,8 @@
 }
 
 .caption a {
+  display: flex;
+  align-items: center;
   text-decoration: inherit;
 }
 
