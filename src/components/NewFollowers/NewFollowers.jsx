@@ -10,24 +10,24 @@ const NewFollowers = () => {
   const { username } = useParams();
 
   const [loading, setLoading] = useState(true);
-  const [profilePictures, setProfilePictures] = useState();
+  const [newFollowersWithPictures, setNewFollowersWithPictures] = useState();
 
   useEffect(() => {
+    let isSubscribed = true;
+
     if (user) {
-      const fetchAllProfilePictures = async () => {
-        const tempProfilePictures = [];
+      (async () => {
+        const res = await fetchProfilePicture(user.newFollowers);
 
-        // eslint-disable-next-line no-restricted-syntax
-        for await (const follower of user.newFollowers) {
-          const res = await fetchProfilePicture(follower);
-          tempProfilePictures.push(res);
+        if (isSubscribed) {
+          setNewFollowersWithPictures(res);
+          setLoading(false);
         }
-
-        setProfilePictures(tempProfilePictures);
-        setLoading(false);
-      };
-      fetchAllProfilePictures();
+      })();
     }
+    return () => {
+      isSubscribed = false;
+    };
   }, [user]);
 
   if (!user) return null;
@@ -55,10 +55,10 @@ const NewFollowers = () => {
         <p>(since last login)</p>
       </div>
       <div className='followers'>
-        {user.newFollowers.map((follower, i) => (
-          <Link key={follower} to={`/${follower}`}>
-            <img src={profilePictures[i]} alt='' />
-            <span>{follower}</span>
+        {newFollowersWithPictures.map((follower) => (
+          <Link key={follower.username} to={`/${follower.username}`}>
+            <img src={follower.photoURL} alt='' />
+            <span>{follower.username}</span>
           </Link>
         ))}
       </div>
