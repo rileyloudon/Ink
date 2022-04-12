@@ -659,17 +659,16 @@ export const fetchProfilePicture = async (user) => {
     batches.push(
       getDocs(
         query(collection(db, 'users'), where('username', 'in', batch))
-      ).then((results) =>
-        results.docs.map((result) => ({
-          username: result.data().username,
-          photoURL: result.data().photoURL,
+      ).then((res) =>
+        res.docs.map((profile) => ({
+          username: profile.data().username,
+          photoURL: profile.data().photoURL,
         }))
       )
     );
   }
 
-  const data = await Promise.all(batches);
-  return data.flat();
+  return (await Promise.all(batches)).flat();
 };
 
 export const fetchFeed = async () => {
@@ -677,22 +676,24 @@ export const fetchFeed = async () => {
   const userRef = doc(db, 'users', auth.currentUser.displayName);
   const docSnap = await getDoc(userRef);
 
-  // Need to test when user has no posts. If [] will return or if it'll cause an error
-  const q = query(
-    collectionGroup(db, 'posts'),
-    where('owner', 'in', [
-      ...docSnap.data().following,
-      auth.currentUser.displayName,
-    ]),
-    orderBy('timestamp', 'desc'),
-    limit(20)
-  );
+  const postsFrom = [...docSnap.data().following, auth.currentUser.displayName];
+  const batches = [];
 
-  const querySnapshot = await getDocs(q);
+  while (postsFrom.length) {
+    const batch = postsFrom.splice(0, 1);
+    batches.push(
+      getDocs(
+        query(
+          collectionGroup(db, 'posts'),
+          where('owner', 'in', batch),
+          orderBy('timestamp', 'desc')
+        )
+      ).then((res) => res.docs.map((post) => post.data()))
+    );
+  }
 
-  const followingUsersPosts = [];
-  querySnapshot.forEach((post) => followingUsersPosts.push(post.data()));
-  return followingUsersPosts;
+  const data = (await Promise.all(batches)).flat();
+  return data.sort((a, b) => b.timestamp - a.timestamp);
 };
 
 export const fetchLikedPosts = async () => {
@@ -715,24 +716,13 @@ export const fetchLikedPosts = async () => {
   }
 };
 
-export const fetchNextFeedPosts = async (type, start) => {
+export const fetchNextLikedPosts = async (start) => {
   const auth = getAuth();
-  let docSnap;
-
-  if (type === 'main') {
-    const userRef = doc(db, 'users', auth.currentUser.displayName);
-    docSnap = await getDoc(userRef);
-  }
 
   try {
     const q = query(
       collectionGroup(db, 'posts'),
-      type === 'main'
-        ? where('owner', 'in', [
-            ...docSnap.data().following,
-            auth.currentUser.displayName,
-          ])
-        : where('likes', 'array-contains', auth.currentUser.displayName),
+      where('likes', 'array-contains', auth.currentUser.displayName),
       orderBy('timestamp', 'desc'),
       startAfter(start),
       limit(10)
