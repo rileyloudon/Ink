@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import UserContext from '../../Context/UserContext';
-import { fetchLikedPosts, fetchNextFeedPosts } from '../../firebase';
+import { fetchLikedPosts, fetchNextLikedPosts } from '../../firebase';
 import Loading from '../Loading/Loading';
 import VerticalPost from '../Post/VerticalPost/VerticalPost';
 import './LikedFeed.css';
@@ -18,6 +18,7 @@ const LikedFeed = () => {
 
   useEffect(() => {
     let isSubscribed = true;
+
     // prevents seeing no posts message if you click the link when viewing another persons liked posts.
     if (!setLoading) setLoading(true);
 
@@ -46,8 +47,7 @@ const LikedFeed = () => {
         !fetchInProgress &&
         isSubscribed
       ) {
-        const posts = await fetchNextFeedPosts(
-          'liked',
+        const posts = await fetchNextLikedPosts(
           nextPosts[nextPosts.length - 1].timestamp
         );
         if (isSubscribed) {
