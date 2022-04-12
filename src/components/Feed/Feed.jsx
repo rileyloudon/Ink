@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import UserContext from '../../Context/UserContext';
-import { fetchFeed, fetchNextFeedPosts } from '../../firebase';
+import { fetchFeed } from '../../firebase';
 import Loading from '../Loading/Loading';
 import VerticalPost from '../Post/VerticalPost/VerticalPost';
 import './Feed.css';
@@ -9,17 +9,17 @@ const Feed = () => {
   const { user } = useContext(UserContext);
   const [displayedPosts, setDisplayedPosts] = useState();
   const [nextPosts, setNextPosts] = useState();
-  const [fetchInProgress, setFetchInProgress] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const postsPerRender = 10;
 
   useEffect(() => {
     let isSubscribed = true;
     if (user)
-      // fetchFeed returns the first 20 posts, fetch more on scroll
       fetchFeed().then((res) => {
         if (isSubscribed) {
-          setDisplayedPosts(res.slice(0, 10));
-          setNextPosts(res.slice(10));
+          setDisplayedPosts(res.slice(0, postsPerRender));
+          setNextPosts(res.slice(postsPerRender));
           setLoading(false);
         }
       });
@@ -30,34 +30,23 @@ const Feed = () => {
   }, [user]);
 
   useEffect(() => {
-    let isSubscribed = true;
     const loadMorePosts = async () => {
       if (
         Math.ceil(window.innerHeight + window.scrollY) >=
           document.documentElement.scrollHeight - 250 &&
         nextPosts &&
-        nextPosts[nextPosts.length - 1] &&
-        !fetchInProgress &&
-        isSubscribed
+        nextPosts[nextPosts.length - 1]
       ) {
-        const posts = await fetchNextFeedPosts(
-          'main',
-          nextPosts[nextPosts.length - 1].timestamp
-        );
-        if (isSubscribed) {
-          setFetchInProgress(true);
-          setDisplayedPosts((oldArray) => [...oldArray, ...nextPosts]);
-          setNextPosts(posts);
-          setFetchInProgress(false);
-        }
+        setDisplayedPosts((oldArray) => [
+          ...oldArray,
+          ...nextPosts.slice(0, postsPerRender),
+        ]);
+        setNextPosts(nextPosts.slice(postsPerRender));
       }
     };
     window.addEventListener('scroll', loadMorePosts);
-    return () => {
-      isSubscribed = false;
-      window.removeEventListener('scroll', loadMorePosts);
-    };
-  }, [nextPosts, displayedPosts, fetchInProgress]);
+    return () => window.removeEventListener('scroll', loadMorePosts);
+  }, [nextPosts, displayedPosts]);
 
   const allPosts = () => {
     return (
