@@ -35,6 +35,9 @@ const Profile = ({ scrollPosition, updateScrollPosition }) => {
 
   useEffect(() => {
     document.title = `${username} - Ink`;
+    return () => {
+      document.title = `Ink`;
+    };
   }, [username]);
 
   useEffect(() => {
