@@ -16,6 +16,7 @@ import FollowRequests from './components/FollowRequests/FollowRequests';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import EditPost from './components/Post/EditPost/EditPost';
 import NewFollowers from './components/NewFollowers/NewFollowers';
+import NewLikes from './components/NewLikes/NewLikes';
 import { fetchUserData, setupAnon, setupUser, signInAnon } from './firebase';
 import './App.css';
 
@@ -115,8 +116,14 @@ function App() {
               ) : (
                 <Redirect to='/' />
               )}
+            </Route>{' '}
+            <Route path='/:username/new-likes'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <NewLikes />
+              ) : (
+                <Redirect to='/' />
+              )}
             </Route>
-
             <Route exact path='/:username/:postId'>
               {user || localStorage.getItem('userWillSignIn') ? (
                 <HorizontalPost />
@@ -131,7 +138,6 @@ function App() {
                 <Redirect to='/' />
               )}
             </Route>
-
             <Route
               exact
               path='/reset-password'
