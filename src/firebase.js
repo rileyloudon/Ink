@@ -161,6 +161,12 @@ export const fetchUserData = async () => {
     });
   }
 
+  if (docSnap.data().newLikes.length >= 1) {
+    await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
+      newLikes: [],
+    });
+  }
+
   return docSnap.data();
 };
 
@@ -604,6 +610,7 @@ export const fetchIndividualPost = async (username, postId) => {
 export const toggleLikePost = async (post) => {
   const auth = getAuth();
 
+  const userRef = doc(db, 'users', post.owner);
   const postRef = doc(db, 'users', post.owner, 'posts', post.id);
   const postSnap = await getDoc(postRef);
 
@@ -611,9 +618,23 @@ export const toggleLikePost = async (post) => {
     await updateDoc(postRef, {
       likes: arrayUnion(auth.currentUser.displayName),
     });
+
+    await updateDoc(userRef, {
+      newLikes: arrayUnion({
+        username: auth.currentUser.displayName,
+        postPhoto: post.imageUrl,
+      }),
+    });
   } else {
     await updateDoc(postRef, {
       likes: arrayRemove(auth.currentUser.displayName),
+    });
+
+    await updateDoc(userRef, {
+      newLikes: arrayRemove({
+        username: auth.currentUser.displayName,
+        postPhoto: post.imageUrl,
+      }),
     });
   }
 
