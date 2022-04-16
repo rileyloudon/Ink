@@ -622,6 +622,7 @@ export const toggleLikePost = async (post) => {
     await updateDoc(userRef, {
       newLikes: arrayUnion({
         username: auth.currentUser.displayName,
+        postId: post.id,
         postPhoto: post.imageUrl,
       }),
     });
@@ -633,6 +634,7 @@ export const toggleLikePost = async (post) => {
     await updateDoc(userRef, {
       newLikes: arrayRemove({
         username: auth.currentUser.displayName,
+        postId: post.id,
         postPhoto: post.imageUrl,
       }),
     });
