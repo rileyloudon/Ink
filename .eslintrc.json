@@ -19,8 +19,11 @@
   "plugins": ["react", "prettier"],
   "rules": {
     "no-console": "warn",
-    "prettier/prettier": ["error", { "singleQuote": true, "jsxSingleQuote": true }],
     "jsx-quotes": ["error", "prefer-single"],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "prettier/prettier": [
+      "error",
+      { "singleQuote": true, "jsxSingleQuote": true }
+    ]
   }
 }
