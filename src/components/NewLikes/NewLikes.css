@@ -1,0 +1,48 @@
+.no-new-likes,
+.new-likes {
+  color: var(--text);
+  text-align: center;
+}
+
+.new-likes h3,
+.new-likes p {
+  margin: 0;
+}
+
+.new-likes .profile-picture {
+  margin-right: 15px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.new-likes .post-photo {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.new-likes span {
+  margin-right: 4px;
+  color: var(--text);
+}
+
+.new-likes a {
+  font-weight: 600;
+}
+
+.new-likes .title,
+.new-likes .like {
+  border-bottom: 1px solid var(--border);
+  background-color: var(--background);
+  padding: 14px 4px;
+  margin: auto;
+}
+
+.new-likes .like,
+.new-likes a {
+  text-decoration: inherit;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
