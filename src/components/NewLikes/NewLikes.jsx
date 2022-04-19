@@ -62,7 +62,7 @@ const NewLikes = () => {
       </div>
       <div className='likes'>
         {mergedNewLikes.map((like) => (
-          <div className='like' key={like.username}>
+          <div className='like' key={like.username + like.postId}>
             <Link to={`/${like.username}`}>
               <img className='profile-picture' src={like.photoURL} alt='' />
               <span>{like.username}</span>
