@@ -155,17 +155,17 @@ export const fetchUserData = async () => {
   const docRef = doc(db, 'users', auth.currentUser.displayName);
   const docSnap = await getDoc(docRef);
 
-  if (docSnap.data().newFollowers.length >= 1) {
-    await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
-      newFollowers: [],
-    });
-  }
+  // if (docSnap.data().newFollowers.length >= 1) {
+  //   await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
+  //     newFollowers: [],
+  //   });
+  // }
 
-  if (docSnap.data().newLikes.length >= 1) {
-    await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
-      newLikes: [],
-    });
-  }
+  // if (docSnap.data().newLikes.length >= 1) {
+  //   await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
+  //     newLikes: [],
+  //   });
+  // }
 
   return docSnap.data();
 };
@@ -675,7 +675,8 @@ export const fetchProfilePicture = async (user) => {
   // returns both username and photoURL because 'in' doesn't keep array order
   // (1 would match first because 1 is at the top in db, causing miss match)
   let userCopy = [...user];
-  if (user[0].username) userCopy = userCopy.map((item) => item.username);
+  if (user.length > 0 && user[0].username)
+    userCopy = userCopy.map((item) => item.username);
 
   const batches = [];
 
