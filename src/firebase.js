@@ -675,8 +675,10 @@ export const fetchProfilePicture = async (user) => {
   // returns both username and photoURL because 'in' doesn't keep array order
   // (1 would match first because 1 is at the top in db, causing miss match)
   let userCopy = [...user];
-  if (user.length > 0 && user[0].username)
-    userCopy = userCopy.map((item) => item.username);
+  if (user.length > 0 && user[0].username) {
+    const tempCopy = userCopy.map((item) => item.username);
+    userCopy = [...new Set(tempCopy)];
+  }
 
   const batches = [];
 
