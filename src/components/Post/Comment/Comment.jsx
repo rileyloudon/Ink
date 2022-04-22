@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { fetchProfilePicture } from '../../../firebase';
+import UserContext from '../../../Context/UserContext';
+import CommentDropdown from '../CommentDropdown/CommentDropdown';
 import './Comment.css';
 
 const Comment = ({ commentObj, includePicture }) => {
+  const { user } = useContext(UserContext);
   const [profilePicture, setProfilePicture] = useState();
 
   useEffect(() => {
@@ -26,6 +29,9 @@ const Comment = ({ commentObj, includePicture }) => {
         <span className='by'>{commentObj.by}</span>
       </Link>
       <span className='comment'>{commentObj.comment}</span>
+      {user.username === commentObj.by && (
+        <CommentDropdown comment={commentObj} />
+      )}
     </div>
   );
 };
