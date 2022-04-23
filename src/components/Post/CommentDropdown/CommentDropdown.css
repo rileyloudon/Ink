@@ -1,0 +1,45 @@
+.comment-dropdown-container {
+  display: inline;
+  position: relative;
+  margin-left: auto;
+  float: right;
+}
+
+.comment-dropdown {
+  position: absolute;
+  display: none;
+  background-color: var(--background);
+  border-radius: 6px;
+  box-shadow: 0 0 4px 1px var(--shadow);
+  width: 200px;
+  z-index: 1;
+  right: 0;
+}
+
+.comment-dropdown button {
+  color: var(--text);
+  cursor: pointer;
+  display: block;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  padding: 8px 16px;
+  width: 100%;
+  text-align: left;
+}
+
+.comment-dropdown.displayed {
+  display: block;
+}
+
+.comment-dropdown button:hover {
+  background-color: var(--off-background);
+}
+
+.comment-dropdown-container .dots {
+  cursor: pointer;
+  fill: var(--text);
+  margin-left: auto;
+  height: 18px;
+  width: 18px;
+}
