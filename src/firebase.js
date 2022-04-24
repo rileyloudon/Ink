@@ -644,9 +644,8 @@ export const toggleLikePost = async (post) => {
 };
 
 export const addComment = async (post, comment) => {
-  const postOwner = post.storageUrl.split('/')[0];
   const auth = getAuth();
-  const postRef = doc(db, 'users', postOwner, 'posts', post.id);
+  const postRef = doc(db, 'users', post.owner, 'posts', post.id);
 
   const newComment = {
     comment,
@@ -662,6 +661,17 @@ export const addComment = async (post, comment) => {
   });
 
   return newComment;
+};
+
+export const deleteComment = async (post, comment) => {
+  const postRef = doc(db, 'users', post.owner, 'posts', post.id);
+
+  await updateDoc(postRef, {
+    comments: arrayRemove(comment),
+  });
+
+  //
+  return 'done';
 };
 
 export const fetchProfilePicture = async (user) => {
