@@ -109,13 +109,21 @@ const HorizontalPost = ({ modal }) => {
                 </span>
               ) : (
                 postData.post.comments.map((commentObj) => (
-                  <Comment key={commentObj.key} commentObj={commentObj} />
+                  <Comment
+                    key={commentObj.key}
+                    post={postData.post}
+                    commentObj={commentObj}
+                  />
                 ))
               )}
               {!postData.post.hideComments &&
                 newComments &&
                 newComments.map((commentObj) => (
-                  <Comment key={commentObj.key} commentObj={commentObj} />
+                  <Comment
+                    key={commentObj.key}
+                    post={postData.post}
+                    commentObj={commentObj}
+                  />
                 ))}
             </section>
             <section className='interact'>

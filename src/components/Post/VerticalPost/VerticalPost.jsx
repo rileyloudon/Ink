@@ -108,6 +108,7 @@ const VerticalPost = ({ post }) => {
             displayedPostComments.map((commentObj) => (
               <Comment
                 key={commentObj.key}
+                post={post}
                 commentObj={commentObj}
                 includePicture={false}
               />
@@ -115,7 +116,12 @@ const VerticalPost = ({ post }) => {
           {!post.hideComments &&
             newComments &&
             newComments.map((commentObj) => (
-              <Comment key={commentObj.key} commentObj={commentObj} />
+              <Comment
+                key={commentObj.key}
+                post={post}
+                commentObj={commentObj}
+                includePicture={false}
+              />
             ))}
           <DatePosted marginBottom={16} timestamp={post.timestamp} />
         </section>
