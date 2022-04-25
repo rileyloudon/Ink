@@ -6,9 +6,10 @@ import UserContext from '../../../Context/UserContext';
 import CommentDropdown from '../CommentDropdown/CommentDropdown';
 import './Comment.css';
 
-const Comment = ({ commentObj, includePicture }) => {
+const Comment = ({ post, commentObj, includePicture }) => {
   const { user } = useContext(UserContext);
   const [profilePicture, setProfilePicture] = useState();
+  const [style, setStyle] = useState({ display: 'none' });
 
   useEffect(() => {
     let isSubscribed = true;
@@ -22,15 +23,24 @@ const Comment = ({ commentObj, includePicture }) => {
     };
   }, [commentObj, includePicture]);
 
+  // maybe use opacity to hide dropdown so the icon is always there just invisible
   return (
-    <div className='commenter'>
+    <div
+      className='commenter'
+      onMouseEnter={() =>
+        user.username === commentObj.by ? setStyle({ display: 'block' }) : null
+      }
+      onMouseLeave={() =>
+        user.username === commentObj.by ? setStyle({ display: 'none' }) : null
+      }
+    >
       <Link to={`/${commentObj.by}`}>
         {includePicture && <img src={profilePicture} alt='' />}
         <span className='by'>{commentObj.by}</span>
       </Link>
       <span className='comment'>{commentObj.comment}</span>
       {user.username === commentObj.by && (
-        <CommentDropdown comment={commentObj} />
+        <CommentDropdown post={post} comment={commentObj} style={style} />
       )}
     </div>
   );
@@ -41,6 +51,7 @@ Comment.defaultProps = {
 };
 
 Comment.propTypes = {
+  post: PropTypes.shape({}).isRequired,
   commentObj: PropTypes.shape({
     by: PropTypes.string,
     comment: PropTypes.string,
