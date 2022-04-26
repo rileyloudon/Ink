@@ -19,14 +19,15 @@ const SignIn = ({ updateLoading, signInGuest }) => {
     /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g.test(email) &&
     password.length >= 6;
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     setButtonLoading(true);
-    signInUser(email, password).then((res) => {
-      if (typeof res === 'string') {
-        setSignInError(res);
-        setButtonLoading(false);
-      }
-    });
+
+    const res = signInUser(email, password);
+
+    if (typeof res === 'string') {
+      setSignInError(res);
+      setButtonLoading(false);
+    }
   };
 
   useEffect(() => {

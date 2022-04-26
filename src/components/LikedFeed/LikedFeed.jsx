@@ -23,13 +23,14 @@ const LikedFeed = () => {
     if (!setLoading) setLoading(true);
 
     if (user)
-      fetchLikedPosts().then((res) => {
+      (async () => {
+        const res = await fetchLikedPosts();
         if (isSubscribed) {
           setDisplayedPosts(res.slice(0, 10));
           setNextPosts(res.slice(10));
           setLoading(false);
         }
-      });
+      })();
 
     return () => {
       isSubscribed = false;

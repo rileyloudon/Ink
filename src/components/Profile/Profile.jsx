@@ -42,8 +42,10 @@ const Profile = ({ scrollPosition, updateScrollPosition }) => {
 
   useEffect(() => {
     let isSubscribed = true;
+
     if (user)
-      fetchUserProfileData(username).then((res) => {
+      (async () => {
+        const res = await fetchUserProfileData(username);
         // res returns an object OR 'User not found'
         // header: all data for the header
         // initialPosts: first 12 posts, fetch more on scroll OR 'private' if profile is private
@@ -52,7 +54,7 @@ const Profile = ({ scrollPosition, updateScrollPosition }) => {
           setProfile(res);
           setLoading(false);
         }
-      });
+      })();
 
     return () => {
       isSubscribed = false;

@@ -15,14 +15,16 @@ const Feed = () => {
 
   useEffect(() => {
     let isSubscribed = true;
+
     if (user)
-      fetchFeed().then((res) => {
+      (async () => {
+        const res = await fetchFeed();
         if (isSubscribed) {
           setDisplayedPosts(res.slice(0, postsPerRender));
           setNextPosts(res.slice(postsPerRender));
           setLoading(false);
         }
-      });
+      })();
 
     return () => {
       isSubscribed = false;

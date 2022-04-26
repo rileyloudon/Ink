@@ -34,21 +34,20 @@ const VerticalPost = ({ post }) => {
   const addNewComment = (comment) =>
     setNewComments((prevState) => [...prevState, comment]);
 
-  const likePost = () => {
-    toggleLikePost(post).then((res) => {
-      // res returns if user liked the post
-      if (res === true) {
-        setLikeStatus((prevState) => ({
-          likeCount: prevState.likeCount + 1,
-          userLikes: true,
-        }));
-      } else if (res === false) {
-        setLikeStatus((prevState) => ({
-          likeCount: prevState.likeCount - 1,
-          userLikes: false,
-        }));
-      }
-    });
+  const likePost = async () => {
+    const res = await toggleLikePost(post);
+    // res returns if user liked the post
+    if (res === true) {
+      setLikeStatus((prevState) => ({
+        likeCount: prevState.likeCount + 1,
+        userLikes: true,
+      }));
+    } else if (res === false) {
+      setLikeStatus((prevState) => ({
+        likeCount: prevState.likeCount - 1,
+        userLikes: false,
+      }));
+    }
   };
 
   const loadMoreComments = () => {
@@ -62,9 +61,12 @@ const VerticalPost = ({ post }) => {
 
   useEffect(() => {
     let isSubscribed = true;
-    fetchProfilePicture(post.owner).then((res) => {
+
+    (async () => {
+      const res = await fetchProfilePicture(post.owner);
       if (isSubscribed) setProfilePicture(res);
-    });
+    })();
+
     return () => {
       isSubscribed = false;
     };

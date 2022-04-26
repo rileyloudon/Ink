@@ -25,23 +25,22 @@ const HorizontalPost = ({ modal }) => {
   const addNewComment = (comment) =>
     setNewComments((prevState) => [...prevState, comment]);
 
-  const likePost = () => {
-    toggleLikePost(postData.post).then((res) => {
-      // res returns if user liked the post
-      if (res === true) {
-        setPostData((prevState) => ({
-          ...prevState,
-          likeCount: prevState.likeCount + 1,
-          userLikes: true,
-        }));
-      } else if (res === false) {
-        setPostData((prevState) => ({
-          ...prevState,
-          likeCount: prevState.likeCount - 1,
-          userLikes: false,
-        }));
-      }
-    });
+  const likePost = async () => {
+    const res = await toggleLikePost(postData.post);
+    // res returns if user liked the post
+    if (res === true) {
+      setPostData((prevState) => ({
+        ...prevState,
+        likeCount: prevState.likeCount + 1,
+        userLikes: true,
+      }));
+    } else if (res === false) {
+      setPostData((prevState) => ({
+        ...prevState,
+        likeCount: prevState.likeCount - 1,
+        userLikes: false,
+      }));
+    }
   };
 
   useEffect(() => {
@@ -53,12 +52,15 @@ const HorizontalPost = ({ modal }) => {
 
   useEffect(() => {
     let isSubscribed = true;
-    fetchIndividualPost(username, postId).then((res) => {
+
+    (async () => {
+      const res = await fetchIndividualPost(username, postId);
       if (isSubscribed) {
         setPostData(res);
         setLoading(false);
       }
-    });
+    })();
+
     return () => {
       isSubscribed = false;
     };

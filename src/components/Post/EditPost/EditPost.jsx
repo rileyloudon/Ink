@@ -26,7 +26,7 @@ const EditPost = () => {
         postData.post.hideComments !== hideComments
       : null;
 
-  const savePost = () => {
+  const savePost = async () => {
     const changed = {
       caption: postData.caption !== caption,
       disableComments: postData.disableComments !== disableComments,
@@ -34,23 +34,27 @@ const EditPost = () => {
     };
 
     setButtonLoading(true);
-    updatePost(postId, changed, caption, disableComments, hideComments).then(
-      (res) => {
-        if (res.updated === true) {
-          setPostData((prevData) => ({
-            ...prevData,
-            caption,
-            disableComments,
-            hideComments,
-          }));
-          setPostUpdated('Post Updated');
-        } else {
-          setError(res.err);
-          setPostUpdated(false);
-        }
-        setButtonLoading(false);
-      }
+    const res = await updatePost(
+      postId,
+      changed,
+      caption,
+      disableComments,
+      hideComments
     );
+
+    if (res.updated === true) {
+      setPostData((prevData) => ({
+        ...prevData,
+        caption,
+        disableComments,
+        hideComments,
+      }));
+      setPostUpdated('Post Updated');
+    } else {
+      setError(res.err);
+      setPostUpdated(false);
+    }
+    setButtonLoading(false);
   };
 
   const handleDelete = async () => {
@@ -61,7 +65,9 @@ const EditPost = () => {
 
   useEffect(() => {
     let isSubscribed = true;
-    fetchIndividualPost(username, postId).then((res) => {
+
+    (async () => {
+      const res = await fetchIndividualPost(username, postId);
       if (isSubscribed) {
         setPostData(res);
         if (typeof res === 'object') {
@@ -70,7 +76,8 @@ const EditPost = () => {
           setHideComments(res.post.hideComments);
         }
       }
-    });
+    })();
+
     return () => {
       isSubscribed = false;
     };

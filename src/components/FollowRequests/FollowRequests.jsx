@@ -50,10 +50,9 @@ const FollowRequests = () => {
             <button
               className='accept-request'
               type='button'
-              onClick={() => {
-                acceptFollowRequest(request.username).then(() => {
-                  updateRequests(request.username, i);
-                });
+              onClick={async () => {
+                await acceptFollowRequest(request.username);
+                updateRequests(request.username, i);
               }}
             >
               Accept
@@ -61,10 +60,9 @@ const FollowRequests = () => {
             <button
               className='deny-request'
               type='button'
-              onClick={() => {
-                denyFollowRequest(request.username).then(() => {
-                  updateRequests(request.username, i);
-                });
+              onClick={async () => {
+                await denyFollowRequest(request.username);
+                updateRequests(request.username, i);
               }}
             >
               Deny
@@ -78,12 +76,13 @@ const FollowRequests = () => {
   useEffect(() => {
     let isSubscribed = true;
     if (user)
-      fetchFollowRequests().then((res) => {
+      (async () => {
+        const res = await fetchFollowRequests();
         if (isSubscribed) {
           setFollowRequests(res);
           setLoading(false);
         }
-      });
+      })();
 
     return () => {
       isSubscribed = false;
