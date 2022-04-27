@@ -11,27 +11,33 @@ const Comment = ({ post, commentObj, includePicture }) => {
   const [profilePicture, setProfilePicture] = useState();
   const [style, setStyle] = useState({ display: 'none' });
 
+  // sets to true if either are true, or false is both false
+  const allowCommentDelete =
+    user.username === commentObj.by || user.username === post.owner;
+
   useEffect(() => {
     let isSubscribed = true;
+
     if (includePicture) {
-      fetchProfilePicture(commentObj.by).then((res) => {
+      (async () => {
+        const res = await fetchProfilePicture(commentObj.by);
         if (isSubscribed) setProfilePicture(res);
-      });
+      })();
     }
+
     return () => {
       isSubscribed = false;
     };
   }, [commentObj, includePicture]);
 
-  // maybe use opacity to hide dropdown so the icon is always there just invisible
   return (
     <div
       className='commenter'
       onMouseEnter={() =>
-        user.username === commentObj.by ? setStyle({ display: 'block' }) : null
+        allowCommentDelete ? setStyle({ display: 'block' }) : null
       }
       onMouseLeave={() =>
-        user.username === commentObj.by ? setStyle({ display: 'none' }) : null
+        allowCommentDelete ? setStyle({ display: 'none' }) : null
       }
     >
       <Link to={`/${commentObj.by}`}>
@@ -39,7 +45,7 @@ const Comment = ({ post, commentObj, includePicture }) => {
         <span className='by'>{commentObj.by}</span>
       </Link>
       <span className='comment'>{commentObj.comment}</span>
-      {user.username === commentObj.by && (
+      {allowCommentDelete && (
         <CommentDropdown post={post} comment={commentObj} style={style} />
       )}
     </div>
@@ -51,7 +57,9 @@ Comment.defaultProps = {
 };
 
 Comment.propTypes = {
-  post: PropTypes.shape({}).isRequired,
+  post: PropTypes.shape({
+    owner: PropTypes.string.isRequired,
+  }).isRequired,
   commentObj: PropTypes.shape({
     by: PropTypes.string,
     comment: PropTypes.string,
