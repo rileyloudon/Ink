@@ -8,16 +8,14 @@ import UserContext from '../Context/UserContext';
 const Home = ({ loading, updateLoading, signInGuest }) => {
   const { user } = useContext(UserContext);
 
-  return (
-    <>
-      {loading && <Loading />}
-      {!user ? (
-        <SignIn updateLoading={updateLoading} signInGuest={signInGuest} />
-      ) : (
-        <Feed />
-      )}
-    </>
-  );
+  const homeContent = () =>
+    user ? (
+      <Feed />
+    ) : (
+      <SignIn updateLoading={updateLoading} signInGuest={signInGuest} />
+    );
+
+  return loading ? <Loading /> : homeContent();
 };
 
 Home.propTypes = {
