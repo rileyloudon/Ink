@@ -6,12 +6,17 @@ import UserContext from '../../../Context/UserContext';
 import CommentDropdown from '../CommentDropdown/CommentDropdown';
 import './Comment.css';
 
-const Comment = ({ post, commentObj, includePicture }) => {
+const Comment = ({
+  post,
+  commentObj,
+  includePicture,
+  deleteDisplayedComment,
+}) => {
   const { user } = useContext(UserContext);
   const [profilePicture, setProfilePicture] = useState();
   const [style, setStyle] = useState({ display: 'none' });
 
-  // sets to true if either are true, or false is both false
+  // sets to true if either are true, or false if both are false
   const allowCommentDelete =
     user.username === commentObj.by || user.username === post.owner;
 
@@ -46,7 +51,12 @@ const Comment = ({ post, commentObj, includePicture }) => {
       </Link>
       <span className='comment'>{commentObj.comment}</span>
       {allowCommentDelete && (
-        <CommentDropdown post={post} comment={commentObj} style={style} />
+        <CommentDropdown
+          post={post}
+          comment={commentObj}
+          style={style}
+          deleteDisplayedComment={deleteDisplayedComment}
+        />
       )}
     </div>
   );
@@ -65,6 +75,7 @@ Comment.propTypes = {
     comment: PropTypes.string,
   }).isRequired,
   includePicture: PropTypes.bool,
+  deleteDisplayedComment: PropTypes.func.isRequired,
 };
 
 export default Comment;

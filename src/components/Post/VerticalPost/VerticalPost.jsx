@@ -34,6 +34,20 @@ const VerticalPost = ({ post }) => {
   const addNewComment = (comment) =>
     setNewComments((prevState) => [...prevState, comment]);
 
+  const deleteDisplayedComment = (commentToDelete) => {
+    if (Object.prototype.hasOwnProperty.call(commentToDelete, 'newComment')) {
+      const tempArray = newComments.filter(
+        (comment) => comment !== commentToDelete
+      );
+      setNewComments(tempArray);
+    } else {
+      const tempArray = displayedPostComments.filter(
+        (comment) => comment !== commentToDelete
+      );
+      setDisplayedPostComments(tempArray);
+    }
+  };
+
   const likePost = async () => {
     const res = await toggleLikePost(post);
     // res returns if user liked the post
@@ -113,6 +127,7 @@ const VerticalPost = ({ post }) => {
                 post={post}
                 commentObj={commentObj}
                 includePicture={false}
+                deleteDisplayedComment={deleteDisplayedComment}
               />
             ))}
           {!post.hideComments &&
@@ -123,6 +138,7 @@ const VerticalPost = ({ post }) => {
                 post={post}
                 commentObj={commentObj}
                 includePicture={false}
+                deleteDisplayedComment={deleteDisplayedComment}
               />
             ))}
           <DatePosted marginBottom={16} timestamp={post.timestamp} />

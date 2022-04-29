@@ -25,6 +25,28 @@ const HorizontalPost = ({ modal }) => {
   const addNewComment = (comment) =>
     setNewComments((prevState) => [...prevState, comment]);
 
+  const deleteDisplayedComment = (commentToDelete) => {
+    if (Object.prototype.hasOwnProperty.call(commentToDelete, 'newComment')) {
+      const tempArray = newComments.filter(
+        (comment) => comment !== commentToDelete
+      );
+      setNewComments(tempArray);
+    } else {
+      const postComments = [...postData.post.comments];
+      const tempArray = postComments.filter(
+        (comment) => comment !== commentToDelete
+      );
+
+      setPostData((prevState) => ({
+        ...prevState,
+        post: {
+          ...prevState.post,
+          comments: tempArray,
+        },
+      }));
+    }
+  };
+
   const likePost = async () => {
     const res = await toggleLikePost(postData.post);
     // res returns if user liked the post
@@ -115,6 +137,7 @@ const HorizontalPost = ({ modal }) => {
                     key={commentObj.key}
                     post={postData.post}
                     commentObj={commentObj}
+                    deleteDisplayedComment={deleteDisplayedComment}
                   />
                 ))
               )}
@@ -125,6 +148,7 @@ const HorizontalPost = ({ modal }) => {
                     key={commentObj.key}
                     post={postData.post}
                     commentObj={commentObj}
+                    deleteDisplayedComment={deleteDisplayedComment}
                   />
                 ))}
             </section>
