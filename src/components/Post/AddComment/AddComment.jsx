@@ -15,7 +15,7 @@ const AddComment = ({ addNewComment, post }) => {
       e.preventDefault();
       const newComment = await addComment(post, comment);
       setComment('');
-      addNewComment(newComment);
+      addNewComment({ ...newComment, newComment: true });
     }
   };
 
