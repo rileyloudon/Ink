@@ -5,7 +5,7 @@ import Header from './components/Header/Header';
 import Home from './components/Home';
 import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
-import Chat from './components/Chat';
+import Chat from './components/Chat/Chat';
 import AddPost from './components/AddPost/AddPost';
 import HorizontalPost from './components/Post/HorizontalPost/HorizontalPost';
 import LikedFeed from './components/LikedFeed/LikedFeed';
