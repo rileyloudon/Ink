@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import UserContext from '../../../Context/UserContext';
-import PostDropdown from '../PostDropDown/PostDropdown';
+import PostDropdown from '../PostDropdown/PostDropdown';
 import './Owner.css';
 
 const Owner = ({ owner, profilePicture, id }) => {
