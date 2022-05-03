@@ -4,7 +4,6 @@ import { useDropzone } from 'react-dropzone';
 import PropTypes from 'prop-types';
 import { ReactComponent as PhotoDefault } from '../../../img/photo/photo-default.svg';
 import { ReactComponent as PhotoError } from '../../../img/photo/photo-error.svg';
-
 import './DropImage.css';
 
 const DropImage = ({ updateImage }) => {

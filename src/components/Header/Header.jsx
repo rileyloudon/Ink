@@ -57,7 +57,6 @@ const Header = ({ updateAddModal, showAddModal }) => {
               {showAddModal ? <AddFilled /> : <AddOutline />}
             </button>
 
-            {/* onClick -> Display follow requests, likes, setActiveTab('favorite') */}
             <FavoriteDropdown
               favoriteDropdownOpen={favoriteDropdownOpen}
               changeFavoriteDropdownOpen={changeFavoriteDropdownOpen}

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
-import './ForgotPassword.css';
 import { forgotPassword } from '../../firebase';
+import './ForgotPassword.css';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
