@@ -669,9 +669,6 @@ export const deleteComment = async (post, comment) => {
   await updateDoc(postRef, {
     comments: arrayRemove(comment),
   });
-
-  //
-  return 'done';
 };
 
 export const fetchProfilePicture = async (user) => {
