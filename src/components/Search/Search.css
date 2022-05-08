@@ -29,7 +29,7 @@
   display: flex;
 }
 
-.search .search-results a {
+.search .search-results .search-item {
   border: 1px solid var(--border);
   background-color: var(--background);
   min-width: 100%;
@@ -42,18 +42,24 @@
   text-decoration: none;
 }
 
-.search .search-results a:hover {
+.search .search-results button {
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.search .search-results .search-item:hover {
   background-color: var(--off-background);
 }
 
-.search .search-results img {
+.search .search-results .search-item img {
   margin-right: 15px;
   width: 28px;
   height: 28px;
   border-radius: 50%;
 }
 
-.search .search-results span {
+.search .search-results .search-item span {
   margin-right: 4px;
   color: var(--text);
   font-weight: 600;

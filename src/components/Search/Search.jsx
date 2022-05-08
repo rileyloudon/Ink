@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { searchUsers } from '../../../firebase';
+import PropTypes from 'prop-types';
+import { searchUsers } from '../../firebase';
 import './Search.css';
 
-const Search = () => {
+const Search = ({ updateCurrentSelectedUser }) => {
   const searchResultsRef = useRef(null);
   const [searchString, setSearchString] = useState('');
   const [results, setResults] = useState();
@@ -41,8 +42,31 @@ const Search = () => {
   }, [resultsOpen]);
 
   const displaySearchResult = (user) => {
+    if (updateCurrentSelectedUser) {
+      return (
+        <button
+          className='search-item'
+          type='button'
+          key={user.username}
+          onClick={() =>
+            updateCurrentSelectedUser({
+              username: user.username,
+              photoURL: user.photoURL,
+            })
+          }
+        >
+          <img src={user.photoURL} alt='' />
+          <span>{user.username}</span>
+        </button>
+      );
+    }
+
     return (
-      <Link to={`/${user.username}`} key={user.username}>
+      <Link
+        className='search-item'
+        to={`/${user.username}`}
+        key={user.username}
+      >
         <img src={user.photoURL} alt='' />
         <span>{user.username}</span>
       </Link>
@@ -71,3 +95,11 @@ const Search = () => {
 };
 
 export default Search;
+
+Search.defaultProps = {
+  updateCurrentSelectedUser: null,
+};
+
+Search.propTypes = {
+  updateCurrentSelectedUser: PropTypes.func,
+};
