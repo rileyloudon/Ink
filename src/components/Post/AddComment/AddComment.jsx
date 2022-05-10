@@ -6,7 +6,7 @@ import { addComment } from '../../../firebase';
 import './AddComment.css';
 import 'emoji-mart/css/emoji-mart.css';
 
-const AddComment = ({ addNewComment, post }) => {
+const AddComment = ({ addNewComment, post, chat }) => {
   const [comment, setComment] = useState('');
   const [displayEmojiPicker, setDisplayEmojiPicker] = useState(false);
 
@@ -47,8 +47,8 @@ const AddComment = ({ addNewComment, post }) => {
         </button>
         <input
           autoComplete='off'
-          id={`${post.id}-textarea`}
-          placeholder='Add a comment...'
+          id={chat ? `chat-textarea` : `${post.id}-textarea`}
+          placeholder={chat ? 'Message' : 'Add a comment...'}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           onKeyDown={(e) => {
@@ -63,18 +63,25 @@ const AddComment = ({ addNewComment, post }) => {
           type='submit'
           disabled={comment.trim().length < 1}
         >
-          Post
+          {chat ? 'Send' : 'Post'}
         </button>
       </form>
     </section>
   );
 };
 
+AddComment.defaultProps = {
+  addNewComment: null,
+  post: null,
+  chat: null,
+};
+
 AddComment.propTypes = {
-  addNewComment: PropTypes.func.isRequired,
+  addNewComment: PropTypes.func,
   post: PropTypes.shape({
     id: PropTypes.string,
-  }).isRequired,
+  }),
+  chat: PropTypes.bool,
 };
 
 export default AddComment;
