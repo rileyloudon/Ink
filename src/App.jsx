@@ -174,7 +174,7 @@ function App() {
             </Route>
             <Route exact path='/chat'>
               {user || localStorage.getItem('userWillSignIn') ? (
-                <Chat />
+                <Chat loading={loading} />
               ) : (
                 <Redirect to='/' />
               )}
