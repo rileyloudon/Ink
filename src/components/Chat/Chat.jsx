@@ -1,14 +1,18 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
+import Loading from '../Loading/Loading';
 import UserSelector from './UserSelector/UserSelector';
 import Messages from './Messages/Messages';
 import './Chat.css';
 
-const Chat = () => {
+const Chat = ({ loading }) => {
   const [currentSelectedUser, setCurrentSelectedUser] = useState(null);
 
   const updateCurrentSelectedUser = (value) => setCurrentSelectedUser(value);
 
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <div className='chat'>
       <UserSelector
         currentSelectedUser={currentSelectedUser}
@@ -20,3 +24,7 @@ const Chat = () => {
 };
 
 export default Chat;
+
+Chat.propTypes = {
+  loading: PropTypes.bool.isRequired,
+};
