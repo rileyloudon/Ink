@@ -110,7 +110,6 @@
   display: none;
 }
 
-.profile-settings .dark-mode,
 .profile-settings .private-account {
   cursor: pointer;
   color: var(--text);
@@ -125,12 +124,10 @@
   margin-bottom: 0;
 }
 
-.profile-settings .dark-mode span:first-of-type,
 .profile-settings .private-account span:first-of-type {
   padding-right: 8px;
 }
 
-.profile-settings .dark-mode span,
 .profile-settings .private-account span {
   display: flex;
   flex-direction: column;

@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserContext from '../../Context/UserContext';
-import ThemeContext from '../../Context/ThemeContext';
 import { updateUserSettings } from '../../firebase';
 import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
 import ChangePicture from './ChangePicture/ChangePicture';
@@ -14,7 +13,6 @@ const Settings = () => {
   // useState data is the data in the form. It can be changed then saved to the database when ready
 
   const { user, setUser } = useContext(UserContext);
-  const { theme, setTheme } = useContext(ThemeContext);
 
   const [newProfilePicture, setNewProfilePicture] = useState('');
 
@@ -33,16 +31,6 @@ const Settings = () => {
     : null;
 
   const updateNewProfilePicture = (value) => setNewProfilePicture(value);
-
-  const changeTheme = (e) => {
-    if (e.target.checked) {
-      localStorage.setItem('theme', 'dark');
-      setTheme('dark');
-    } else {
-      localStorage.setItem('theme', 'light');
-      setTheme('light');
-    }
-  };
 
   const saveSettings = async () => {
     const changed = {
@@ -164,17 +152,6 @@ const Settings = () => {
             {buttonLoading && <Spinner className='spinner' />}
           </button>
         </form>
-        <label htmlFor='toggle-theme' className='dark-mode'>
-          <span>Dark Mode</span>
-          <input
-            type='checkbox'
-            name='toggle-theme'
-            id='toggle-theme'
-            checked={theme === 'dark'}
-            onChange={(e) => changeTheme(e)}
-          />
-          <span className='checkmark' />
-        </label>
         <button type='button' className='delete-account'>
           Delete Account
         </button>
