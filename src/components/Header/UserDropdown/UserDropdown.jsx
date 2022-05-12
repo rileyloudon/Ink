@@ -1,12 +1,14 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import { signOutUser } from '../../../firebase';
+import { logOutUser } from '../../../firebase';
 import UserContext from '../../../Context/UserContext';
+import ThemeContext from '../../../Context/ThemeContext';
 import './UserDropdown.css';
 
 const UserDropdown = () => {
   const history = useHistory();
   const { user } = useContext(UserContext);
+  const { theme, setTheme } = useContext(ThemeContext);
   const userDropdownRef = useRef(null);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
@@ -17,9 +19,8 @@ const UserDropdown = () => {
       if (
         userDropdownRef.current !== null &&
         !userDropdownRef.current.contains(e.traget)
-      ) {
+      )
         setUserDropdownOpen(!userDropdownOpen);
-      }
     };
 
     if (userDropdownOpen) window.addEventListener('click', handleClickOutside);
@@ -56,16 +57,26 @@ const UserDropdown = () => {
         <button
           type='button'
           onClick={() => {
+            const newTheme = theme === 'light' ? 'dark' : 'light';
+            setTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+          }}
+        >
+          Toggle Theme
+        </button>
+        <button
+          type='button'
+          onClick={() => {
             history.push('/settings');
             window.scrollTo(0, 0);
           }}
         >
           Settings
         </button>
-        <div className='sign-out'>
+        <div className='log-out'>
           <button
             type='button'
-            onClick={() => signOutUser().then(() => history.push('/'))}
+            onClick={() => logOutUser().then(() => history.push('/'))}
           >
             Log Out
           </button>
