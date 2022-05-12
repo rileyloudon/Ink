@@ -55,3 +55,7 @@
 .user-dropdown button:hover {
   background-color: var(--off-background);
 }
+
+.user-dropdown .log-out {
+  border-top: 1px solid var(--border);
+}
