@@ -3,6 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { logOutUser } from '../../../firebase';
 import UserContext from '../../../Context/UserContext';
 import ThemeContext from '../../../Context/ThemeContext';
+import { ReactComponent as ProfileSvg } from '../../../img/profile/profile.svg';
+import { ReactComponent as LikedSvg } from '../../../img/favorite/favorite-small.svg';
+import { ReactComponent as ThemeSvg } from '../../../img/theme/theme.svg';
+import { ReactComponent as SettingsSvg } from '../../../img/settings/settings.svg';
 import './UserDropdown.css';
 
 const UserDropdown = () => {
@@ -43,6 +47,7 @@ const UserDropdown = () => {
             window.scrollTo(0, 0);
           }}
         >
+          <ProfileSvg className='user-dropdown-svg' />
           Profile
         </button>
         <button
@@ -52,6 +57,7 @@ const UserDropdown = () => {
             window.scrollTo(0, 0);
           }}
         >
+          <LikedSvg className='user-dropdown-svg' />
           Liked
         </button>
         <button
@@ -62,6 +68,7 @@ const UserDropdown = () => {
             localStorage.setItem('theme', newTheme);
           }}
         >
+          <ThemeSvg className='user-dropdown-svg' />
           Toggle Theme
         </button>
         <button
@@ -71,6 +78,7 @@ const UserDropdown = () => {
             window.scrollTo(0, 0);
           }}
         >
+          <SettingsSvg className='user-dropdown-svg' />
           Settings
         </button>
         <div className='log-out'>
