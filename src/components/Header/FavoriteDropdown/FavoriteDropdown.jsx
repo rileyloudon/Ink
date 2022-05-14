@@ -2,8 +2,8 @@ import { useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import UserContext from '../../../Context/UserContext';
-import { ReactComponent as FavoriteOutline } from '../../../img/favorite/favorite-outline.svg';
-import { ReactComponent as FavoriteFilled } from '../../../img/favorite/favorite-filled.svg';
+import { ReactComponent as FavoriteOutline } from '../../../img/shared/favorite-outline.svg';
+import { ReactComponent as FavoriteFilled } from '../../../img/shared/favorite-filled.svg';
 import './FavoriteDropdown.css';
 
 const FavoriteDropdown = ({
@@ -33,9 +33,9 @@ const FavoriteDropdown = ({
   return (
     <div className='favorite-dropdown-container'>
       {favoriteDropdownOpen ? (
-        <FavoriteFilled onClick={handleClick} />
+        <FavoriteFilled onClick={handleClick} className='header-svg' />
       ) : (
-        <FavoriteOutline onClick={handleClick} />
+        <FavoriteOutline onClick={handleClick} className='header-svg' />
       )}
       <div
         ref={favoriteDropdownRef}

@@ -3,10 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { logOutUser } from '../../../firebase';
 import UserContext from '../../../Context/UserContext';
 import ThemeContext from '../../../Context/ThemeContext';
-import { ReactComponent as ProfileSvg } from '../../../img/profile/profile.svg';
-import { ReactComponent as LikedSvg } from '../../../img/favorite/favorite-small.svg';
-import { ReactComponent as ThemeSvg } from '../../../img/theme/theme.svg';
-import { ReactComponent as SettingsSvg } from '../../../img/settings/settings.svg';
+import { ReactComponent as ProfileSvg } from '../../../img/UserDropdown/profile.svg';
+import { ReactComponent as LikedSvg } from '../../../img/UserDropdown/favorite-small.svg';
+import { ReactComponent as ThemeSvg } from '../../../img/UserDropdown/theme.svg';
+import { ReactComponent as SettingsSvg } from '../../../img/UserDropdown/settings.svg';
 import './UserDropdown.css';
 
 const UserDropdown = () => {

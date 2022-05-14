@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import FavoriteDropdown from './FavoriteDropdown/FavoriteDropdown';
 import UserDropdown from './UserDropdown/UserDropdown';
 import Search from '../Search/Search';
-import { ReactComponent as HomeOutline } from '../../img/home/home-outline.svg';
-import { ReactComponent as HomeFilled } from '../../img/home/home-filled.svg';
-import { ReactComponent as ChatOutline } from '../../img/chat/chat-outline.svg';
-import { ReactComponent as ChatFilled } from '../../img/chat/chat-filled.svg';
-import { ReactComponent as AddOutline } from '../../img/add/add-outline.svg';
-import { ReactComponent as AddFilled } from '../../img/add/add-filled.svg';
+import { ReactComponent as HomeOutline } from '../../img/Header/home-outline.svg';
+import { ReactComponent as HomeFilled } from '../../img/Header/home-filled.svg';
+import { ReactComponent as ChatOutline } from '../../img/Header/chat-outline.svg';
+import { ReactComponent as ChatFilled } from '../../img/Header/chat-filled.svg';
+import { ReactComponent as AddOutline } from '../../img/Header/add-outline.svg';
+import { ReactComponent as AddFilled } from '../../img/Header/add-filled.svg';
 import './header.css';
 
 const Header = ({ updateAddModal, showAddModal }) => {
@@ -34,18 +34,18 @@ const Header = ({ updateAddModal, showAddModal }) => {
               {location.pathname === '/' &&
               !showAddModal &&
               !favoriteDropdownOpen ? (
-                <HomeFilled />
+                <HomeFilled className='header-svg' />
               ) : (
-                <HomeOutline />
+                <HomeOutline className='header-svg' />
               )}
             </Link>
             <Link to='/chat' onClick={window.scrollTo(0, 0)}>
               {location.pathname === '/chat' &&
               !showAddModal &&
               !favoriteDropdownOpen ? (
-                <ChatFilled />
+                <ChatFilled className='header-svg' />
               ) : (
-                <ChatOutline />
+                <ChatOutline className='header-svg' />
               )}
             </Link>
 
@@ -54,7 +54,11 @@ const Header = ({ updateAddModal, showAddModal }) => {
               className='add'
               onClick={() => updateAddModal(true)}
             >
-              {showAddModal ? <AddFilled /> : <AddOutline />}
+              {showAddModal ? (
+                <AddFilled className='header-svg' />
+              ) : (
+                <AddOutline className='header-svg' />
+              )}
             </button>
 
             <FavoriteDropdown

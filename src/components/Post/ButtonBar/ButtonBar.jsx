@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { ReactComponent as FavoriteNotLiked } from '../../../img/favorite/favorite-outline.svg';
-import { ReactComponent as FavoriteLiked } from '../../../img/favorite/favorite-liked.svg';
-import { ReactComponent as CommentOutline } from '../../../img/comment/comment-outline.svg';
+import { ReactComponent as FavoriteNotLiked } from '../../../img/shared/favorite-outline.svg';
+import { ReactComponent as FavoriteLiked } from '../../../img/Post/favorite-liked.svg';
+import { ReactComponent as CommentOutline } from '../../../img/Post/comment-outline.svg';
 import './ButtonBar.css';
 
 const ButtonBar = ({ userLikes, likePost, disableComments, postId }) => {

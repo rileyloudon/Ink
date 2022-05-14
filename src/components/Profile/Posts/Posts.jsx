@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { fetchNextProfilePosts } from '../../../firebase';
-import { ReactComponent as FavoriteFilled } from '../../../img/favorite/favorite-filled.svg';
-import { ReactComponent as CommentFilled } from '../../../img/comment/comment-filled.svg';
+import { ReactComponent as FavoriteFilled } from '../../../img/shared/favorite-filled.svg';
+import { ReactComponent as CommentFilled } from '../../../img/Profile/comment-filled.svg';
 import './Posts.css';
 
 const Posts = ({ username, initialPosts, updateScrollPosition }) => {
