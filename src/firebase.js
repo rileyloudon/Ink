@@ -33,6 +33,7 @@ import {
   deleteDoc,
   startAt,
   endAt,
+  addDoc,
 } from 'firebase/firestore';
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -144,7 +145,7 @@ export const setupAnon = async () => {
   });
 };
 
-export const signOutUser = async () => {
+export const logOutUser = async () => {
   const auth = getAuth();
   await signOut(auth).catch((err) => `Error signing out, ${err}`);
 };
@@ -155,17 +156,17 @@ export const fetchUserData = async () => {
   const docRef = doc(db, 'users', auth.currentUser.displayName);
   const docSnap = await getDoc(docRef);
 
-  // if (docSnap.data().newFollowers.length >= 1) {
-  //   await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
-  //     newFollowers: [],
-  //   });
-  // }
+  if (docSnap.data().newFollowers.length >= 1) {
+    await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
+      newFollowers: [],
+    });
+  }
 
-  // if (docSnap.data().newLikes.length >= 1) {
-  //   await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
-  //     newLikes: [],
-  //   });
-  // }
+  if (docSnap.data().newLikes.length >= 1) {
+    await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
+      newLikes: [],
+    });
+  }
 
   return docSnap.data();
 };
@@ -846,5 +847,43 @@ export const searchUsers = async (searchTerm) => {
   } catch (err) {
     console.log(err);
     return [];
+  }
+};
+
+export const sendMessage = async (otherUser, message) => {
+  try {
+    const auth = getAuth();
+
+    const docRef = collection(
+      db,
+      'users',
+      auth.currentUser.displayName,
+      'chat',
+      otherUser,
+      'messages'
+    );
+
+    const otherUserDocRef = collection(
+      db,
+      'users',
+      otherUser,
+      'chat',
+      auth.currentUser.displayName,
+      'messages'
+    );
+
+    await addDoc(docRef, {
+      message,
+      date: Timestamp.now(),
+      from: auth.currentUser.displayName,
+    });
+
+    await addDoc(otherUserDocRef, {
+      message,
+      date: Timestamp.now(),
+      from: auth.currentUser.displayName,
+    });
+  } catch (e) {
+    console.log(e);
   }
 };
