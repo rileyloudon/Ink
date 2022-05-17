@@ -50,7 +50,7 @@
   align-items: center;
 }
 
-.header-container .nav svg {
+.header-container .nav .header-svg {
   fill: var(--svg);
   margin: 0 10px;
   width: 26px;
