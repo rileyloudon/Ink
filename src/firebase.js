@@ -854,36 +854,78 @@ export const sendMessage = async (otherUser, message) => {
   try {
     const auth = getAuth();
 
-    const docRef = collection(
-      db,
-      'users',
-      auth.currentUser.displayName,
-      'chat',
-      otherUser,
-      'messages'
+    await addDoc(
+      collection(
+        db,
+        'users',
+        auth.currentUser.displayName,
+        'chat',
+        otherUser,
+        'messages'
+      ),
+      {
+        message,
+        date: Timestamp.now(),
+        from: auth.currentUser.displayName,
+      }
     );
 
-    const otherUserDocRef = collection(
-      db,
-      'users',
-      otherUser,
-      'chat',
-      auth.currentUser.displayName,
-      'messages'
+    await setDoc(
+      doc(db, 'users', auth.currentUser.displayName, 'chat', otherUser),
+      {
+        lastMessage: Timestamp.now(),
+      }
     );
 
-    await addDoc(docRef, {
-      message,
-      date: Timestamp.now(),
-      from: auth.currentUser.displayName,
-    });
+    await addDoc(
+      collection(
+        db,
+        'users',
+        otherUser,
+        'chat',
+        auth.currentUser.displayName,
+        'messages'
+      ),
+      {
+        message,
+        date: Timestamp.now(),
+        from: auth.currentUser.displayName,
+      }
+    );
 
-    await addDoc(otherUserDocRef, {
-      message,
-      date: Timestamp.now(),
-      from: auth.currentUser.displayName,
-    });
+    await setDoc(
+      doc(db, 'users', otherUser, 'chat', auth.currentUser.displayName),
+      {
+        lastMessage: Timestamp.now(),
+      }
+    );
   } catch (e) {
     console.log(e);
+  }
+};
+
+export const fetchLatestChatUsers = async () => {
+  const auth = getAuth();
+  try {
+    const q = query(
+      collection(db, 'users', auth.currentUser.displayName, 'chat'),
+      orderBy('lastMessage', 'desc'),
+      limit(3)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const users = [];
+    const pictures = [];
+    querySnapshot.forEach((user) => {
+      const profilePicture = fetchProfilePicture(user.id);
+      pictures.push(profilePicture);
+      users.push(user.id);
+    });
+
+    const profilePictures = await Promise.all(pictures);
+    return { users, profilePictures };
+  } catch (e) {
+    console.log(e);
+    return [];
   }
 };
