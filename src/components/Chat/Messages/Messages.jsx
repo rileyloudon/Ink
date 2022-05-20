@@ -1,11 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import {
+  getFirestore,
+  onSnapshot,
+  collection,
+  orderBy,
+  query,
+} from 'firebase/firestore';
 import AddComment from '../../Post/AddComment/AddComment';
+import UserContext from '../../../Context/UserContext';
 import './Messages.css';
 
 const Messages = ({ currentSelectedUser }) => {
-  const [prevMessages] = useState(null);
+  const db = getFirestore();
+  const { user } = useContext(UserContext);
+
+  const [prevMessages, setPrevMessages] = useState(null);
+
+  useEffect(() => {
+    if (user && currentSelectedUser) {
+      const q = query(
+        collection(
+          db,
+          'users',
+          user.username,
+          'chat',
+          currentSelectedUser.username,
+          'messages'
+        ),
+        orderBy('date', 'asc')
+      );
+      const unsub = onSnapshot(q, (querySnapshot) => {
+        const allMessages = [];
+        querySnapshot.forEach((message) => {
+          allMessages.push(message.data());
+        });
+        setPrevMessages(...[allMessages]);
+      });
+      return () => unsub();
+    }
+
+    return null;
+  }, [currentSelectedUser, db, user]);
 
   return (
     <div className='messages'>
@@ -21,9 +58,19 @@ const Messages = ({ currentSelectedUser }) => {
         <p>No User Selected</p>
       )}
       <div className='prev-messages'>
-        {prevMessages && prevMessages.map((message) => <p>{message}</p>)}
+        {prevMessages &&
+          prevMessages.map((m) => (
+            <p
+              className={m.from === user.username ? 'blue' : 'grey'}
+              key={m.date + m.message}
+            >
+              {m.message}
+            </p>
+          ))}
       </div>
-      <AddComment chat />
+      {currentSelectedUser && (
+        <AddComment chat currentSelectedUser={currentSelectedUser.username} />
+      )}
     </div>
   );
 };
