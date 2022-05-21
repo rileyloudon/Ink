@@ -1,21 +1,24 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
-import { fetchLatestChatUsers } from '../../../firebase';
+import { useEffect } from 'react';
 import Search from '../../Search/Search';
 import './UserSelector.css';
 
-const UserSelector = ({ currentSelectedUser, updateCurrentSelectedUser }) => {
-  const [pastChats, setPastChats] = useState(null);
-
+const UserSelector = ({
+  currentSelectedUser,
+  updateCurrentSelectedUser,
+  pastChats,
+  updatePastChats,
+}) => {
+  console.log(pastChats);
   useEffect(() => {
     if (currentSelectedUser) {
       if (!pastChats) {
-        setPastChats({
+        updatePastChats({
           users: currentSelectedUser.username,
           profilePictures: currentSelectedUser.photoURL,
         });
       } else if (!pastChats.users.includes(currentSelectedUser.username)) {
-        setPastChats((prevState) => ({
+        updatePastChats((prevState) => ({
           users: [currentSelectedUser.username, ...prevState.users],
           profilePictures: [
             currentSelectedUser.photoURL,
@@ -24,25 +27,7 @@ const UserSelector = ({ currentSelectedUser, updateCurrentSelectedUser }) => {
         }));
       }
     }
-  }, [currentSelectedUser, pastChats]);
-
-  useEffect(() => {
-    let isSubscribed = true;
-    console.log('s');
-
-    (async () => {
-      // res returns an object: users & profilePictures
-      // thry will be in the same order so users[0] goes with profilePictures[0]
-      const res = await fetchLatestChatUsers();
-      if (isSubscribed) {
-        setPastChats(res);
-      }
-    })();
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, []);
+  }, [currentSelectedUser, pastChats, updatePastChats]);
 
   return pastChats ? (
     <div className='user-selector'>
@@ -85,4 +70,9 @@ UserSelector.propTypes = {
     photoURL: PropTypes.string.isRequired,
   }),
   updateCurrentSelectedUser: PropTypes.func.isRequired,
+  pastChats: PropTypes.shape({
+    users: PropTypes.arrayOf(PropTypes.string).isRequired,
+    profilePictures: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
+  updatePastChats: PropTypes.func.isRequired,
 };
