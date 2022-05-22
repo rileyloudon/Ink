@@ -17,6 +17,9 @@
 
   --error: rgb(237, 73, 86);
   --green: rgb(0, 144, 0);
+
+  --chat-blue: #1a83fb;
+  --chat-grey: #e9e9eb;
 }
 
 [data-theme='dark'] {
@@ -39,6 +42,9 @@
 
   --error: rgb(236, 99, 99);
   --green: rgb(50, 222, 132);
+
+  --chat-blue: #1e88fb;
+  --chat-grey: #3b3b3d;
 }
 
 body {
