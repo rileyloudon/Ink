@@ -929,3 +929,24 @@ export const fetchLatestChatUsers = async () => {
     return [];
   }
 };
+
+export const fetchAllowMessages = async (user) => {
+  const auth = getAuth();
+  const userRef = doc(db, 'users', user);
+  const docSnap = await getDoc(userRef);
+
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    if (
+      data.allowMessages === 'followers' &&
+      !data.followers.includes(auth.currentUser.displayName)
+    ) {
+      return { allow: false, reason: 'not-following' };
+    }
+    if (data.allowMessages === 'none') {
+      return { allow: false, reason: 'messages-disabled' };
+    }
+    return { allow: true };
+  }
+  return null;
+};
