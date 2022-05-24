@@ -20,9 +20,8 @@ const CommentDropdown = ({ post, comment, style, deleteDisplayedComment }) => {
       if (
         commentDropdownRef.current !== null &&
         !commentDropdownRef.current.contains(e.traget)
-      ) {
+      )
         setCommentDropdownOpen(!commentDropdownOpen);
-      }
     };
 
     if (commentDropdownOpen)

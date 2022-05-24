@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { signInUser } from '../../firebase';
 import { ReactComponent as AstronautSvg } from '../../img/misc/astronaut.svg';
-import UserContext from '../../Context/UserContext';
 import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
+import UserContext from '../../Context/UserContext';
 import './SignIn.css';
 
 const SignIn = ({ updateLoading, signInGuest }) => {

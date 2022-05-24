@@ -18,9 +18,8 @@ const PostDropdown = ({ owner, id }) => {
       if (
         postDropDownRef.current !== null &&
         !postDropDownRef.current.contains(e.traget)
-      ) {
+      )
         setPostDropdownOpen(!postDropdownOpen);
-      }
     };
 
     if (postDropdownOpen) window.addEventListener('click', handleClickOutside);
