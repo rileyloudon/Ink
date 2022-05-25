@@ -2,20 +2,32 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import EmojiPicker from '../EmojiPicker/EmojiPicker';
 import { ReactComponent as EmojiSvg } from '../../../img/emoji/emoji-face.svg';
-import { addComment } from '../../../firebase';
+import { addComment, sendMessage } from '../../../firebase';
 import './AddComment.css';
 import 'emoji-mart/css/emoji-mart.css';
 
-const AddComment = ({ addNewComment, post, chat }) => {
+const AddComment = ({
+  addNewComment,
+  post,
+  chat,
+  currentSelectedUser,
+  disable,
+}) => {
+  // Add Spinner in place of post button while waiting for comment to be added to firebase
   const [comment, setComment] = useState('');
   const [displayEmojiPicker, setDisplayEmojiPicker] = useState(false);
 
   const handleSubmit = async (e) => {
     if (comment.trim().length >= 1) {
-      e.preventDefault();
-      const newComment = await addComment(post, comment);
-      setComment('');
-      addNewComment({ ...newComment, newComment: true });
+      if (chat) {
+        setComment('');
+        sendMessage(currentSelectedUser, comment);
+      } else {
+        e.preventDefault();
+        const newComment = await addComment(post, comment);
+        setComment('');
+        addNewComment({ ...newComment, newComment: true });
+      }
     }
   };
 
@@ -61,7 +73,7 @@ const AddComment = ({ addNewComment, post, chat }) => {
         <button
           className='post-btn'
           type='submit'
-          disabled={comment.trim().length < 1}
+          disabled={comment.trim().length < 1 || disable}
         >
           {chat ? 'Send' : 'Post'}
         </button>
@@ -74,6 +86,8 @@ AddComment.defaultProps = {
   addNewComment: null,
   post: null,
   chat: null,
+  currentSelectedUser: null,
+  disable: false,
 };
 
 AddComment.propTypes = {
@@ -82,6 +96,8 @@ AddComment.propTypes = {
     id: PropTypes.string,
   }),
   chat: PropTypes.bool,
+  currentSelectedUser: PropTypes.string,
+  disable: PropTypes.bool,
 };
 
 export default AddComment;
