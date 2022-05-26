@@ -10,16 +10,62 @@ import {
 } from 'firebase/firestore';
 import AddComment from '../../Post/AddComment/AddComment';
 import UserContext from '../../../Context/UserContext';
+import Loading from '../../Loading/Loading';
+import { fetchAllowMessages } from '../../../firebase';
 import './Messages.css';
 
 const Messages = ({ currentSelectedUser }) => {
   const db = getFirestore();
   const { user } = useContext(UserContext);
 
+  const [loading, setLoading] = useState(true);
   const [prevMessages, setPrevMessages] = useState(null);
+  const [allowMessages, setAllowMessages] = useState(null);
+  const [disable, setDisable] = useState(false);
+
+  const allowMessagesWarning = () => {
+    // allow user to reply if first sent a message by someone with restricive chat
+    if (allowMessages && allowMessages.allow === false) {
+      if (allowMessages.reason === 'not-following') {
+        return (
+          <p className='blocked-messages'>
+            {currentSelectedUser.username} only allows messages from their
+            followers.
+          </p>
+        );
+      }
+
+      if (allowMessages.reason === 'messages-disabled') {
+        return (
+          <p className='blocked-messages'>
+            {currentSelectedUser.username} has disabled their messages.
+          </p>
+        );
+      }
+    }
+
+    return null;
+  };
+
+  useEffect(() => {
+    if (allowMessages && allowMessages.allow === false) setDisable(true);
+    return () => setDisable(false);
+  }, [allowMessages]);
+
+  useEffect(() => {
+    if (currentSelectedUser) {
+      (async () => {
+        const allowMessageStatus = await fetchAllowMessages(
+          currentSelectedUser.username
+        );
+        setAllowMessages(allowMessageStatus);
+      })();
+    }
+  }, [currentSelectedUser]);
 
   useEffect(() => {
     if (user && currentSelectedUser) {
+      setLoading(true);
       const q = query(
         collection(
           db,
@@ -37,6 +83,7 @@ const Messages = ({ currentSelectedUser }) => {
           allMessages.push(message.data());
         });
         setPrevMessages(...[allMessages]);
+        setLoading(false);
       });
       return () => unsub();
     }
@@ -58,7 +105,9 @@ const Messages = ({ currentSelectedUser }) => {
         <p>No User Selected</p>
       )}
       <div className='prev-messages'>
-        {prevMessages &&
+        {loading ? (
+          <Loading />
+        ) : (
           prevMessages.map((m) => (
             <p
               className={m.from === user.username ? 'blue' : 'grey'}
@@ -66,10 +115,16 @@ const Messages = ({ currentSelectedUser }) => {
             >
               {m.message}
             </p>
-          ))}
+          ))
+        )}
       </div>
+      {currentSelectedUser && allowMessagesWarning()}
       {currentSelectedUser && (
-        <AddComment chat currentSelectedUser={currentSelectedUser.username} />
+        <AddComment
+          chat
+          currentSelectedUser={currentSelectedUser.username}
+          disable={disable}
+        />
       )}
     </div>
   );
