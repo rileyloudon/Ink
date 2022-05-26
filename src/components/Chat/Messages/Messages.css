@@ -1,0 +1,63 @@
+.messages {
+  display: flex;
+  flex-direction: column;
+}
+
+.messages p,
+.messages a {
+  text-align: center;
+  margin: 8px;
+}
+
+.messages a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.messages a img {
+  margin-right: 15px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+}
+
+.messages a span {
+  margin-right: 4px;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.messages .blocked-messages {
+  font-style: italic;
+  justify-content: end;
+}
+
+.prev-messages {
+  padding: 0;
+  margin: 8px 16px;
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  flex-grow: 1;
+}
+
+.prev-messages .blue {
+  align-self: flex-end;
+  padding: 8px;
+  background-color: var(--chat-blue);
+  border-radius: 15px;
+  color: white;
+}
+
+.prev-messages .grey {
+  align-self: flex-start;
+  padding: 8px;
+  background-color: var(--chat-grey);
+  border-radius: 15px;
+  color: var(--text);
+}
