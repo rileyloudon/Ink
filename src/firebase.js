@@ -941,9 +941,14 @@ export const fetchAllowMessages = async (user) => {
       data.allowMessages === 'followers' &&
       !data.followers.includes(auth.currentUser.displayName)
     ) {
+      // checks if a chat already exists, if so allow messages
+      const docSnap2 = await getDoc(
+        doc(db, 'users', user, 'chat', auth.currentUser.displayName)
+      );
+      if (docSnap2.exists()) return { allow: true };
       return { allow: false, reason: 'not-following' };
     }
-    if (data.allowMessages === 'none') {
+    if (data.allowMessages === 'false') {
       return { allow: false, reason: 'messages-disabled' };
     }
     return { allow: true };
