@@ -19,6 +19,7 @@ const Settings = () => {
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
   const [privateAccount, setPrivateAccount] = useState(false);
+  const [allowMessages, setAllowMessages] = useState('');
   const [error, setError] = useState();
   const [profileUpdated, setProfileUpdated] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -27,7 +28,8 @@ const Settings = () => {
     ? newProfilePicture ||
       user.fullName !== name ||
       user.bio !== bio ||
-      user.private !== privateAccount
+      user.private !== privateAccount ||
+      user.allowMessages !== allowMessages
     : null;
 
   const updateNewProfilePicture = (value) => setNewProfilePicture(value);
@@ -38,6 +40,7 @@ const Settings = () => {
       name: user.fullName !== name,
       bio: user.bio !== bio,
       privateAccount: user.private !== privateAccount,
+      allowMessages: user.allowMessages !== allowMessages,
     };
 
     setButtonLoading(true);
@@ -46,7 +49,8 @@ const Settings = () => {
       newProfilePicture,
       name,
       bio,
-      privateAccount
+      privateAccount,
+      allowMessages
     );
 
     if (res.updated === true) {
@@ -76,6 +80,7 @@ const Settings = () => {
       setName(user.fullName);
       setBio(user.bio);
       setPrivateAccount(user.private);
+      setAllowMessages(user.allowMessages);
     }
   }, [user]);
 
@@ -113,6 +118,18 @@ const Settings = () => {
               {user.followRequests === 1 ? '' : 's'}
             </Link>
           )}
+          <label htmlFor='allow-messages' className='allow-messages'>
+            <span>Allow Messages From</span>
+            <select
+              name='allow-messages'
+              defaultValue={user.allowMessages}
+              onChange={(e) => setAllowMessages(e.target.value)}
+            >
+              <option value='true'>Everyone</option>
+              <option value='followers'>Followers</option>
+              <option value='false'>Nobody</option>
+            </select>
+          </label>
           <label htmlFor='change-name' className='input'>
             <p>Name</p>
             <input
