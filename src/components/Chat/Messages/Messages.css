@@ -42,7 +42,7 @@
   margin-bottom: 4px;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
   flex-grow: 1;
 }
 
