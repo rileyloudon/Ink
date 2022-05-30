@@ -10,7 +10,8 @@ import {
 } from 'firebase/firestore';
 import AddComment from '../../Post/AddComment/AddComment';
 import UserContext from '../../../Context/UserContext';
-import Loading from '../../Loading/Loading';
+import { ReactComponent as Spinner } from '../../../img/spinner/spinner.svg';
+import { ReactComponent as ChatOutline } from '../../../img/Header/chat-outline.svg';
 import { fetchAllowMessages } from '../../../firebase';
 import './Messages.css';
 
@@ -24,7 +25,6 @@ const Messages = ({ currentSelectedUser }) => {
   const [disable, setDisable] = useState(false);
 
   const allowMessagesWarning = () => {
-    // allow user to reply if first sent a message by someone with restricive chat
     if (allowMessages && allowMessages.allow === false) {
       if (allowMessages.reason === 'not-following') {
         return (
@@ -45,6 +45,49 @@ const Messages = ({ currentSelectedUser }) => {
     }
 
     return null;
+  };
+
+  const displayNoUser = () => {
+    return (
+      <div className='messages-no-user'>
+        <ChatOutline />
+        <p>Search for a user to start a chat</p>
+      </div>
+    );
+  };
+
+  const displayCurrentUser = () => {
+    return (
+      <div className='messages'>
+        <Link
+          to={`/${currentSelectedUser.username}`}
+          key={currentSelectedUser.username}
+        >
+          <img src={currentSelectedUser.photoURL} alt='' />
+          <span>{currentSelectedUser.username}</span>
+        </Link>
+        <div className='prev-messages'>
+          {loading ? (
+            <Spinner className='spinner' />
+          ) : (
+            prevMessages.map((m) => (
+              <p
+                className={m.from === user.username ? 'blue' : 'grey'}
+                key={m.date + m.message}
+              >
+                {m.message}
+              </p>
+            ))
+          )}
+        </div>
+        {allowMessagesWarning()}
+        <AddComment
+          chat
+          currentSelectedUser={currentSelectedUser.username}
+          disable={disable}
+        />
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -91,43 +134,7 @@ const Messages = ({ currentSelectedUser }) => {
     return null;
   }, [currentSelectedUser, db, user]);
 
-  return (
-    <div className='messages'>
-      {currentSelectedUser ? (
-        <Link
-          to={`/${currentSelectedUser.username}`}
-          key={currentSelectedUser.username}
-        >
-          <img src={currentSelectedUser.photoURL} alt='' />
-          <span>{currentSelectedUser.username}</span>
-        </Link>
-      ) : (
-        <p>No User Selected</p>
-      )}
-      <div className='prev-messages'>
-        {loading ? (
-          <Loading />
-        ) : (
-          prevMessages.map((m) => (
-            <p
-              className={m.from === user.username ? 'blue' : 'grey'}
-              key={m.date + m.message}
-            >
-              {m.message}
-            </p>
-          ))
-        )}
-      </div>
-      {currentSelectedUser && allowMessagesWarning()}
-      {currentSelectedUser && (
-        <AddComment
-          chat
-          currentSelectedUser={currentSelectedUser.username}
-          disable={disable}
-        />
-      )}
-    </div>
-  );
+  return currentSelectedUser ? displayCurrentUser() : displayNoUser();
 };
 
 export default Messages;
