@@ -418,7 +418,8 @@ export const updateUserSettings = async (
   profilePcture,
   name,
   bio,
-  privateAccount
+  privateAccount,
+  allowMessages
 ) => {
   const auth = getAuth();
   const docRef = doc(db, 'users', auth.currentUser.displayName);
@@ -481,6 +482,12 @@ export const updateUserSettings = async (
       });
 
       return { updated: true, publicImageUrl };
+    }
+
+    if (changed.allowMessages) {
+      await updateDoc(docRef, {
+        allowMessages,
+      });
     }
 
     return { updated: true };
