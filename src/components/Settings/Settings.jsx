@@ -66,6 +66,7 @@ const Settings = () => {
         fullName: name,
         bio,
         private: privateAccount,
+        allowMessages,
       }));
       setProfileUpdated(true);
     } else {
