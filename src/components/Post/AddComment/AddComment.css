@@ -56,3 +56,7 @@
   cursor: not-allowed;
   color: var(--button-disabled);
 }
+
+.add-comment .spinner {
+  fill: var(--button);
+}
