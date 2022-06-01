@@ -21,7 +21,6 @@ const VerticalPost = ({ post }) => {
   const [hiddenPostComments, setHiddenPostComments] = useState(
     post.comments.length > 3 ? post.comments.slice(0, -3) : null
   );
-  const [newComments, setNewComments] = useState([]);
   const [likeStatus, setLikeStatus] = useState(
     user
       ? {
@@ -32,20 +31,13 @@ const VerticalPost = ({ post }) => {
   );
 
   const addNewComment = (comment) =>
-    setNewComments((prevState) => [...prevState, comment]);
+    setDisplayedPostComments((prevState) => [...prevState, comment]);
 
   const deleteDisplayedComment = (commentToDelete) => {
-    if (Object.prototype.hasOwnProperty.call(commentToDelete, 'newComment')) {
-      const tempArray = newComments.filter(
-        (comment) => comment !== commentToDelete
-      );
-      setNewComments(tempArray);
-    } else {
-      const tempArray = displayedPostComments.filter(
-        (comment) => comment !== commentToDelete
-      );
-      setDisplayedPostComments(tempArray);
-    }
+    const tempArray = displayedPostComments.filter(
+      (comment) => comment !== commentToDelete
+    );
+    setDisplayedPostComments(tempArray);
   };
 
   const likePost = async () => {
@@ -122,17 +114,6 @@ const VerticalPost = ({ post }) => {
             )}
           {!post.hideComments &&
             displayedPostComments.map((commentObj) => (
-              <Comment
-                key={commentObj.key}
-                post={post}
-                commentObj={commentObj}
-                includePicture={false}
-                deleteDisplayedComment={deleteDisplayedComment}
-              />
-            ))}
-          {!post.hideComments &&
-            newComments &&
-            newComments.map((commentObj) => (
               <Comment
                 key={commentObj.key}
                 post={post}

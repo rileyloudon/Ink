@@ -19,32 +19,31 @@ const HorizontalPost = ({ modal }) => {
   const history = useHistory();
 
   const [postData, setPostData] = useState();
-  const [newComments, setNewComments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const addNewComment = (comment) =>
-    setNewComments((prevState) => [...prevState, comment]);
+  const addNewComment = (comment) => {
+    setPostData((prevState) => ({
+      ...prevState,
+      post: {
+        ...prevState.post,
+        comments: [...prevState.post.comments, comment],
+      },
+    }));
+  };
 
   const deleteDisplayedComment = (commentToDelete) => {
-    if (Object.prototype.hasOwnProperty.call(commentToDelete, 'newComment')) {
-      const tempArray = newComments.filter(
-        (comment) => comment !== commentToDelete
-      );
-      setNewComments(tempArray);
-    } else {
-      const postComments = [...postData.post.comments];
-      const tempArray = postComments.filter(
-        (comment) => comment !== commentToDelete
-      );
+    const postComments = [...postData.post.comments];
+    const tempArray = postComments.filter(
+      (comment) => comment !== commentToDelete
+    );
 
-      setPostData((prevState) => ({
-        ...prevState,
-        post: {
-          ...prevState.post,
-          comments: tempArray,
-        },
-      }));
-    }
+    setPostData((prevState) => ({
+      ...prevState,
+      post: {
+        ...prevState.post,
+        comments: tempArray,
+      },
+    }));
   };
 
   const likePost = async () => {
@@ -141,16 +140,6 @@ const HorizontalPost = ({ modal }) => {
                   />
                 ))
               )}
-              {!postData.post.hideComments &&
-                newComments &&
-                newComments.map((commentObj) => (
-                  <Comment
-                    key={commentObj.key}
-                    post={postData.post}
-                    commentObj={commentObj}
-                    deleteDisplayedComment={deleteDisplayedComment}
-                  />
-                ))}
             </section>
             <section className='interact'>
               <ButtonBar
