@@ -3,6 +3,21 @@
   flex-direction: column;
 }
 
+.messages-no-user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 16px;
+  color: var(--text);
+}
+
+.messages-no-user svg {
+  fill: var(--text);
+  height: 38px;
+  width: 38px;
+}
+
 .messages p,
 .messages a {
   text-align: center;
@@ -32,6 +47,7 @@
 }
 
 .messages .blocked-messages {
+  color: var(--text);
   font-style: italic;
   justify-content: end;
 }
@@ -60,4 +76,14 @@
   background-color: var(--chat-grey);
   border-radius: 15px;
   color: var(--text);
+}
+
+.prev-messages .spinner {
+  fill: var(--text);
+  align-self: center;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
