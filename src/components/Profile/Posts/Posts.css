@@ -64,3 +64,9 @@
   margin: auto;
   overflow: hidden;
 }
+
+@media (max-width: 735px) {
+  .post .view-post:hover .post-stats {
+    display: none;
+  }
+}
