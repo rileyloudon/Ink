@@ -10,6 +10,8 @@ const Search = ({ updateCurrentSelectedUser }) => {
   const [results, setResults] = useState();
   const [resultsOpen, setResultsOpen] = useState(false);
 
+  const handleFocus = (e) => e.target.select();
+
   const handleClick = async () => {
     setResultsOpen(true);
 
@@ -83,6 +85,7 @@ const Search = ({ updateCurrentSelectedUser }) => {
         value={searchString}
         onClick={handleClick}
         onChange={(e) => handleSearch(e)}
+        onFocus={handleFocus}
       />
       <div
         ref={searchResultsRef}
