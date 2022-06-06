@@ -33,3 +33,9 @@
 .favorite-dropdown.displayed {
   display: block;
 }
+
+@media (max-width: 735px) {
+  .favorite-dropdown-container .favorite-dropdown {
+    bottom: 45px;
+  }
+}

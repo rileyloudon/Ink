@@ -70,3 +70,9 @@
 .user-dropdown .log-out button {
   height: 36px;
 }
+
+@media (max-width: 735px) {
+  .user-dropdown {
+    bottom: 45px;
+  }
+}
