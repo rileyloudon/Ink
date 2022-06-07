@@ -8,8 +8,8 @@ const UserSelector = ({
   updateCurrentSelectedUser,
   pastChats,
   updatePastChats,
+  updateActiveTab,
 }) => {
-  console.log(pastChats);
   useEffect(() => {
     if (currentSelectedUser) {
       if (!pastChats) {
@@ -31,23 +31,25 @@ const UserSelector = ({
 
   return pastChats ? (
     <div className='user-selector'>
-      <h3>Chat</h3>
-      <h4>To</h4>
-      <Search updateCurrentSelectedUser={updateCurrentSelectedUser} />
-      {/* Search box to find users to chat to. Check 'allowMessages' user value */}
-      <h4>Past Chats</h4>
+      <h4 className='to'>To</h4>
+      <Search
+        updateCurrentSelectedUser={updateCurrentSelectedUser}
+        updateActiveTab={updateActiveTab}
+      />
+      {pastChats.users.length > 0 && <h4>Past Chats</h4>}
       {pastChats.users.map((user, i) => {
         return (
           <button
             className='past-chat'
             type='button'
             key={user}
-            onClick={() =>
+            onClick={() => {
               updateCurrentSelectedUser({
                 username: user,
                 photoURL: pastChats.profilePictures[i],
-              })
-            }
+              });
+              updateActiveTab('chatting');
+            }}
           >
             <img src={pastChats.profilePictures[i]} alt='' />
             <span>{user}</span>
@@ -75,4 +77,5 @@ UserSelector.propTypes = {
     profilePictures: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
   updatePastChats: PropTypes.func.isRequired,
+  updateActiveTab: PropTypes.func.isRequired,
 };

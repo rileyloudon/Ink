@@ -1,9 +1,10 @@
 .messages {
   display: flex;
   flex-direction: column;
+  width: 50vw;
 }
 
-.messages-no-user {
+.messages.no-user {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,15 +13,21 @@
   color: var(--text);
 }
 
-.messages-no-user svg {
+.messages.no-user svg {
   fill: var(--text);
   height: 38px;
   width: 38px;
 }
 
+.messages .back {
+  position: absolute;
+  fill: var(--svg);
+  padding: 8px 0 0 8px;
+  cursor: pointer;
+}
+
 .messages p,
 .messages a {
-  text-align: center;
   margin: 8px;
 }
 
@@ -86,4 +93,14 @@
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+
+@media (max-width: 735px) {
+  .messages {
+    width: 80vw;
+  }
+
+  .messages a {
+    margin-left: 40px;
+  }
 }

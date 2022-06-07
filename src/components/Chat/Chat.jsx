@@ -9,12 +9,23 @@ import './Chat.css';
 const Chat = () => {
   const { user } = useContext(UserContext);
 
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
+  const [activeTab, setActiveTab] = useState('selector');
   const [loading, setLoading] = useState(true);
+
   const [currentSelectedUser, setCurrentSelectedUser] = useState(null);
   const [pastChats, setPastChats] = useState(null);
 
+  const updateActiveTab = (value) => setActiveTab(value);
   const updateCurrentSelectedUser = (value) => setCurrentSelectedUser(value);
   const updatePastChats = (value) => setPastChats(value);
+
+  useEffect(() => {
+    const handleRezise = () => setWindowSize(window.innerWidth);
+
+    window.addEventListener('resize', handleRezise);
+    return () => window.removeEventListener('resize', handleRezise);
+  }, []);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -39,14 +50,19 @@ const Chat = () => {
   return loading ? (
     <Loading />
   ) : (
-    <div className='chat'>
+    <div className={`${activeTab} chat`}>
       <UserSelector
         currentSelectedUser={currentSelectedUser}
         updateCurrentSelectedUser={updateCurrentSelectedUser}
         pastChats={pastChats}
         updatePastChats={updatePastChats}
+        updateActiveTab={updateActiveTab}
       />
-      <Messages currentSelectedUser={currentSelectedUser} />
+      <Messages
+        currentSelectedUser={currentSelectedUser}
+        windowSize={windowSize}
+        updateActiveTab={updateActiveTab}
+      />
     </div>
   );
 };

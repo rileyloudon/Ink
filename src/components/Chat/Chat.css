@@ -1,0 +1,24 @@
+.chat {
+  display: flex;
+  width: max-content;
+  max-width: 920px;
+  height: calc(95vh - 85px);
+  margin: auto;
+  margin-top: 30px;
+  border: 1px solid var(--border);
+  background-color: var(--background);
+}
+
+@media (max-width: 735px) {
+  .chat {
+    height: calc(95vh - 247.5px);
+  }
+
+  .chat.selector .messages {
+    display: none;
+  }
+
+  .chat.chatting .user-selector {
+    display: none;
+  }
+}

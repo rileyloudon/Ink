@@ -3,8 +3,12 @@
   padding: 8px;
 }
 
-.user-selector h3 {
-  margin: 0;
+.user-selector h4 {
+  color: var(--text);
+}
+
+.user-selector .to {
+  margin-top: 0;
 }
 
 .user-selector .past-chat {
@@ -13,10 +17,10 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
   text-decoration: none;
   cursor: pointer;
   margin-bottom: 12px;
+  width: 100%;
 }
 
 .user-selector .past-chat img {
@@ -31,4 +35,10 @@
   color: var(--text);
   font-weight: 600;
   font-size: 16px;
+}
+
+@media (max-width: 735px) {
+  .user-selector {
+    max-width: max-content;
+  }
 }

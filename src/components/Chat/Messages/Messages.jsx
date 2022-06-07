@@ -12,10 +12,11 @@ import AddComment from '../../Post/AddComment/AddComment';
 import UserContext from '../../../Context/UserContext';
 import { ReactComponent as Spinner } from '../../../img/spinner/spinner.svg';
 import { ReactComponent as ChatOutline } from '../../../img/Header/chat-outline.svg';
+import { ReactComponent as Back } from '../../../img/Chat/back.svg';
 import { fetchAllowMessages } from '../../../firebase';
 import './Messages.css';
 
-const Messages = ({ currentSelectedUser }) => {
+const Messages = ({ currentSelectedUser, windowSize, updateActiveTab }) => {
   const db = getFirestore();
   const { user } = useContext(UserContext);
 
@@ -49,9 +50,9 @@ const Messages = ({ currentSelectedUser }) => {
 
   const displayNoUser = () => {
     return (
-      <div className='messages-no-user'>
+      <div className='messages no-user'>
         <ChatOutline />
-        <p>Search for a user to start a chat</p>
+        <p>Search for a user to start chatting</p>
       </div>
     );
   };
@@ -59,6 +60,9 @@ const Messages = ({ currentSelectedUser }) => {
   const displayCurrentUser = () => {
     return (
       <div className='messages'>
+        {windowSize < 735 && (
+          <Back className='back' onClick={() => updateActiveTab('selector')} />
+        )}
         <Link
           to={`/${currentSelectedUser.username}`}
           key={currentSelectedUser.username}
@@ -148,4 +152,6 @@ Messages.propTypes = {
     username: PropTypes.string.isRequired,
     photoURL: PropTypes.string.isRequired,
   }),
+  windowSize: PropTypes.number.isRequired,
+  updateActiveTab: PropTypes.func.isRequired,
 };
