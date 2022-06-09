@@ -1,18 +1,23 @@
 .search {
   position: relative;
+  width: max-content;
 }
 
 .search-box {
+  box-sizing: border-box;
   background-color: var(--off-background);
   border: 1px solid var(--border);
   color: var(--text);
   cursor: text;
   width: 199px;
-  height: 12px;
   padding: 7px;
   border-radius: 3px;
   font-weight: 300;
   font-size: 14px;
+}
+
+.search-chat {
+  margin: initial;
 }
 
 .search .search-results {
@@ -34,11 +39,10 @@
   background-color: var(--background);
   min-width: 100%;
   max-width: max-content;
-  padding: 8px;
+  padding: 8px 4px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
   text-decoration: none;
 }
 
@@ -67,4 +71,14 @@
 
 .search-box::placeholder {
   color: var(--text);
+}
+
+@media (max-width: 735px) {
+  .search {
+    margin: auto;
+  }
+
+  .search-chat {
+    margin: initial;
+  }
 }
