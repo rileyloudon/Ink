@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { searchUsers } from '../../firebase';
 import './Search.css';
 
-const Search = ({ updateCurrentSelectedUser }) => {
+const Search = ({ updateCurrentSelectedUser, updateActiveTab }) => {
   const searchResultsRef = useRef(null);
   const [searchString, setSearchString] = useState('');
   const [results, setResults] = useState();
@@ -50,12 +50,13 @@ const Search = ({ updateCurrentSelectedUser }) => {
           className='search-item'
           type='button'
           key={user.username}
-          onClick={() =>
+          onClick={() => {
             updateCurrentSelectedUser({
               username: user.username,
               photoURL: user.photoURL,
-            })
-          }
+            });
+            updateActiveTab('chatting');
+          }}
         >
           <img src={user.photoURL} alt='' />
           <span>{user.username}</span>
@@ -76,7 +77,9 @@ const Search = ({ updateCurrentSelectedUser }) => {
   };
 
   return (
-    <div className='search'>
+    <div
+      className={`search ${updateCurrentSelectedUser ? 'search-chat' : null}`}
+    >
       <input
         className='search-box'
         type='text'
@@ -101,8 +104,10 @@ export default Search;
 
 Search.defaultProps = {
   updateCurrentSelectedUser: null,
+  updateActiveTab: null,
 };
 
 Search.propTypes = {
   updateCurrentSelectedUser: PropTypes.func,
+  updateActiveTab: PropTypes.func,
 };
