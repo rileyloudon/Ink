@@ -64,3 +64,28 @@
   padding: inherit;
   margin: 0;
 }
+
+@media (max-width: 735px) {
+  .header-container {
+    padding: 0;
+    justify-content: initial;
+  }
+
+  .header-container .title {
+    max-width: max-content;
+  }
+
+  .header-container .title .ink {
+    padding-left: 20px;
+  }
+
+  .header-container .nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    justify-content: space-evenly;
+    background-color: var(--background);
+    border-top: 1px solid var(--border);
+    padding: 3px 0;
+  }
+}
