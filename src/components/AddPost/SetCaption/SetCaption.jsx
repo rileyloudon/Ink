@@ -38,8 +38,6 @@ const SetCaption = ({ image, updateAddModal }) => {
         <textarea
           name='caption-text'
           id=''
-          cols='30'
-          rows='10'
           placeholder='Write a caption...'
           value={text}
           onChange={(e) => setText(e.target.value)}
