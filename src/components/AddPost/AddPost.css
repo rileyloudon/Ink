@@ -14,9 +14,9 @@
 .modal {
   position: relative;
   max-height: 781px;
-  max-width: 1491px;
-  width: 95vw;
-  height: 90vh;
+  max-width: 781px;
+  width: 80vw;
+  height: 70vh;
   background-color: var(--background);
   border-radius: 12px;
 }
@@ -51,4 +51,11 @@
   font-size: 24px;
   margin: 0 16px;
   padding: 0;
+}
+
+@media (max-width: 735px) {
+  .modal {
+    padding-bottom: 8px;
+    height: max-content;
+  }
 }

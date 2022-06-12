@@ -10,18 +10,16 @@
   height: calc(100% - 53px);
 }
 
-.image,
-.form {
+.set-caption .image,
+.set-caption .form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin: 0;
-  border-left: 1px solid var(--border);
   height: 100%;
 }
 
 .set-caption .image {
-  border-bottom-left-radius: 12px;
   width: 100%;
   background-color: var(--off-background);
 }
@@ -34,6 +32,7 @@
 
 .set-caption .form {
   padding: 0 16px;
+  border-left: 1px solid var(--border);
 }
 
 .set-caption .form .poster {
@@ -56,10 +55,11 @@
   resize: none;
   overflow: auto;
   font-size: 16px;
-  line-height: 24px;
   margin: 0;
   color: var(--text);
   background-color: var(--background);
+  width: 275px;
+  height: 194px;
 }
 
 .set-caption .form textarea:focus {
@@ -127,4 +127,31 @@
   border-radius: 3px;
   line-height: 26px;
   cursor: pointer;
+}
+
+@media (max-width: 735px) {
+  .set-caption {
+    flex-direction: column;
+  }
+
+  .set-caption .form {
+    box-sizing: border-box;
+    width: 100%;
+    border: none;
+    padding: 16px;
+  }
+
+  .set-caption .image {
+    padding: 6px 0;
+  }
+
+  .set-caption .image img {
+    max-width: 100%;
+    max-height: 100px;
+  }
+
+  .set-caption .form textarea {
+    width: 100%;
+    height: 100px;
+  }
 }
