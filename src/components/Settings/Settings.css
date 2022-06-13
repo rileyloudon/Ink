@@ -13,6 +13,24 @@
   align-items: center;
 }
 
+.profile-settings .allow-messages {
+  padding: 16px 0;
+}
+
+.profile-settings .allow-messages span {
+  color: var(--text);
+  padding-right: 8px;
+}
+
+.profile-settings select {
+  background-color: transparent;
+  color: var(--text);
+  border: 1px solid var(--button);
+  padding: 6px;
+  width: max-content;
+  outline: none;
+}
+
 .profile-settings button {
   background: 0 0;
   border: 0;
@@ -118,9 +136,6 @@
   position: relative;
   user-select: none;
   margin: 16px 0;
-}
-
-.profile-settings .private-account {
   margin-bottom: 0;
 }
 
