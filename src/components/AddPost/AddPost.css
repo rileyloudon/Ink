@@ -56,6 +56,5 @@
 @media (max-width: 735px) {
   .modal {
     padding-bottom: 8px;
-    height: max-content;
   }
 }
