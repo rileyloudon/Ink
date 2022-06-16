@@ -52,7 +52,7 @@ const Feed = () => {
 
   const allPosts = () => {
     return (
-      <>
+      <div className='feed'>
         {displayedPosts.length === 0 ? (
           <div className='no-feed-posts'>
             <h3>No posts to show</h3>
@@ -63,7 +63,7 @@ const Feed = () => {
             <VerticalPost key={post.id} post={post} />
           ))
         )}
-      </>
+      </div>
     );
   };
 
