@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import { useContext, useRef, useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import UserContext from '../../../Context/UserContext';
 import { ReactComponent as Dots } from '../../../img/dots/dots.svg';
 import './PostDropdown.css';
 
 const PostDropdown = ({ owner, id }) => {
   const { user } = useContext(UserContext);
+  const location = useLocation();
   const history = useHistory();
   const postDropDownRef = useRef(null);
   const [postDropdownOpen, setPostDropdownOpen] = useState(false);
@@ -33,15 +34,17 @@ const PostDropdown = ({ owner, id }) => {
         ref={postDropDownRef}
         className={`post-dropdown ${postDropdownOpen ? 'displayed' : ''}`}
       >
-        <button
-          type='button'
-          onClick={() => {
-            history.push(`/${owner}/${id}`);
-            window.scrollTo(0, 0);
-          }}
-        >
-          View Post
-        </button>
+        {location.pathname === '/' && (
+          <button
+            type='button'
+            onClick={() => {
+              history.push(`/${owner}/${id}`);
+              window.scrollTo(0, 0);
+            }}
+          >
+            View Post
+          </button>
+        )}
         {owner === user.username && (
           <button
             type='button'
