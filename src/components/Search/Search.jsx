@@ -77,9 +77,7 @@ const Search = ({ updateCurrentSelectedUser, updateActiveTab }) => {
   };
 
   return (
-    <div
-      className={`search ${updateCurrentSelectedUser ? 'search-chat' : null}`}
-    >
+    <div className={`search ${updateCurrentSelectedUser ? 'search-chat' : ''}`}>
       <input
         className='search-box'
         type='text'
