@@ -20,7 +20,7 @@ const Posts = ({ username, initialPosts, updateScrollPosition }) => {
         key={post.imageUrl}
         to={{
           pathname: `/${username}/${post.id}`,
-          state: { background: location },
+          state: { background: window.innerWidth > 735 ? location : null },
         }}
         onClick={() => updateScrollPosition(window.scrollY)}
       >
