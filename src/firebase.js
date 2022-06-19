@@ -955,7 +955,7 @@ export const fetchAllowMessages = async (user) => {
       if (docSnap2.exists()) return { allow: true };
       return { allow: false, reason: 'not-following' };
     }
-    if (data.allowMessages === 'false') {
+    if (data.allowMessages === 'none') {
       return { allow: false, reason: 'messages-disabled' };
     }
     return { allow: true };

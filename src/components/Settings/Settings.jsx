@@ -126,9 +126,9 @@ const Settings = () => {
               defaultValue={user.allowMessages}
               onChange={(e) => setAllowMessages(e.target.value)}
             >
-              <option value='true'>Everyone</option>
+              <option value='all'>Everyone</option>
               <option value='followers'>Followers</option>
-              <option value='false'>Nobody</option>
+              <option value='none'>Nobody</option>
             </select>
           </label>
           <label htmlFor='change-name' className='input'>
