@@ -82,7 +82,7 @@ const VerticalPost = ({ post }) => {
     <div className='vertical-view'>
       <Owner owner={post.owner} profilePicture={profilePicture} id={post.id} />
       <figure className='post-image' onDoubleClick={likePost}>
-        <img src={post.imageUrl} alt='' />
+        <img src={post.imageUrl} alt='' loading='eager' />
       </figure>
       <section className='bottom-bar'>
         <section className='interact'>
@@ -122,7 +122,7 @@ const VerticalPost = ({ post }) => {
                 deleteDisplayedComment={deleteDisplayedComment}
               />
             ))}
-          <DatePosted marginBottom={16} timestamp={post.timestamp} />
+          <DatePosted timestamp={post.timestamp} />
         </section>
         {!post.disableComments && (
           <AddComment addNewComment={addNewComment} post={post} />

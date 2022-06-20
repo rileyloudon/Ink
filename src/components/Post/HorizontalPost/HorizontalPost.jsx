@@ -112,7 +112,7 @@ const HorizontalPost = ({ modal }) => {
           className={modal ? 'horizontal-view modal-view' : 'horizontal-view'}
         >
           <figure className='post-image' onDoubleClick={likePost}>
-            <img src={postData.post.imageUrl} alt='' />
+            <img src={postData.post.imageUrl} alt='' loading='eager' />
           </figure>
           <section className='side-bar'>
             <Owner
@@ -141,16 +141,14 @@ const HorizontalPost = ({ modal }) => {
                 ))
               )}
             </section>
-            <section className='interact'>
-              <ButtonBar
-                userLikes={postData.userLikes}
-                likePost={likePost}
-                disableComments={postData.post.disableComments}
-                postId={postData.post.id}
-              />
-              <Likes likeCount={postData.likeCount} />
-              <DatePosted timestamp={postData.post.timestamp} />
-            </section>
+            <ButtonBar
+              userLikes={postData.userLikes}
+              likePost={likePost}
+              disableComments={postData.post.disableComments}
+              postId={postData.post.id}
+            />
+            <Likes likeCount={postData.likeCount} />
+            <DatePosted timestamp={postData.post.timestamp} />
             {!postData.post.disableComments && (
               <AddComment addNewComment={addNewComment} post={postData.post} />
             )}
