@@ -10,7 +10,7 @@ import { ReactComponent as ChatOutline } from '../../img/Header/chat-outline.svg
 import { ReactComponent as ChatFilled } from '../../img/Header/chat-filled.svg';
 import { ReactComponent as AddOutline } from '../../img/Header/add-outline.svg';
 import { ReactComponent as AddFilled } from '../../img/Header/add-filled.svg';
-import './header.css';
+import './Header.css';
 
 const Header = ({ updateAddModal, showAddModal }) => {
   const location = useLocation();
