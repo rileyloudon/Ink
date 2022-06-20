@@ -52,7 +52,7 @@
 
 .horizontal-view .side-bar {
   flex-grow: 1;
-  width: 30%;
+  width: 335px;
   background-color: var(--background);
 }
 
@@ -72,12 +72,59 @@
   flex-grow: 1;
 }
 
-.horizontal-view .interact {
-  margin-bottom: 14px;
+.horizontal-view .icons,
+.horizontal-view .likes,
+.horizontal-view .date {
   padding-left: 16px;
+}
+
+.horizontal-view .date {
+  margin-bottom: 14px;
 }
 
 .horizontal-post-error {
   text-align: center;
   color: var(--text);
+}
+
+@media (max-width: 735px) {
+  .horizontal-view {
+    margin-top: 15px;
+    flex-direction: column;
+    width: 100vw;
+    border: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .horizontal-view .post-image,
+  .horizontal-view .side-bar {
+    width: 100%;
+  }
+
+  .horizontal-view .post-image img {
+    max-height: 250px;
+  }
+
+  .horizontal-view .side-bar .icons {
+    padding-top: 12px;
+    order: 2;
+  }
+
+  .horizontal-view .side-bar .likes {
+    order: 3;
+  }
+  .horizontal-view .side-bar .owner {
+    order: 1;
+  }
+
+  .horizontal-view .side-bar .comments {
+    order: 4;
+  }
+  .horizontal-view .side-bar .date {
+    order: 5;
+  }
+  .horizontal-view .side-bar .comment-box {
+    order: 6;
+  }
 }
