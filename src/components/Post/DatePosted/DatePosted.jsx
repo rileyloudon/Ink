@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './DatePosted.css';
 
-const DatePosted = ({ marginBottom, timestamp }) => {
+const DatePosted = ({ timestamp }) => {
   const postedDate = () => {
     const postDate = timestamp.toDate();
     const todaysDate = new Date();
@@ -57,18 +57,13 @@ const DatePosted = ({ marginBottom, timestamp }) => {
   };
 
   return (
-    <div className='date' style={{ marginBottom: `${marginBottom}px` }}>
+    <div className='date'>
       <time>{postedDate()}</time>
     </div>
   );
 };
 
-DatePosted.defaultProps = {
-  marginBottom: 0,
-};
-
 DatePosted.propTypes = {
-  marginBottom: PropTypes.number,
   timestamp: PropTypes.shape({
     toDate: PropTypes.func,
   }).isRequired,
