@@ -186,3 +186,17 @@ input:checked ~ .checkmark:after {
   margin: 0;
   color: var(--green);
 }
+
+@media (max-width: 735px) {
+  .profile-settings {
+    width: 100%;
+    padding: 6px;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+  }
+
+  .profile-settings form .input p {
+    width: 50px;
+  }
+}
