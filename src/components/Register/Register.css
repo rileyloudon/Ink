@@ -4,16 +4,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 350px;
+  margin: auto;
 }
 
 .register {
-  width: 348px;
   height: max-content;
   background-color: var(--background);
   margin: 0 0 10px;
   padding: 10px 0;
   border: 1px solid var(--border);
   border-radius: 1px;
+  width: 100%;
 }
 
 .register h1 {
@@ -118,16 +120,23 @@
   text-align: center;
   font-size: 14px;
   color: var(--text);
-  width: 350px;
   background-color: var(--background);
   margin: 0 0 10px;
   padding: 10px 0;
   border: 1px solid var(--border);
   border-radius: 1px;
+  width: 100%;
 }
 
 .register-container .have-account a {
   color: var(--button);
   text-decoration: none;
   font-weight: 600;
+}
+
+@media (max-width: 500px) {
+  .register-container {
+    height: 90vh;
+    width: 90vw;
+  }
 }
