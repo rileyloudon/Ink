@@ -44,7 +44,7 @@ const DropImage = ({ updateImage }) => {
         </p>
       )}
       <button className='select-from-computer' type='button' onClick={open}>
-        Select From Computer
+        Select From Device
       </button>
     </div>
   );

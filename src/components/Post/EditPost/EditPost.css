@@ -82,7 +82,7 @@
 }
 
 .post-settings form .input {
-  display: block;
+  display: flex;
   margin: 20px 0;
 }
 
