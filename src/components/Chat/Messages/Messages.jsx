@@ -59,7 +59,7 @@ const Messages = ({ currentSelectedUser, windowSize, updateActiveTab }) => {
 
   const displayCurrentUser = () => {
     return (
-      <div className='messages'>
+      <section className='messages'>
         {windowSize < 735 && (
           <Back className='back' onClick={() => updateActiveTab('selector')} />
         )}
@@ -90,7 +90,7 @@ const Messages = ({ currentSelectedUser, windowSize, updateActiveTab }) => {
           currentSelectedUser={currentSelectedUser.username}
           disable={disable}
         />
-      </div>
+      </section>
     );
   };
 

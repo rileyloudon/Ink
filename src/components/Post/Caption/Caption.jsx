@@ -5,13 +5,13 @@ import './Caption.css';
 
 const Caption = ({ owner, photoURL, caption }) => {
   return caption.length > 1 ? (
-    <div className='caption'>
+    <section className='caption'>
       <Link to={`/${owner}`}>
         {photoURL && <img src={photoURL} alt='' />}
         <span className='post-owner'>{owner}</span>
       </Link>
       <span className='post-caption'>{caption}</span>
-    </div>
+    </section>
   ) : null;
 };
 

@@ -107,7 +107,7 @@ const HorizontalPost = ({ modal }) => {
     ) : (
       <>
         {modal && <div className='post-backdrop' />}
-        <div
+        <article
           ref={modal ? modalRef : null}
           className={modal ? 'horizontal-view modal-view' : 'horizontal-view'}
         >
@@ -153,7 +153,7 @@ const HorizontalPost = ({ modal }) => {
               <AddComment addNewComment={addNewComment} post={postData.post} />
             )}
           </section>
-        </div>
+        </article>
       </>
     );
   };

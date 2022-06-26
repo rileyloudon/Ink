@@ -6,7 +6,7 @@ import './ButtonBar.css';
 
 const ButtonBar = ({ userLikes, likePost, disableComments, postId }) => {
   return (
-    <div className='icons'>
+    <section className='icons'>
       <button type='button' onClick={likePost}>
         {userLikes ? <FavoriteLiked /> : <FavoriteNotLiked />}
       </button>
@@ -18,7 +18,7 @@ const ButtonBar = ({ userLikes, likePost, disableComments, postId }) => {
           <CommentOutline />
         </button>
       )}
-    </div>
+    </section>
   );
 };
 

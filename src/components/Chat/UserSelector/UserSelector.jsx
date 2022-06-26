@@ -30,7 +30,7 @@ const UserSelector = ({
   }, [currentSelectedUser, pastChats, updatePastChats]);
 
   return pastChats ? (
-    <div className='user-selector'>
+    <section className='user-selector'>
       <h4 className='to'>To</h4>
       <Search
         updateCurrentSelectedUser={updateCurrentSelectedUser}
@@ -56,7 +56,7 @@ const UserSelector = ({
           </button>
         );
       })}
-    </div>
+    </section>
   ) : null;
 };
 

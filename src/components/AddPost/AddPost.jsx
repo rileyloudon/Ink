@@ -35,7 +35,7 @@ const AddPost = ({ updateAddModal }) => {
 
   return (
     <div className='dropzone-container'>
-      <div ref={modal} className='modal'>
+      <article ref={modal} className='modal'>
         <div className='top-bar'>
           <h2>{!image.properties ? 'New Post' : 'Caption'}</h2>
           <button
@@ -52,7 +52,7 @@ const AddPost = ({ updateAddModal }) => {
         ) : (
           <SetCaption image={image} updateAddModal={updateAddModal} />
         )}
-      </div>
+      </article>
     </div>
   );
 };

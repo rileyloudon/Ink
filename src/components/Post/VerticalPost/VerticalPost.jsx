@@ -79,7 +79,7 @@ const VerticalPost = ({ post }) => {
   }, [post.owner]);
 
   return (
-    <div className='vertical-view'>
+    <article className='vertical-view'>
       <Owner owner={post.owner} profilePicture={profilePicture} id={post.id} />
       <figure className='post-image' onDoubleClick={likePost}>
         <img src={post.imageUrl} alt='' loading='eager' />
@@ -128,7 +128,7 @@ const VerticalPost = ({ post }) => {
           <AddComment addNewComment={addNewComment} post={post} />
         )}
       </section>
-    </div>
+    </article>
   );
 };
 

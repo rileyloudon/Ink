@@ -19,57 +19,55 @@ const Header = ({ updateAddModal, showAddModal }) => {
   const updateFavoriteDropdownOpen = (value) => setFavoriteDropdownOpen(value);
 
   return (
-    <header>
-      <div className='center-header'>
-        <div className='header-background' />
-        <div className='header-container'>
-          <div className='title'>
-            <Link to='/' className='ink' onClick={() => window.scrollTo(0, 0)}>
-              Ink
-            </Link>
-          </div>
-          <Search />
-          <div className='nav'>
-            <Link to='/' onClick={() => window.scrollTo(0, 0)}>
-              {location.pathname === '/' &&
-              !showAddModal &&
-              !favoriteDropdownOpen ? (
-                <HomeFilled className='header-svg' />
-              ) : (
-                <HomeOutline className='header-svg' />
-              )}
-            </Link>
-            <Link to='/chat' onClick={() => window.scrollTo(0, 0)}>
-              {location.pathname === '/chat' &&
-              !showAddModal &&
-              !favoriteDropdownOpen ? (
-                <ChatFilled className='header-svg' />
-              ) : (
-                <ChatOutline className='header-svg' />
-              )}
-            </Link>
+    <div className='center-header'>
+      <div className='header-background' />
+      <header className='header-container'>
+        <h1 className='title'>
+          <Link to='/' className='ink' onClick={() => window.scrollTo(0, 0)}>
+            Ink
+          </Link>
+        </h1>
+        <Search />
+        <nav className='nav'>
+          <Link to='/' onClick={() => window.scrollTo(0, 0)}>
+            {location.pathname === '/' &&
+            !showAddModal &&
+            !favoriteDropdownOpen ? (
+              <HomeFilled className='header-svg' />
+            ) : (
+              <HomeOutline className='header-svg' />
+            )}
+          </Link>
+          <Link to='/chat' onClick={() => window.scrollTo(0, 0)}>
+            {location.pathname === '/chat' &&
+            !showAddModal &&
+            !favoriteDropdownOpen ? (
+              <ChatFilled className='header-svg' />
+            ) : (
+              <ChatOutline className='header-svg' />
+            )}
+          </Link>
 
-            <button
-              type='button'
-              className='add'
-              onClick={() => updateAddModal(true)}
-            >
-              {showAddModal ? (
-                <AddFilled className='header-svg' />
-              ) : (
-                <AddOutline className='header-svg' />
-              )}
-            </button>
+          <button
+            type='button'
+            className='add'
+            onClick={() => updateAddModal(true)}
+          >
+            {showAddModal ? (
+              <AddFilled className='header-svg' />
+            ) : (
+              <AddOutline className='header-svg' />
+            )}
+          </button>
 
-            <FavoriteDropdown
-              favoriteDropdownOpen={favoriteDropdownOpen}
-              updateFavoriteDropdownOpen={updateFavoriteDropdownOpen}
-            />
-            <UserDropdown />
-          </div>
-        </div>
-      </div>
-    </header>
+          <FavoriteDropdown
+            favoriteDropdownOpen={favoriteDropdownOpen}
+            updateFavoriteDropdownOpen={updateFavoriteDropdownOpen}
+          />
+          <UserDropdown />
+        </nav>
+      </header>
+    </div>
   );
 };
 

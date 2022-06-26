@@ -97,7 +97,7 @@ const EditPost = () => {
 
   return postData ? (
     <>
-      <div className='post-preview'>
+      <section className='post-preview'>
         <figure className='post-image'>
           <img src={postData.post.imageUrl} alt='' />
         </figure>
@@ -105,8 +105,8 @@ const EditPost = () => {
           <p>Likes: {postData.likeCount}</p>
           <p>Comments: {postData.post.comments.length}</p>
         </div>
-      </div>
-      <div className='post-settings'>
+      </section>
+      <section className='post-settings'>
         <form>
           <label htmlFor='change-caption' className='input'>
             <p>Caption</p>
@@ -183,7 +183,7 @@ const EditPost = () => {
             </button>
           </div>
         )}
-      </div>
+      </section>
     </>
   ) : null;
 };

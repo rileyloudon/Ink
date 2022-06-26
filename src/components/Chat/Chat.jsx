@@ -50,7 +50,7 @@ const Chat = () => {
   return loading ? (
     <Loading />
   ) : (
-    <div className={`${activeTab} chat`}>
+    <article className={`${activeTab} chat`}>
       <UserSelector
         currentSelectedUser={currentSelectedUser}
         updateCurrentSelectedUser={updateCurrentSelectedUser}
@@ -63,7 +63,7 @@ const Chat = () => {
         windowSize={windowSize}
         updateActiveTab={updateActiveTab}
       />
-    </div>
+    </article>
   );
 };
 
