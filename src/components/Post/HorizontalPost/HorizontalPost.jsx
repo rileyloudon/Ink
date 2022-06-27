@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { fetchIndividualPost, toggleLikePost } from '../../../firebase';
@@ -10,10 +10,13 @@ import Likes from '../Likes/Likes';
 import DatePosted from '../DatePosted/DatePosted';
 import Caption from '../Caption/Caption';
 import Owner from '../Owner/Owner';
+import UserContext from '../../../Context/UserContext';
 import './HorizontalPost.css';
 
 const HorizontalPost = ({ modal }) => {
   const modalRef = useRef();
+
+  const { user } = useContext(UserContext);
 
   const { username, postId } = useParams();
   const history = useHistory();
@@ -47,21 +50,21 @@ const HorizontalPost = ({ modal }) => {
   };
 
   const likePost = async () => {
-    const res = await toggleLikePost(postData.post);
-    // res returns if user liked the post
-    if (res === true) {
-      setPostData((prevState) => ({
-        ...prevState,
-        likeCount: prevState.likeCount + 1,
-        userLikes: true,
-      }));
-    } else if (res === false) {
+    if (postData.userLikes) {
       setPostData((prevState) => ({
         ...prevState,
         likeCount: prevState.likeCount - 1,
         userLikes: false,
       }));
+    } else {
+      setPostData((prevState) => ({
+        ...prevState,
+        likeCount: prevState.likeCount + 1,
+        userLikes: true,
+      }));
     }
+
+    await toggleLikePost(postData.post);
   };
 
   useEffect(() => {
@@ -74,18 +77,19 @@ const HorizontalPost = ({ modal }) => {
   useEffect(() => {
     let isSubscribed = true;
 
-    (async () => {
-      const res = await fetchIndividualPost(username, postId);
-      if (isSubscribed) {
-        setPostData(res);
-        setLoading(false);
-      }
-    })();
+    if (user)
+      (async () => {
+        const res = await fetchIndividualPost(username, postId);
+        if (isSubscribed) {
+          setPostData(res);
+          setLoading(false);
+        }
+      })();
 
     return () => {
       isSubscribed = false;
     };
-  }, [username, postId]);
+  }, [username, postId, user]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
