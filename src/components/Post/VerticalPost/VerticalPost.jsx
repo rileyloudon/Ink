@@ -41,19 +41,19 @@ const VerticalPost = ({ post }) => {
   };
 
   const likePost = async () => {
-    const res = await toggleLikePost(post);
-    // res returns if user liked the post
-    if (res === true) {
-      setLikeStatus((prevState) => ({
-        likeCount: prevState.likeCount + 1,
-        userLikes: true,
-      }));
-    } else if (res === false) {
+    if (likeStatus.userLikes) {
       setLikeStatus((prevState) => ({
         likeCount: prevState.likeCount - 1,
         userLikes: false,
       }));
+    } else {
+      setLikeStatus((prevState) => ({
+        likeCount: prevState.likeCount + 1,
+        userLikes: true,
+      }));
     }
+
+    await toggleLikePost(post);
   };
 
   const loadMoreComments = () => {
