@@ -15,7 +15,7 @@
   right: 0;
 }
 
-.post-dropdown button {
+.post-dropdown a {
   color: var(--text);
   cursor: pointer;
   display: block;
@@ -23,15 +23,15 @@
   background-color: transparent;
   font-size: 14px;
   padding: 8px 16px;
-  width: 100%;
   text-align: left;
+  text-decoration: none;
 }
 
 .post-dropdown.displayed {
   display: block;
 }
 
-.post-dropdown button:hover {
+.post-dropdown a:hover {
   background-color: var(--off-background);
 }
 

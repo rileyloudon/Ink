@@ -36,7 +36,8 @@
   right: 0;
 }
 
-.user-dropdown button {
+.user-dropdown button,
+.user-dropdown a {
   color: var(--text);
   cursor: pointer;
   display: flex;
@@ -45,8 +46,15 @@
   background-color: transparent;
   font-size: 14px;
   padding: 8px 16px;
-  width: 100%;
   text-align: left;
+}
+
+.user-dropdown button {
+  width: 100%;
+}
+
+.user-dropdown a {
+  text-decoration: none;
 }
 
 .user-dropdown .user-dropdown-svg {
@@ -59,7 +67,8 @@
   display: block;
 }
 
-.user-dropdown button:hover {
+.user-dropdown button:hover,
+.user-dropdown a:hover {
   background-color: var(--off-background);
 }
 

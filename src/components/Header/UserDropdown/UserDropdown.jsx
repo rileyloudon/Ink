@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { logOutUser } from '../../../firebase';
 import UserContext from '../../../Context/UserContext';
 import ThemeContext from '../../../Context/ThemeContext';
@@ -40,26 +40,17 @@ const UserDropdown = () => {
         ref={userDropdownRef}
         className={`user-dropdown ${userDropdownOpen ? 'displayed' : ''}`}
       >
-        <button
-          type='button'
-          onClick={() => {
-            history.push(`/${user.username}`);
-            window.scrollTo(0, 0);
-          }}
-        >
+        <Link to={`/${user.username}`} onClick={() => window.scrollTo(0, 0)}>
           <ProfileSvg className='user-dropdown-svg' />
           Profile
-        </button>
-        <button
-          type='button'
-          onClick={() => {
-            history.push(`/${user.username}/liked`);
-            window.scrollTo(0, 0);
-          }}
+        </Link>
+        <Link
+          to={`/${user.username}/liked`}
+          onClick={() => window.scrollTo(0, 0)}
         >
           <LikedSvg className='user-dropdown-svg' />
           Liked
-        </button>
+        </Link>
         <button
           type='button'
           onClick={() => {
@@ -71,16 +62,14 @@ const UserDropdown = () => {
           <ThemeSvg className='user-dropdown-svg' />
           Toggle Theme
         </button>
-        <button
+        <Link
+          to='/settings'
           type='button'
-          onClick={() => {
-            history.push('/settings');
-            window.scrollTo(0, 0);
-          }}
+          onClick={() => window.scrollTo(0, 0)}
         >
           <SettingsSvg className='user-dropdown-svg' />
           Settings
-        </button>
+        </Link>
         <div className='log-out'>
           <button
             type='button'

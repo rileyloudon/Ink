@@ -1,6 +1,6 @@
 import { useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import UserContext from '../../../Context/UserContext';
 import { ReactComponent as FavoriteOutline } from '../../../img/shared/favorite-outline.svg';
 import { ReactComponent as FavoriteFilled } from '../../../img/shared/favorite-filled.svg';
@@ -10,7 +10,6 @@ const FavoriteDropdown = ({
   favoriteDropdownOpen,
   updateFavoriteDropdownOpen,
 }) => {
-  const history = useHistory();
   const { user } = useContext(UserContext);
   const favoriteDropdownRef = useRef(null);
 
@@ -44,27 +43,18 @@ const FavoriteDropdown = ({
         }`}
       >
         {user.private && (
-          <button
-            type='button'
-            onClick={() => history.push('/settings/follow-requests')}
-          >
+          <Link to='/settings/follow-requests'>
             {user.followRequests} Follow Request
             {user.followRequests === 1 ? '' : 's'}
-          </button>
+          </Link>
         )}
-        <button
-          type='button'
-          onClick={() => history.push(`/${user.username}/new-likes`)}
-        >
+        <Link to={`/${user.username}/new-likes`}>
           {user.newLikes.length} New Like{user.newLikes.length === 1 ? '' : 's'}
-        </button>
-        <button
-          type='button'
-          onClick={() => history.push(`/${user.username}/new-followers`)}
-        >
+        </Link>
+        <Link to={`/${user.username}/new-followers`}>
           {user.newFollowers.length} New Follower
           {user.newFollowers.length === 1 ? '' : 's'}
-        </button>
+        </Link>
       </div>
     </div>
   );

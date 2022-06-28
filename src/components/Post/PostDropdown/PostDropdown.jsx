@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useContext, useRef, useState, useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import UserContext from '../../../Context/UserContext';
 import { ReactComponent as Dots } from '../../../img/dots/dots.svg';
 import './PostDropdown.css';
@@ -8,7 +8,6 @@ import './PostDropdown.css';
 const PostDropdown = ({ owner, id }) => {
   const { user } = useContext(UserContext);
   const location = useLocation();
-  const history = useHistory();
   const postDropDownRef = useRef(null);
   const [postDropdownOpen, setPostDropdownOpen] = useState(false);
 
@@ -35,23 +34,12 @@ const PostDropdown = ({ owner, id }) => {
         className={`post-dropdown ${postDropdownOpen ? 'displayed' : ''}`}
       >
         {location.pathname === '/' && (
-          <button
-            type='button'
-            onClick={() => {
-              history.push(`/${owner}/${id}`);
-              window.scrollTo(0, 0);
-            }}
-          >
+          <Link to={`/${owner}/${id}`} onClick={() => window.scrollTo(0, 0)}>
             View Post
-          </button>
+          </Link>
         )}
         {owner === user.username && (
-          <button
-            type='button'
-            onClick={() => history.push(`/${owner}/${id}/edit`)}
-          >
-            Edit Post
-          </button>
+          <Link to={`/${owner}/${id}/edit`}>Edit Post</Link>
         )}
       </div>
     </div>
