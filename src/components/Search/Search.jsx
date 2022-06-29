@@ -24,7 +24,7 @@ const Search = ({ updateCurrentSelectedUser, updateActiveTab }) => {
   const handleSearch = async (e) => {
     setSearchString(e.target.value);
 
-    const matchingUsers = await searchUsers(e.target.value);
+    const matchingUsers = await searchUsers(e.target.value.toLowerCase());
     setResults(matchingUsers);
   };
 
