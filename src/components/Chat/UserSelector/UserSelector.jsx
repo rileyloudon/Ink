@@ -44,10 +44,14 @@ const UserSelector = ({
             type='button'
             key={user}
             onClick={() => {
-              updateCurrentSelectedUser({
-                username: user,
-                photoURL: pastChats.profilePictures[i],
-              });
+              if (
+                currentSelectedUser === null ||
+                currentSelectedUser.username !== user
+              )
+                updateCurrentSelectedUser({
+                  username: user,
+                  photoURL: pastChats.profilePictures[i],
+                });
               updateActiveTab('chatting');
             }}
           >
