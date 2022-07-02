@@ -21,14 +21,14 @@ const AddComment = ({
   const handleSubmit = async (e) => {
     if (comment.trim().length >= 1) {
       setLoading(true);
+      setComment('');
       if (chat) {
-        await sendMessage(currentSelectedUser, comment);
+        sendMessage(currentSelectedUser, comment);
       } else {
         e.preventDefault();
         const newComment = await addComment(post, comment);
         addNewComment(newComment);
       }
-      setComment('');
       setLoading(false);
     }
   };
