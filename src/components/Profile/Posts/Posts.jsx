@@ -24,7 +24,12 @@ const Posts = ({ username, initialPosts, updateScrollPosition }) => {
         }}
         onClick={() => updateScrollPosition(window.scrollY)}
       >
-        <img className='post-image' src={post.imageUrl} alt='' />
+        <img
+          className='post-image'
+          src={post.imageUrl}
+          alt=''
+          loading='eager'
+        />
         <div className='view-post'>
           <div className='post-stats'>
             <span>
