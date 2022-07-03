@@ -16,11 +16,11 @@ const AddComment = ({
 }) => {
   const [comment, setComment] = useState('');
   const [displayEmojiPicker, setDisplayEmojiPicker] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     if (comment.trim().length >= 1) {
-      setLoading(true);
+      setButtonLoading(true);
       setComment('');
       if (chat) {
         sendMessage(currentSelectedUser, comment);
@@ -29,7 +29,7 @@ const AddComment = ({
         const newComment = await addComment(post, comment);
         addNewComment(newComment);
       }
-      setLoading(false);
+      setButtonLoading(false);
     }
   };
 
@@ -72,7 +72,7 @@ const AddComment = ({
             }
           }}
         />
-        {loading ? (
+        {buttonLoading ? (
           <Spinner className='spinner' />
         ) : (
           <button
