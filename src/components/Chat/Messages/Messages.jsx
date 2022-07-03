@@ -127,7 +127,7 @@ const Messages = ({ currentSelectedUser, windowSize, updateActiveTab }) => {
       const unsub = onSnapshot(q, (querySnapshot) => {
         const allMessages = [];
         querySnapshot.forEach((message) => {
-          allMessages.push(message.data());
+          allMessages.unshift(message.data());
         });
         setPrevMessages(...[allMessages]);
         setLoading(false);
