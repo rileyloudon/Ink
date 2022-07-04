@@ -36,6 +36,7 @@
 
 .comment-dropdown button:hover {
   background-color: var(--off-background);
+  border-radius: 6px;
 }
 
 .comment-dropdown-container .dots {

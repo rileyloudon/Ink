@@ -70,6 +70,7 @@
 .user-dropdown button:hover,
 .user-dropdown a:hover {
   background-color: var(--off-background);
+  border-radius: 6px;
 }
 
 .user-dropdown .log-out {

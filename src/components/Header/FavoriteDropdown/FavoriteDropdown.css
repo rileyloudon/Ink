@@ -28,6 +28,7 @@
 
 .favorite-dropdown-container .favorite-dropdown a:hover {
   background-color: var(--off-background);
+  border-radius: 6px;
 }
 
 .favorite-dropdown.displayed {
