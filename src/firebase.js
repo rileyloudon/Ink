@@ -104,6 +104,7 @@ export const setupUser = async ({ tempUsername, fullName }) => {
     allowMessages: 'all',
     newFollowers: [],
     newLikes: [],
+    uid: auth.currentUser.uid,
   }).catch((err) => {
     return `Error updating profile, ${err}`;
   });
@@ -312,6 +313,7 @@ export const sendFollowRequest = async (followedUser) => {
   await setDoc(docRef, {
     username: auth.currentUser.displayName,
     date: Timestamp.now(),
+    followedUser,
   });
 
   return true;
@@ -576,6 +578,7 @@ export const uploadNewPost = async (image, caption, disableComments) => {
 
     return await setDoc(docRef, {
       owner: auth.currentUser.displayName,
+      uid: auth.currentUser.uid,
       imageUrl: publicImageUrl,
       caption,
       disableComments,
@@ -697,6 +700,8 @@ export const fetchProfilePicture = async (user) => {
 
   const batches = [];
 
+  // Since firebase 'in' has a limit of 10, we need to seperate userCopy
+  // into batches of 10 to prevent error on large arrays
   while (userCopy.length) {
     const batch = userCopy.splice(0, 10);
     batches.push(
@@ -722,21 +727,28 @@ export const fetchFeed = async () => {
   const postsFrom = [...docSnap.data().following, auth.currentUser.displayName];
   const batches = [];
 
-  while (postsFrom.length) {
-    const batch = postsFrom.splice(0, 1);
-    batches.push(
-      getDocs(
-        query(
-          collectionGroup(db, 'posts'),
-          where('owner', 'in', batch),
-          orderBy('timestamp', 'desc')
-        )
-      ).then((res) => res.docs.map((post) => post.data()))
-    );
-  }
+  try {
+    // Firebase 'in' has a limit of 10, so we need to use splice to create
+    // batches of 10.
+    while (postsFrom.length) {
+      const batch = postsFrom.splice(0, 10);
+      batches.push(
+        getDocs(
+          query(
+            collectionGroup(db, 'posts'),
+            where('owner', 'in', batch),
+            orderBy('timestamp', 'desc')
+          )
+        ).then((res) => res.docs.map((post) => post.data()))
+      );
+    }
 
-  const data = (await Promise.all(batches)).flat();
-  return data.sort((a, b) => b.timestamp - a.timestamp);
+    const data = (await Promise.all(batches)).flat();
+    return data.sort((a, b) => b.timestamp - a.timestamp);
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
 };
 
 export const fetchLikedPosts = async () => {
@@ -873,7 +885,9 @@ export const sendMessage = async (otherUser, message) => {
       {
         message,
         date: Timestamp.now(),
+        to: otherUser,
         from: auth.currentUser.displayName,
+        fromUid: auth.currentUser.uid,
       }
     );
 
@@ -881,31 +895,37 @@ export const sendMessage = async (otherUser, message) => {
       doc(db, 'users', auth.currentUser.displayName, 'chat', otherUser),
       {
         lastMessage: Timestamp.now(),
+        chatUsers: [auth.currentUser.displayName, otherUser],
       }
     );
 
-    await addDoc(
-      collection(
-        db,
-        'users',
-        otherUser,
-        'chat',
-        auth.currentUser.displayName,
-        'messages'
-      ),
-      {
-        message,
-        date: Timestamp.now(),
-        from: auth.currentUser.displayName,
-      }
-    );
+    if (otherUser !== auth.currentUser.displayName) {
+      await addDoc(
+        collection(
+          db,
+          'users',
+          otherUser,
+          'chat',
+          auth.currentUser.displayName,
+          'messages'
+        ),
+        {
+          message,
+          date: Timestamp.now(),
+          to: otherUser,
+          from: auth.currentUser.displayName,
+          fromUid: auth.currentUser.uid,
+        }
+      );
 
-    await setDoc(
-      doc(db, 'users', otherUser, 'chat', auth.currentUser.displayName),
-      {
-        lastMessage: Timestamp.now(),
-      }
-    );
+      await setDoc(
+        doc(db, 'users', otherUser, 'chat', auth.currentUser.displayName),
+        {
+          lastMessage: Timestamp.now(),
+          chatUsers: [auth.currentUser.displayName, otherUser],
+        }
+      );
+    }
   } catch (e) {
     console.log(e);
   }
