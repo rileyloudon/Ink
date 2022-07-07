@@ -43,15 +43,15 @@ const FavoriteDropdown = ({
         }`}
       >
         {user.private && (
-          <Link to='/settings/follow-requests'>
+          <Link to='/account/follow-requests'>
             {user.followRequests} Follow Request
             {user.followRequests === 1 ? '' : 's'}
           </Link>
         )}
-        <Link to={`/${user.username}/new-likes`}>
+        <Link to='/account/new-likes'>
           {user.newLikes.length} New Like{user.newLikes.length === 1 ? '' : 's'}
         </Link>
-        <Link to={`/${user.username}/new-followers`}>
+        <Link to='/account/new-followers'>
           {user.newFollowers.length} New Follower
           {user.newFollowers.length === 1 ? '' : 's'}
         </Link>

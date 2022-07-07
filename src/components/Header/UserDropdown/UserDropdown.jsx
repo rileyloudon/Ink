@@ -44,10 +44,7 @@ const UserDropdown = () => {
           <ProfileSvg className='user-dropdown-svg' />
           Profile
         </Link>
-        <Link
-          to={`/${user.username}/liked`}
-          onClick={() => window.scrollTo(0, 0)}
-        >
+        <Link to='/account/liked' onClick={() => window.scrollTo(0, 0)}>
           <LikedSvg className='user-dropdown-svg' />
           Liked
         </Link>
@@ -63,7 +60,7 @@ const UserDropdown = () => {
           Toggle Theme
         </button>
         <Link
-          to='/settings'
+          to='/account/settings'
           type='button'
           onClick={() => window.scrollTo(0, 0)}
         >
