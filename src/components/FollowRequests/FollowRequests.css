@@ -40,6 +40,11 @@
 .request button {
   margin-right: 5px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 28px;
 }
 
 .request .accept-request {
@@ -51,6 +56,10 @@
   line-height: 26px;
 }
 
+.request .accept-request .spinner {
+  fill: var(--background);
+}
+
 .request .deny-request {
   padding: 0 24px;
   color: var(--text);
@@ -58,4 +67,12 @@
   border: 1px solid var(--border);
   border-radius: 3px;
   line-height: 26px;
+}
+
+.request .deny-request .spinner {
+  fill: var(--text);
+}
+
+.request .spinner {
+  margin: 0;
 }
