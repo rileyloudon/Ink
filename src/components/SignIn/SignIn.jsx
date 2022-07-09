@@ -87,7 +87,7 @@ const SignIn = ({ updateLoading, signInGuest }) => {
           <p className='sign-in-error' role='alert'>
             {signInError}
           </p>
-          <Link to='/reset-password' className='reset-password'>
+          <Link to='/account/reset-password' className='reset-password'>
             Forgot password?
           </Link>
         </form>
@@ -96,7 +96,7 @@ const SignIn = ({ updateLoading, signInGuest }) => {
       <div className='create-account'>
         <p>
           Don&#39;t have an account?
-          <Link to='/register'> Sign up</Link>
+          <Link to='/account/register'> Sign up</Link>
         </p>
       </div>
     </div>

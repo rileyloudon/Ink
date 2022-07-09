@@ -38,8 +38,8 @@ const Header = ({ updateAddModal, showAddModal }) => {
               <HomeOutline className='header-svg' />
             )}
           </Link>
-          <Link to='/chat' onClick={() => window.scrollTo(0, 0)}>
-            {location.pathname === '/chat' &&
+          <Link to='/direct/chat' onClick={() => window.scrollTo(0, 0)}>
+            {location.pathname === '/direct/chat' &&
             !showAddModal &&
             !favoriteDropdownOpen ? (
               <ChatFilled className='header-svg' />
