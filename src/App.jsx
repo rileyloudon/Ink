@@ -96,53 +96,48 @@ function App() {
             />
           )}
           <Switch location={background || location}>
-            <Route exact path='/settings/follow-requests'>
+            <Route exact path='/account/follow-requests'>
               {user || localStorage.getItem('userWillSignIn') ? (
                 <FollowRequests />
               ) : (
                 <Redirect to='/' />
               )}
             </Route>
-            <Route path='/:username/liked'>
+            <Route exact path='/account/settings'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <Settings />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+            <Route exact path='/direct/chat'>
+              {user || localStorage.getItem('userWillSignIn') ? (
+                <Chat loading={loading} />
+              ) : (
+                <Redirect to='/' />
+              )}
+            </Route>
+            <Route path='/account/liked'>
               {user || localStorage.getItem('userWillSignIn') ? (
                 <LikedFeed />
               ) : (
                 <Redirect to='/' />
               )}
             </Route>
-            <Route path='/:username/new-followers'>
+            <Route path='/account/new-followers'>
               {user || localStorage.getItem('userWillSignIn') ? (
                 <NewFollowers />
               ) : (
                 <Redirect to='/' />
               )}
             </Route>{' '}
-            <Route path='/:username/new-likes'>
+            <Route path='/account/new-likes'>
               {user || localStorage.getItem('userWillSignIn') ? (
                 <NewLikes />
               ) : (
                 <Redirect to='/' />
               )}
             </Route>
-            <Route exact path='/:username/:postId'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <HorizontalPost />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
-            <Route exact path='/:username/:postId/edit'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <EditPost />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
-            <Route
-              exact
-              path='/reset-password'
-              render={() => <ForgotPassword />}
-            />
             <Route
               exact
               path='/'
@@ -156,7 +151,12 @@ function App() {
             />
             <Route
               exact
-              path='/register'
+              path='/account/reset-password'
+              render={() => <ForgotPassword />}
+            />
+            <Route
+              exact
+              path='/account/register'
               render={() => (
                 <Register
                   updateLoading={updateLoading}
@@ -165,16 +165,16 @@ function App() {
                 />
               )}
             />
-            <Route exact path='/settings'>
+            <Route exact path='/:username/:postId'>
               {user || localStorage.getItem('userWillSignIn') ? (
-                <Settings />
+                <HorizontalPost />
               ) : (
                 <Redirect to='/' />
               )}
             </Route>
-            <Route exact path='/chat'>
+            <Route exact path='/:username/:postId/edit'>
               {user || localStorage.getItem('userWillSignIn') ? (
-                <Chat loading={loading} />
+                <EditPost />
               ) : (
                 <Redirect to='/' />
               )}
