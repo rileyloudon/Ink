@@ -172,7 +172,7 @@ function App() {
                 <Redirect to='/' />
               )}
             </Route>
-            <Route exact path='/:username/:postId/edit'>
+            <Route exact path='/account/:postId/edit'>
               {user || localStorage.getItem('userWillSignIn') ? (
                 <EditPost />
               ) : (

@@ -39,7 +39,7 @@ const PostDropdown = ({ owner, id }) => {
           </Link>
         )}
         {owner === user.username && (
-          <Link to={`/${owner}/${id}/edit`}>Edit Post</Link>
+          <Link to={`/account/${id}/edit`}>Edit Post</Link>
         )}
       </div>
     </div>
