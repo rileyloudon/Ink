@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import UserContext from '../../Context/UserContext';
 import { fetchProfilePicture } from '../../firebase';
 import Loading from '../Loading/Loading';
@@ -7,7 +7,6 @@ import './NewLikes.css';
 
 const NewLikes = () => {
   const { user } = useContext(UserContext);
-  const { username } = useParams();
 
   const [loading, setLoading] = useState(true);
   const [mergedNewLikes, setMergedNewLikes] = useState();
@@ -40,17 +39,6 @@ const NewLikes = () => {
   }, [user]);
 
   if (!user) return null;
-
-  if (user.username !== username) {
-    return (
-      <div className='no-new-likes'>
-        <h3>You can only view your own new likes</h3>
-        <Link className='own-new-likes' to={`/${user.username}/new-likes`}>
-          Click here to view them
-        </Link>
-      </div>
-    );
-  }
 
   return loading ? (
     <Loading />

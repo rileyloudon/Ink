@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
 import UserContext from '../../Context/UserContext';
 import { fetchLikedPosts, fetchNextLikedPosts } from '../../firebase';
 import Loading from '../Loading/Loading';
@@ -8,8 +7,6 @@ import './LikedFeed.css';
 
 const LikedFeed = () => {
   const { user } = useContext(UserContext);
-
-  const { username } = useParams();
 
   const [displayedPosts, setDisplayedPosts] = useState();
   const [nextPosts, setNextPosts] = useState();
@@ -67,17 +64,6 @@ const LikedFeed = () => {
   }, [nextPosts, displayedPosts, fetchInProgress]);
 
   const posts = () => {
-    if (user && user.username !== username) {
-      return (
-        <div className='no-liked-posts'>
-          <h3>You can only view your own liked posts</h3>
-          <Link className='own-liked-posts' to={`/${user.username}/liked`}>
-            Click here to view them
-          </Link>
-        </div>
-      );
-    }
-
     return (
       <>
         {displayedPosts.length === 0 ? (

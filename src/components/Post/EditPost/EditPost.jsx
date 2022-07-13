@@ -3,11 +3,12 @@ import { useParams } from 'react-router-dom';
 import { ReactComponent as Spinner } from '../../../img/spinner/spinner.svg';
 import UserContext from '../../../Context/UserContext';
 import { deletePost, fetchIndividualPost, updatePost } from '../../../firebase';
+import Loading from '../../Loading/Loading';
 import './EditPost.css';
 
 const EditPost = () => {
   const { user } = useContext(UserContext);
-  const { username, postId } = useParams();
+  const { postId } = useParams();
 
   const [postData, setPostData] = useState();
   const [caption, setCaption] = useState('');
@@ -66,28 +67,26 @@ const EditPost = () => {
   useEffect(() => {
     let isSubscribed = true;
 
-    (async () => {
-      const res = await fetchIndividualPost(username, postId);
-      if (isSubscribed) {
-        setPostData(res);
-        if (typeof res === 'object') {
-          setCaption(res.post.caption);
-          setDisableComments(res.post.disableComments);
-          setHideComments(res.post.hideComments);
+    if (user) {
+      (async () => {
+        const res = await fetchIndividualPost(user.username, postId);
+        if (isSubscribed) {
+          setPostData(res);
+          if (typeof res === 'object') {
+            setCaption(res.post.caption);
+            setDisableComments(res.post.disableComments);
+            setHideComments(res.post.hideComments);
+          }
         }
-      }
-    })();
+      })();
+    }
 
     return () => {
       isSubscribed = false;
     };
-  }, [username, postId]);
+  }, [user, postId]);
 
-  if (user && user.username !== username) {
-    return <h3 className='not-your-post'>You can only edit your own posts</h3>;
-  }
-
-  if (postData === 'Post not found' || postData === 'User not found')
+  if (postData === 'Post not found')
     return (
       <div className='edit-post-error'>
         <h2>{postData}.</h2>
@@ -99,7 +98,7 @@ const EditPost = () => {
     <>
       <section className='post-preview'>
         <figure className='post-image'>
-          <img src={postData.post.imageUrl} alt='' />
+          <img src={postData.post.imageUrl} alt='' loading='eager' />
         </figure>
         <div className='stats'>
           <p>Likes: {postData.likeCount}</p>
@@ -170,7 +169,7 @@ const EditPost = () => {
         )}
         {confirmDelete && (
           <div className='confirm-delete'>
-            <p>Are you sure you wish the delete this post?</p>
+            <p>Are you sure you wish to delete this post?</p>
             <button type='button' className='delete' onClick={handleDelete}>
               Delete
             </button>
@@ -185,7 +184,9 @@ const EditPost = () => {
         )}
       </section>
     </>
-  ) : null;
+  ) : (
+    <Loading />
+  );
 };
 
 export default EditPost;
