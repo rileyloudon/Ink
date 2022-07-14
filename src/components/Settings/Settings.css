@@ -38,12 +38,21 @@
 }
 
 .profile-settings .delete-account {
+  margin-top: 16px;
   color: var(--error);
 }
 
 .profile-settings .confirm-delete {
   color: var(--text);
   text-align: center;
+}
+
+.profile-settings .confirm-delete .delete-account-password {
+  margin: 0;
+}
+
+.profile-settings .confirm-delete div {
+  margin: 8px 0;
 }
 
 .profile-settings .confirm-delete .delete {
@@ -211,9 +220,5 @@ input:checked ~ .checkmark:after {
     border-left: none;
     border-right: none;
     border-radius: 0;
-  }
-
-  .profile-settings form .input p {
-    width: 50px;
   }
 }
