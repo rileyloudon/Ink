@@ -80,7 +80,7 @@ const Search = ({ updateCurrentSelectedUser, updateActiveTab }) => {
     <div className={`search ${updateCurrentSelectedUser ? 'search-chat' : ''}`}>
       <input
         className='search-box'
-        type='text'
+        type='search'
         placeholder='Search'
         autoCapitalize='none'
         value={searchString}
