@@ -415,36 +415,29 @@ export const denyFollowRequest = async (requestedUser) => {
   }
 };
 
-export const updateUserSettings = async (
-  changed,
-  profilePcture,
-  name,
-  bio,
-  privateAccount,
-  allowMessages
-) => {
+export const updateUserSettings = async (changed, profilePcture, inputs) => {
   const auth = getAuth();
   const docRef = doc(db, 'users', auth.currentUser.displayName);
 
   try {
     if (changed.name) {
       await updateDoc(docRef, {
-        fullName: name,
+        fullName: inputs.name,
       });
     }
 
     if (changed.bio) {
       await updateDoc(docRef, {
-        bio,
+        bio: inputs.bio,
       });
     }
 
     // if going from private -> unprivated, set all follow requests to follow
     if (changed.privateAccount) {
       await updateDoc(docRef, {
-        private: privateAccount,
+        private: inputs.private,
       });
-      if (!privateAccount) {
+      if (!inputs.private) {
         const docSnap = await getDoc(docRef);
         if (docSnap.data().followRequests >= 1) {
           const requestsRef = collection(
@@ -488,7 +481,7 @@ export const updateUserSettings = async (
 
     if (changed.allowMessages) {
       await updateDoc(docRef, {
-        allowMessages,
+        allowMessages: inputs.allowMessages,
       });
     }
 
