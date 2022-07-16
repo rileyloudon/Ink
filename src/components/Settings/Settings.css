@@ -37,36 +37,6 @@
   cursor: pointer;
 }
 
-.profile-settings .delete-account {
-  margin-top: 16px;
-  color: var(--error);
-}
-
-.profile-settings .confirm-delete {
-  color: var(--text);
-  text-align: center;
-}
-
-.profile-settings .confirm-delete .delete-account-password {
-  margin: 0;
-}
-
-.profile-settings .confirm-delete div {
-  margin: 8px 0;
-}
-
-.profile-settings .confirm-delete .delete {
-  color: var(--error);
-  margin-right: 12px;
-}
-
-.profile-settings .confirm-delete .cancel {
-  color: var(--text);
-  border: 1px solid var(--text);
-  border-radius: 6px;
-  height: 30px;
-}
-
 .profile-settings section {
   display: flex;
   flex-direction: row;

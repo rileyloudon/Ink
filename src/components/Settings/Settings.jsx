@@ -126,9 +126,9 @@ const Settings = () => {
               defaultValue={user.allowMessages}
               onChange={(e) => setAllowMessages(e.target.value)}
             >
-              <option value='all'>Everyone</option>
+              <option value='everyone'>Everyone</option>
               <option value='followers'>Followers</option>
-              <option value='none'>Nobody</option>
+              <option value='nobody'>Nobody</option>
             </select>
           </label>
           <label htmlFor='change-name' className='input'>
@@ -170,9 +170,6 @@ const Settings = () => {
             {buttonLoading && <Spinner className='spinner' />}
           </button>
         </form>
-        <button type='button' className='delete-account'>
-          Delete Account
-        </button>
       </div>
       {user.username !== 'guest' && <ChangePassword />}
     </>
