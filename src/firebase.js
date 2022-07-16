@@ -415,29 +415,36 @@ export const denyFollowRequest = async (requestedUser) => {
   }
 };
 
-export const updateUserSettings = async (changed, profilePcture, inputs) => {
+export const updateUserSettings = async (
+  changed,
+  profilePcture,
+  name,
+  bio,
+  privateAccount,
+  allowMessages
+) => {
   const auth = getAuth();
   const docRef = doc(db, 'users', auth.currentUser.displayName);
 
   try {
     if (changed.name) {
       await updateDoc(docRef, {
-        fullName: inputs.name,
+        fullName: name,
       });
     }
 
     if (changed.bio) {
       await updateDoc(docRef, {
-        bio: inputs.bio,
+        bio,
       });
     }
 
     // if going from private -> unprivated, set all follow requests to follow
     if (changed.privateAccount) {
       await updateDoc(docRef, {
-        private: inputs.private,
+        private: privateAccount,
       });
-      if (!inputs.private) {
+      if (!privateAccount) {
         const docSnap = await getDoc(docRef);
         if (docSnap.data().followRequests >= 1) {
           const requestsRef = collection(
@@ -456,32 +463,26 @@ export const updateUserSettings = async (changed, profilePcture, inputs) => {
         }
       }
     }
-
     if (changed.profilePicture) {
       const storage = getStorage();
-
       const storageRef = ref(
         storage,
         `${auth.currentUser.displayName}/profile-picture`
       );
-
       await uploadBytes(storageRef, profilePcture.properties);
-
       const publicImageUrl = await getDownloadURL(storageRef);
-
       await updateDoc(docRef, {
         photoURL: publicImageUrl,
       });
       await updateProfile(auth.currentUser, {
         photoURL: publicImageUrl,
       });
-
       return { updated: true, publicImageUrl };
     }
 
     if (changed.allowMessages) {
       await updateDoc(docRef, {
-        allowMessages: inputs.allowMessages,
+        allowMessages,
       });
     }
 
