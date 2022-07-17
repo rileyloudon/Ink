@@ -58,12 +58,17 @@
 }
 
 .post-settings .delete-post {
+  margin: 8px;
   color: var(--error);
 }
 
 .post-settings .confirm-delete {
   color: var(--text);
   text-align: center;
+}
+
+.post-settings .confirm-delete p {
+  margin: 8px;
 }
 
 .post-settings .confirm-delete .delete {
