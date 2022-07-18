@@ -59,7 +59,7 @@ const EditPost = () => {
   };
 
   const handleDelete = async () => {
-    const status = await deletePost(postId);
+    const status = await deletePost(postData.post);
     if (status.deleted === true) setPostUpdated('Post Deleted');
     else setError(status.err.message);
   };
