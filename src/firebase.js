@@ -36,7 +36,13 @@ import {
   addDoc,
 } from 'firebase/firestore';
 
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAXsxLt1-ebKHlUr_8w0mCLTe6w921K3V8',
@@ -225,38 +231,6 @@ export const fetchNextProfilePosts = async (username, start) => {
   postsSnap.forEach((post) => posts.push(post.data()));
   return posts;
 };
-
-// export const toggleFollowUser = async (userToInteract) => {
-//   const auth = getAuth();
-
-//   const me = doc(db, 'users', auth.currentUser.displayName);
-//   const otherUser = doc(db, 'users', userToInteract);
-
-//   const docSnap = await getDoc(doc(db, 'users', userToInteract));
-
-//   if (!docSnap.data().followers.includes(auth.currentUser.displayName)) {
-//     // Follow User
-//     await updateDoc(me, {
-//       following: arrayUnion(userToInteract),
-//     });
-
-//     await updateDoc(otherUser, {
-//       followers: arrayUnion(auth.currentUser.displayName),
-//     });
-
-//     return 'p';
-//   }
-//   // Unfollow User
-//   await updateDoc(me, {
-//     following: arrayRemove(userToInteract),
-//   });
-
-//   await updateDoc(otherUser, {
-//     followers: arrayRemove(auth.currentUser.displayName),
-//   });
-
-//   return docSnap.data();
-// };
 
 export const followUser = async (followedUser) => {
   const auth = getAuth();
@@ -533,16 +507,21 @@ export const updatePost = async (
   }
 };
 
-export const deletePost = async (postId) => {
+export const deletePost = async (post) => {
   const auth = getAuth();
+  const storage = getStorage();
+
   try {
+    await deleteDoc(
+      doc(db, 'users', auth.currentUser.displayName, 'posts', post.id)
+    );
+
+    await deleteObject(ref(storage, post.storageUrl));
+
     await updateDoc(doc(db, 'users', auth.currentUser.displayName), {
       postCount: increment(-1),
     });
 
-    await deleteDoc(
-      doc(db, 'users', auth.currentUser.displayName, 'posts', postId)
-    );
     return { deleted: true };
   } catch (err) {
     return { deleted: false, err };
