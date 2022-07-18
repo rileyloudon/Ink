@@ -27,6 +27,7 @@ const DropImage = ({ updateImage }) => {
     multiple: false,
     accept: 'image/jpeg, image/png',
     maxSize: 5000000, // 5 MB
+    maxFiles: 1,
     noClick: true,
     noKeyboard: true,
     onDropAccepted,
