@@ -18,7 +18,10 @@ const EditPost = () => {
   const [error, setError] = useState();
 
   const [postUpdated, setPostUpdated] = useState(false);
-  const [buttonLoading, setButtonLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState({
+    main: false,
+    delete: false,
+  });
 
   const changedData =
     typeof postData === 'object'
@@ -154,8 +157,8 @@ const EditPost = () => {
             disabled={!changedData}
             onClick={savePost}
           >
-            {!buttonLoading ? 'Save' : 'Saving'}
-            {buttonLoading && <Spinner className='spinner' />}
+            {!buttonLoading.main ? 'Save' : 'Saving'}
+            {buttonLoading.main && <Spinner className='spinner' />}
           </button>
         </form>
         {!confirmDelete && (
@@ -170,16 +173,19 @@ const EditPost = () => {
         {confirmDelete && (
           <div className='confirm-delete'>
             <p>Are you sure you wish to delete this post?</p>
-            <button type='button' className='delete' onClick={handleDelete}>
-              Delete
-            </button>
-            <button
-              type='button'
-              className='cancel'
-              onClick={() => setConfirmDelete(false)}
-            >
-              Cancel
-            </button>
+            <div className='delete-buttons'>
+              <button type='button' className='delete' onClick={handleDelete}>
+                {!buttonLoading.delete ? 'Delete' : 'Deleting'}
+                {buttonLoading.delete && <Spinner className='spinner' />}
+              </button>
+              <button
+                type='button'
+                className='cancel'
+                onClick={() => setConfirmDelete(false)}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         )}
       </section>

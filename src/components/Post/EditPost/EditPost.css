@@ -71,9 +71,22 @@
   margin: 8px;
 }
 
+.post-settings .confirm-delete .delete-buttons {
+  display: flex;
+  justify-content: center;
+}
+
 .post-settings .confirm-delete .delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
   color: var(--error);
   margin-right: 12px;
+}
+
+.post-settings .confirm-delete .delete svg {
+  fill: var(--error);
 }
 
 .post-settings .confirm-delete .cancel {
@@ -81,6 +94,7 @@
   border: 1px solid var(--text);
   border-radius: 6px;
   height: 30px;
+  font-size: 14px;
 }
 
 .post-settings form {
