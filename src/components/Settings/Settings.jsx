@@ -90,8 +90,8 @@ const Settings = () => {
   }, [newProfilePicture]);
 
   useEffect(() => {
-    if (changedData) setProfileUpdated(false);
-  }, [changedData]);
+    if (changedData && profileUpdated) setProfileUpdated(false);
+  }, [changedData, profileUpdated]);
 
   return user ? (
     <>
