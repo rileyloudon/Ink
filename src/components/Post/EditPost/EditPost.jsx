@@ -37,7 +37,7 @@ const EditPost = () => {
       hideComments: postData.hideComments !== hideComments,
     };
 
-    setButtonLoading(true);
+    setButtonLoading((prevState) => ({ ...prevState, main: true }));
     const res = await updatePost(
       postId,
       changed,
@@ -49,22 +49,29 @@ const EditPost = () => {
     if (res.updated === true) {
       setPostData((prevData) => ({
         ...prevData,
-        caption,
-        disableComments,
-        hideComments,
+        post: {
+          ...prevData.post,
+          caption,
+          disableComments,
+          hideComments,
+        },
       }));
       setPostUpdated('Post Updated');
     } else {
       setError(res.err);
       setPostUpdated(false);
     }
-    setButtonLoading(false);
+    setButtonLoading((prevState) => ({ ...prevState, main: false }));
   };
 
   const handleDelete = async () => {
+    setButtonLoading((prevState) => ({ ...prevState, delete: true }));
     const status = await deletePost(postData.post);
-    if (status.deleted === true) setPostUpdated('Post Deleted');
-    else setError(status.err.message);
+    if (status.deleted === true) {
+      setConfirmDelete(false);
+      setPostUpdated('Post Deleted');
+    } else setError(status.err.message);
+    setButtonLoading((prevState) => ({ ...prevState, delete: false }));
   };
 
   useEffect(() => {
@@ -88,6 +95,11 @@ const EditPost = () => {
       isSubscribed = false;
     };
   }, [user, postId]);
+
+  useEffect(() => {
+    if (changedData && postUpdated && postUpdated !== 'Post Deleted')
+      setPostUpdated(false);
+  }, [changedData, postUpdated]);
 
   if (postData === 'Post not found')
     return (
@@ -154,7 +166,7 @@ const EditPost = () => {
           <button
             className='save'
             type='button'
-            disabled={!changedData}
+            disabled={!changedData || postUpdated === 'Post Deleted'}
             onClick={savePost}
           >
             {!buttonLoading.main ? 'Save' : 'Saving'}
@@ -174,7 +186,12 @@ const EditPost = () => {
           <div className='confirm-delete'>
             <p>Are you sure you wish to delete this post?</p>
             <div className='delete-buttons'>
-              <button type='button' className='delete' onClick={handleDelete}>
+              <button
+                type='button'
+                className='delete'
+                disabled={postUpdated === 'Post Deleted'}
+                onClick={handleDelete}
+              >
                 {!buttonLoading.delete ? 'Delete' : 'Deleting'}
                 {buttonLoading.delete && <Spinner className='spinner' />}
               </button>
