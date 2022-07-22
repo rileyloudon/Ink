@@ -85,6 +85,10 @@
   margin-right: 12px;
 }
 
+.post-settings .confirm-delete .delete:disabled {
+  cursor: not-allowed;
+}
+
 .post-settings .confirm-delete .delete svg {
   fill: var(--error);
 }
