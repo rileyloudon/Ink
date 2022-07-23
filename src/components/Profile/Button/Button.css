@@ -42,6 +42,13 @@
   fill: var(--text);
 }
 
+.top .edit {
+  margin-left: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .top .edit,
 .top .requested {
   padding: 5px 9px;

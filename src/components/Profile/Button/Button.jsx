@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   cancelFollowRequest,
   followUser,
@@ -13,7 +13,6 @@ import './Button.css';
 
 const Button = ({ profile, updateHeader }) => {
   const { user } = useContext(UserContext);
-  const history = useHistory();
 
   const [buttonLoading, setButtonLoading] = useState(false);
 
@@ -62,13 +61,9 @@ const Button = ({ profile, updateHeader }) => {
   }
 
   return (
-    <button
-      onClick={() => history.push('/settings')}
-      className='edit'
-      type='button'
-    >
+    <Link to='/account/settings' className='edit'>
       Edit Profile
-    </button>
+    </Link>
   );
 };
 
