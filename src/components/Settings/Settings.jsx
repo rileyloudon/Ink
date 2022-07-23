@@ -5,6 +5,7 @@ import { updateUserSettings } from '../../firebase';
 import { ReactComponent as Spinner } from '../../img/spinner/spinner.svg';
 import ChangePicture from './ChangePicture/ChangePicture';
 import ChangePassword from './ChangePassword/ChangePassword';
+import Loading from '../Loading/Loading';
 import './Settings.css';
 
 const Settings = () => {
@@ -114,7 +115,7 @@ const Settings = () => {
             <span className='checkmark' />
           </label>
           {user.followRequests >= 1 && (
-            <Link to='/settings/follow-requests' className='follow-requests'>
+            <Link to='/account/follow-requests' className='follow-requests'>
               {user.followRequests} follow request
               {user.followRequests === 1 ? '' : 's'}
             </Link>
@@ -173,7 +174,9 @@ const Settings = () => {
       </div>
       {user.username !== 'guest' && <ChangePassword />}
     </>
-  ) : null;
+  ) : (
+    <Loading />
+  );
 };
 
 export default Settings;
