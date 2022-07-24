@@ -38,52 +38,6 @@ const FollowRequests = () => {
     }));
   };
 
-  const requests = () => {
-    if (followRequests.users && followRequests.users.length === 0) {
-      return <h3 className='no-requests'>No follow requests to show</h3>;
-    }
-
-    return (
-      <div className='follow-requests'>
-        <h3>Follow Requests</h3>
-        {followRequests.users.map((request, i) => (
-          <div className='request' key={request.username}>
-            <Link to={`/${request.username}`}>
-              <img src={followRequests.profilePictures[i]} alt='' />
-              <span>{request.username}</span>
-            </Link>
-            <button
-              className='accept-request'
-              type='button'
-              onClick={async () => {
-                setButtongLoading({ accept: true, deny: false });
-                await acceptFollowRequest(request.username);
-                updateRequests(request.username, i);
-              }}
-            >
-              {buttonLoading.accept ? (
-                <Spinner className='spinner' />
-              ) : (
-                'Accept'
-              )}
-            </button>
-            <button
-              className='deny-request'
-              type='button'
-              onClick={async () => {
-                setButtongLoading({ accept: false, deny: true });
-                await denyFollowRequest(request.username);
-                updateRequests(request.username, i);
-              }}
-            >
-              {buttonLoading.deny ? <Spinner className='spinner' /> : 'Deny'}
-            </button>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   useEffect(() => {
     let isSubscribed = true;
     if (user)
@@ -102,7 +56,43 @@ const FollowRequests = () => {
     };
   }, [user]);
 
-  return loading ? <Loading /> : requests();
+  return loading ? (
+    <Loading />
+  ) : (
+    <div className='follow-requests'>
+      <h3>Follow Requests</h3>
+      {followRequests.users.map((request, i) => (
+        <div className='request' key={request.username}>
+          <Link to={`/${request.username}`}>
+            <img src={followRequests.profilePictures[i]} alt='' />
+            <span>{request.username}</span>
+          </Link>
+          <button
+            className='accept-request'
+            type='button'
+            onClick={async () => {
+              setButtongLoading({ accept: true, deny: false });
+              await acceptFollowRequest(request.username);
+              updateRequests(request.username, i);
+            }}
+          >
+            {buttonLoading.accept ? <Spinner className='spinner' /> : 'Accept'}
+          </button>
+          <button
+            className='deny-request'
+            type='button'
+            onClick={async () => {
+              setButtongLoading({ accept: false, deny: true });
+              await denyFollowRequest(request.username);
+              updateRequests(request.username, i);
+            }}
+          >
+            {buttonLoading.deny ? <Spinner className='spinner' /> : 'Deny'}
+          </button>
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export default FollowRequests;
