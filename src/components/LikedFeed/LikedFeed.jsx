@@ -16,9 +16,6 @@ const LikedFeed = () => {
   useEffect(() => {
     let isSubscribed = true;
 
-    // prevents seeing no posts message if you click the link when viewing another persons liked posts.
-    if (!setLoading) setLoading(true);
-
     if (user)
       (async () => {
         const res = await fetchLikedPosts();
@@ -57,30 +54,27 @@ const LikedFeed = () => {
       }
     };
     window.addEventListener('scroll', loadMorePosts);
+
     return () => {
       isSubscribed = false;
       window.removeEventListener('scroll', loadMorePosts);
     };
   }, [nextPosts, displayedPosts, fetchInProgress]);
 
-  const posts = () => {
-    return (
-      <>
-        {displayedPosts.length === 0 ? (
-          <div className='no-liked-posts'>
-            <h3>No posts to show</h3>
-            <p>Try liking a post to see it here</p>
-          </div>
-        ) : (
-          displayedPosts.map((post) => (
-            <VerticalPost key={post.id} post={post} />
-          ))
-        )}
-      </>
-    );
-  };
-
-  return loading ? <Loading /> : posts();
+  return loading ? (
+    <Loading />
+  ) : (
+    <>
+      {displayedPosts.length === 0 ? (
+        <div className='no-liked-posts'>
+          <h3>No posts to show</h3>
+          <p>Try liking a post to see it here</p>
+        </div>
+      ) : (
+        displayedPosts.map((post) => <VerticalPost key={post.id} post={post} />)
+      )}
+    </>
+  );
 };
 
 export default LikedFeed;
