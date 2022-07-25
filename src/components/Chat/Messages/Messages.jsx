@@ -48,52 +48,6 @@ const Messages = ({ currentSelectedUser, windowSize, updateActiveTab }) => {
     return null;
   };
 
-  const displayNoUser = () => {
-    return (
-      <div className='messages no-user'>
-        <ChatOutline />
-        <p>Search for a user to start chatting</p>
-      </div>
-    );
-  };
-
-  const displayCurrentUser = () => {
-    return (
-      <section className='messages'>
-        {windowSize < 735 && (
-          <Back className='back' onClick={() => updateActiveTab('selector')} />
-        )}
-        <Link
-          to={`/${currentSelectedUser.username}`}
-          key={currentSelectedUser.username}
-        >
-          <img src={currentSelectedUser.photoURL} alt='' />
-          <span>{currentSelectedUser.username}</span>
-        </Link>
-        <div className='prev-messages'>
-          {loading ? (
-            <Spinner className='spinner' />
-          ) : (
-            prevMessages.map((m) => (
-              <p
-                className={m.from === user.username ? 'blue' : 'grey'}
-                key={m.date + m.message}
-              >
-                {m.message}
-              </p>
-            ))
-          )}
-        </div>
-        {allowMessagesWarning()}
-        <AddComment
-          chat
-          currentSelectedUser={currentSelectedUser.username}
-          disable={disable}
-        />
-      </section>
-    );
-  };
-
   useEffect(() => {
     if (allowMessages && allowMessages.allow === false) setDisable(true);
     return () => setDisable(false);
@@ -138,7 +92,45 @@ const Messages = ({ currentSelectedUser, windowSize, updateActiveTab }) => {
     return null;
   }, [currentSelectedUser, db, user]);
 
-  return currentSelectedUser ? displayCurrentUser() : displayNoUser();
+  return !currentSelectedUser ? (
+    <div className='messages no-user'>
+      <ChatOutline />
+      <p>Search for a user to start chatting</p>
+    </div>
+  ) : (
+    <section className='messages'>
+      {windowSize < 735 && (
+        <Back className='back' onClick={() => updateActiveTab('selector')} />
+      )}
+      <Link
+        to={`/${currentSelectedUser.username}`}
+        key={currentSelectedUser.username}
+      >
+        <img src={currentSelectedUser.photoURL} alt='' />
+        <span>{currentSelectedUser.username}</span>
+      </Link>
+      <div className='prev-messages'>
+        {loading ? (
+          <Spinner className='spinner' />
+        ) : (
+          prevMessages.map((m) => (
+            <p
+              className={m.from === user.username ? 'blue' : 'grey'}
+              key={m.date + m.message}
+            >
+              {m.message}
+            </p>
+          ))
+        )}
+      </div>
+      {allowMessagesWarning()}
+      <AddComment
+        chat
+        currentSelectedUser={currentSelectedUser.username}
+        disable={disable}
+      />
+    </section>
+  );
 };
 
 export default Messages;

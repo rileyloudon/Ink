@@ -50,24 +50,20 @@ const Feed = () => {
     return () => window.removeEventListener('scroll', loadMorePosts);
   }, [nextPosts, displayedPosts]);
 
-  const allPosts = () => {
-    return (
-      <div className='feed'>
-        {displayedPosts.length === 0 ? (
-          <div className='no-feed-posts'>
-            <h3>No posts to show</h3>
-            <p>Try following someone to see their posts here</p>
-          </div>
-        ) : (
-          displayedPosts.map((post) => (
-            <VerticalPost key={post.id} post={post} />
-          ))
-        )}
-      </div>
-    );
-  };
-
-  return loading ? <Loading /> : allPosts();
+  return loading ? (
+    <Loading />
+  ) : (
+    <div className='feed'>
+      {displayedPosts.length === 0 ? (
+        <div className='no-feed-posts'>
+          <h3>No posts to show</h3>
+          <p>Try following someone to see their posts here</p>
+        </div>
+      ) : (
+        displayedPosts.map((post) => <VerticalPost key={post.id} post={post} />)
+      )}
+    </div>
+  );
 };
 
 export default Feed;
