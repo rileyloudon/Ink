@@ -65,19 +65,6 @@ const Register = ({ updateLoading, signInGuest, updateNewUserData }) => {
             <div className='or-line' />
           </div>
           <input
-            type='email'
-            placeholder='Email'
-            aria-label='Email'
-            aria-required='true'
-            // name='username' is so password managers save and use email
-            name='username'
-            autoComplete='username email'
-            inputMode='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
             type='text'
             spellCheck='off'
             maxLength='16'
@@ -96,6 +83,19 @@ const Register = ({ updateLoading, signInGuest, updateNewUserData }) => {
             aria-required='true'
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
+            required
+          />
+          <input
+            type='email'
+            placeholder='Email'
+            aria-label='Email'
+            aria-required='true'
+            // name='username' is so password managers save and use email
+            name='username'
+            autoComplete='username email'
+            inputMode='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
