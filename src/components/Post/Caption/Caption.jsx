@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './Caption.css';
 
 const Caption = ({ owner, photoURL, caption }) => {
-  return caption.length > 1 ? (
+  return caption.length ? (
     <section className='caption'>
       <Link to={`/${owner}`}>
         {photoURL && <img src={photoURL} alt='' />}
