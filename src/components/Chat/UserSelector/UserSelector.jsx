@@ -10,6 +10,15 @@ const UserSelector = ({
   updatePastChats,
   updateActiveTab,
 }) => {
+  const handleClick = (user, i) => {
+    if (currentSelectedUser === null || currentSelectedUser.username !== user)
+      updateCurrentSelectedUser({
+        username: user,
+        photoURL: pastChats.profilePictures[i],
+      });
+    updateActiveTab('chatting');
+  };
+
   useEffect(() => {
     if (currentSelectedUser) {
       if (!pastChats) {
@@ -43,17 +52,7 @@ const UserSelector = ({
             className='past-chat'
             type='button'
             key={user}
-            onClick={() => {
-              if (
-                currentSelectedUser === null ||
-                currentSelectedUser.username !== user
-              )
-                updateCurrentSelectedUser({
-                  username: user,
-                  photoURL: pastChats.profilePictures[i],
-                });
-              updateActiveTab('chatting');
-            }}
+            onClick={() => handleClick(user, i)}
           >
             <img src={pastChats.profilePictures[i]} alt='' />
             <span>{user}</span>
