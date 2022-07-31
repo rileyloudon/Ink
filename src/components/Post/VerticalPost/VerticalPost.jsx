@@ -65,6 +65,38 @@ const VerticalPost = ({ post }) => {
     setHiddenPostComments(hiddenPostComments.slice(0, -3));
   };
 
+  const renderComments = () => {
+    if (post.hideComments)
+      return (
+        <span className='comments-hidden'>
+          {post.owner} has hidden the comments
+        </span>
+      );
+
+    return (
+      <>
+        {hiddenPostComments && hiddenPostComments.length > 0 && (
+          <button
+            type='button'
+            className='more-comments'
+            onClick={loadMoreComments}
+          >
+            View more comments
+          </button>
+        )}
+        {displayedPostComments.map((commentObj) => (
+          <Comment
+            key={commentObj.key}
+            post={post}
+            commentObj={commentObj}
+            includePicture={false}
+            deleteDisplayedComment={deleteDisplayedComment}
+          />
+        ))}
+      </>
+    );
+  };
+
   useEffect(() => {
     let isSubscribed = true;
 
@@ -96,32 +128,7 @@ const VerticalPost = ({ post }) => {
         </section>
         <section className='comments'>
           <Caption owner={post.owner} caption={post.caption} />
-          {post.hideComments && (
-            <span className='comments-hidden'>
-              {post.owner} has hidden the comments
-            </span>
-          )}
-          {!post.hideComments &&
-            hiddenPostComments &&
-            hiddenPostComments.length !== 0 && (
-              <button
-                type='button'
-                className='more-comments'
-                onClick={loadMoreComments}
-              >
-                View more comments
-              </button>
-            )}
-          {!post.hideComments &&
-            displayedPostComments.map((commentObj) => (
-              <Comment
-                key={commentObj.key}
-                post={post}
-                commentObj={commentObj}
-                includePicture={false}
-                deleteDisplayedComment={deleteDisplayedComment}
-              />
-            ))}
+          {renderComments()}
           <DatePosted timestamp={post.timestamp} />
         </section>
         {!post.disableComments && (
