@@ -19,7 +19,8 @@ const SignIn = ({ updateLoading, signInGuest }) => {
     /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g.test(email) &&
     password.length >= 6;
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (e) => {
+    e.preventDefault();
     setButtonLoading(true);
 
     const res = signInUser(email, password);
@@ -65,7 +66,7 @@ const SignIn = ({ updateLoading, signInGuest }) => {
               className='log-in-btn'
               type='submit'
               disabled={!isFormValid}
-              onClick={handleSignIn}
+              onClick={(e) => handleSignIn(e)}
             >
               {!buttonLoading ? 'Log In' : `Logging In`}
               {buttonLoading && <Spinner className='spinner' />}
@@ -75,11 +76,7 @@ const SignIn = ({ updateLoading, signInGuest }) => {
               <p>OR</p>
               <div className='or-line' />
             </div>
-            <button
-              className='guest-btn'
-              type='button'
-              onClick={() => signInGuest()}
-            >
+            <button className='guest-btn' type='button' onClick={signInGuest}>
               <AstronautSvg />
               Log In as Guest
             </button>
