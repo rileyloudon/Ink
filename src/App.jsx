@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { Switch, Route, useLocation } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Header from './components/Header/Header';
 import Home from './components/Home';
@@ -17,6 +17,7 @@ import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import EditPost from './components/Post/EditPost/EditPost';
 import NewFollowers from './components/NewFollowers/NewFollowers';
 import NewLikes from './components/NewLikes/NewLikes';
+import PrivateRoute from './PrivateRoute';
 import { fetchUserData, setupAnon, setupUser, signInAnon } from './firebase';
 import './App.css';
 
@@ -96,48 +97,27 @@ function App() {
             />
           )}
           <Switch location={background || location}>
-            <Route exact path='/account/follow-requests'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <FollowRequests />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
-            <Route exact path='/account/settings'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <Settings />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
-            <Route exact path='/direct/chat'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <Chat loading={loading} />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
-            <Route path='/account/liked'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <LikedFeed />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
-            <Route path='/account/new-followers'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <NewFollowers />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>{' '}
-            <Route path='/account/new-likes'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <NewLikes />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
+            <PrivateRoute exact path='/direct/chat'>
+              <Chat loading={loading} />
+            </PrivateRoute>
+            <PrivateRoute exact path='/account/follow-requests'>
+              <FollowRequests />
+            </PrivateRoute>
+            <PrivateRoute exact path='/account/settings'>
+              <Settings />
+            </PrivateRoute>
+            <PrivateRoute exact path='/account/liked'>
+              <LikedFeed />
+            </PrivateRoute>
+            <PrivateRoute exact path='/account/new-followers'>
+              <NewFollowers />
+            </PrivateRoute>
+            <PrivateRoute exact path='/account/new-likes'>
+              <NewLikes />
+            </PrivateRoute>
+            <PrivateRoute exact path='/account/:postId/edit'>
+              <EditPost />
+            </PrivateRoute>
             <Route
               exact
               path='/'
@@ -165,30 +145,15 @@ function App() {
                 />
               )}
             />
-            <Route exact path='/:username/:postId'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <HorizontalPost />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
-            <Route exact path='/account/:postId/edit'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <EditPost />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
-            <Route path='/:username'>
-              {user || localStorage.getItem('userWillSignIn') ? (
-                <Profile
-                  scrollPosition={scrollPosition}
-                  updateScrollPosition={updateScrollPosition}
-                />
-              ) : (
-                <Redirect to='/' />
-              )}
-            </Route>
+            <PrivateRoute exact path='/:username/:postId'>
+              <HorizontalPost />
+            </PrivateRoute>
+            <PrivateRoute path='/:username'>
+              <Profile
+                scrollPosition={scrollPosition}
+                updateScrollPosition={updateScrollPosition}
+              />
+            </PrivateRoute>
           </Switch>
           {showAddModal && <AddPost updateAddModal={updateAddModal} />}
           {background && (
