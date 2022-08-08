@@ -39,7 +39,7 @@
   background-color: var(--background);
   min-width: 100%;
   max-width: max-content;
-  padding: 8px 4px;
+  padding: 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
