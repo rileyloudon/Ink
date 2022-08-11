@@ -1,13 +1,15 @@
 {
   "env": {
     "browser": true,
-    "es2021": true
+    "es2021": true,
+    "jest/globals": true
   },
   "extends": [
     "plugin:react/recommended",
     "airbnb",
     "airbnb/hooks",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:jest/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -16,9 +18,9 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["react", "prettier", "jest"],
   "rules": {
-    "no-console": "warn",
+    "no-console": "off",
     "jsx-quotes": ["error", "prefer-single"],
     "react/react-in-jsx-scope": "off",
     "prettier/prettier": [
