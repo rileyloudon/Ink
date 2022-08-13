@@ -152,7 +152,7 @@ export const setupAnon = async () => {
   });
 };
 
-export const logOutUser = async () => {
+export const signOutUser = async () => {
   const auth = getAuth();
   await signOut(auth).catch((err) => `Error signing out, ${err}`);
 };

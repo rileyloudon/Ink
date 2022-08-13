@@ -63,12 +63,12 @@ const SignIn = ({ updateLoading, signInGuest }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <button
-              className='log-in-btn'
+              className='sign-in-btn'
               type='submit'
               disabled={!isFormValid}
               onClick={(e) => handleSignIn(e)}
             >
-              {!buttonLoading ? 'Log In' : `Logging In`}
+              {!buttonLoading ? 'Sign In' : `Signing In`}
               {buttonLoading && <Spinner className='spinner' />}
             </button>
             <div className='or'>
@@ -78,7 +78,7 @@ const SignIn = ({ updateLoading, signInGuest }) => {
             </div>
             <button className='guest-btn' type='button' onClick={signInGuest}>
               <AstronautSvg />
-              Log In as Guest
+              Sign In as Guest
             </button>
           </div>
           <p className='sign-in-error' role='alert'>

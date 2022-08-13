@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { logOutUser } from '../../../firebase';
+import { signOutUser } from '../../../firebase';
 import UserContext from '../../../Context/UserContext';
 import ThemeContext from '../../../Context/ThemeContext';
 import { ReactComponent as ProfileSvg } from '../../../img/UserDropdown/profile.svg';
@@ -67,12 +67,12 @@ const UserDropdown = () => {
           <SettingsSvg className='user-dropdown-svg' />
           Settings
         </Link>
-        <div className='log-out'>
+        <div className='sign-out'>
           <button
             type='button'
-            onClick={() => logOutUser().then(() => history.push('/'))}
+            onClick={() => signOutUser().then(() => history.push('/'))}
           >
-            Log Out
+            Sign Out
           </button>
         </div>
       </div>
