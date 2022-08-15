@@ -89,7 +89,7 @@ const Messages = ({ currentSelectedUser, windowSize, updateActiveTab }) => {
       return () => unsub();
     }
 
-    return null;
+    return undefined;
   }, [currentSelectedUser, db, user]);
 
   return !currentSelectedUser ? (
