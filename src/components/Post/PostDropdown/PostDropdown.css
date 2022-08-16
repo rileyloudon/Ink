@@ -4,9 +4,16 @@
   float: right;
 }
 
+.post-dropdown-container .post-dots {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
 .post-dropdown {
   position: absolute;
-  display: none;
+  display: block;
   background-color: var(--background);
   border-radius: 6px;
   box-shadow: 0 0 4px 1px var(--shadow);
@@ -27,10 +34,6 @@
   text-decoration: none;
 }
 
-.post-dropdown.displayed {
-  display: block;
-}
-
 .post-dropdown a:hover {
   background-color: var(--off-background);
   border-radius: 6px;
@@ -41,4 +44,5 @@
   padding-right: 15px;
   fill: var(--text);
   margin-left: auto;
+  pointer-events: none;
 }

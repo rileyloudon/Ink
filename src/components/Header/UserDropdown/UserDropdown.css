@@ -27,7 +27,7 @@
 
 .user-dropdown {
   position: absolute;
-  display: none;
+  display: block;
   background-color: var(--background);
   border-radius: 6px;
   box-shadow: 0 0 4px 1px var(--shadow);
@@ -61,10 +61,7 @@
   fill: var(--svg);
   margin-right: 10px;
   cursor: pointer;
-}
-
-.user-dropdown.displayed {
-  display: block;
+  pointer-events: none;
 }
 
 .user-dropdown button:hover,

@@ -19,7 +19,8 @@ const FavoriteDropdown = ({
     const handleClickOutside = (e) => {
       if (
         favoriteDropdownRef.current !== null &&
-        !favoriteDropdownRef.current.contains(e.traget)
+        !favoriteDropdownRef.current.contains(e.traget) &&
+        !e.target.classList.contains('favorite-button')
       )
         updateFavoriteDropdownOpen(!favoriteDropdownOpen);
     };
@@ -31,31 +32,27 @@ const FavoriteDropdown = ({
 
   return (
     <div className='favorite-dropdown-container'>
-      {favoriteDropdownOpen ? (
-        <FavoriteFilled onClick={handleClick} className='header-svg' />
-      ) : (
-        <FavoriteOutline onClick={handleClick} className='header-svg' />
-      )}
-      <div
-        ref={favoriteDropdownRef}
-        className={`favorite-dropdown ${
-          favoriteDropdownOpen ? 'displayed' : ''
-        }`}
-      >
-        {user.private && (
-          <Link to='/account/follow-requests'>
-            {user.followRequests} Follow Request
-            {user.followRequests === 1 ? '' : 's'}
+      <button type='button' onClick={handleClick} className='favorite-button'>
+        {favoriteDropdownOpen ? <FavoriteFilled /> : <FavoriteOutline />}
+      </button>
+      {favoriteDropdownOpen && (
+        <div ref={favoriteDropdownRef} className='favorite-dropdown'>
+          {user.private && (
+            <Link to='/account/follow-requests'>
+              {user.followRequests} Follow Request
+              {user.followRequests === 1 ? '' : 's'}
+            </Link>
+          )}
+          <Link to='/account/new-likes'>
+            {user.newLikes.length} New Like
+            {user.newLikes.length === 1 ? '' : 's'}
           </Link>
-        )}
-        <Link to='/account/new-likes'>
-          {user.newLikes.length} New Like{user.newLikes.length === 1 ? '' : 's'}
-        </Link>
-        <Link to='/account/new-followers'>
-          {user.newFollowers.length} New Follower
-          {user.newFollowers.length === 1 ? '' : 's'}
-        </Link>
-      </div>
+          <Link to='/account/new-followers'>
+            {user.newFollowers.length} New Follower
+            {user.newFollowers.length === 1 ? '' : 's'}
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

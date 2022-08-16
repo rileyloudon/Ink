@@ -17,7 +17,8 @@ const PostDropdown = ({ owner, id }) => {
     const handleClickOutside = (e) => {
       if (
         postDropDownRef.current !== null &&
-        !postDropDownRef.current.contains(e.traget)
+        !postDropDownRef.current.contains(e.traget) &&
+        !e.target.classList.contains('post-dots')
       )
         setPostDropdownOpen(!postDropdownOpen);
     };
@@ -28,20 +29,21 @@ const PostDropdown = ({ owner, id }) => {
 
   return (
     <div className='post-dropdown-container'>
-      <Dots className='dots' onClick={handleClick} />
-      <div
-        ref={postDropDownRef}
-        className={`post-dropdown ${postDropdownOpen ? 'displayed' : ''}`}
-      >
-        {location.pathname === '/' && (
-          <Link to={`/${owner}/${id}`} onClick={() => window.scrollTo(0, 0)}>
-            View Post
-          </Link>
-        )}
-        {owner === user.username && (
-          <Link to={`/account/${id}/edit`}>Edit Post</Link>
-        )}
-      </div>
+      <button type='button' className='post-dots' onClick={handleClick}>
+        <Dots className='dots' />
+      </button>
+      {postDropdownOpen && (
+        <div ref={postDropDownRef} className='post-dropdown'>
+          {location.pathname === '/' && (
+            <Link to={`/${owner}/${id}`} onClick={() => window.scrollTo(0, 0)}>
+              View Post
+            </Link>
+          )}
+          {owner === user.username && (
+            <Link to={`/account/${id}/edit`}>Edit Post</Link>
+          )}
+        </div>
+      )}
     </div>
   );
 };

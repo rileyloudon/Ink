@@ -22,7 +22,8 @@ const UserDropdown = () => {
     const handleClickOutside = (e) => {
       if (
         userDropdownRef.current !== null &&
-        !userDropdownRef.current.contains(e.traget)
+        !userDropdownRef.current.contains(e.traget) &&
+        !e.target.classList.contains('profile-picture')
       )
         setUserDropdownOpen(!userDropdownOpen);
     };
@@ -36,46 +37,45 @@ const UserDropdown = () => {
       <button type='button' className='profile-border' onClick={handleClick}>
         <img className='profile-picture' src={user.photoURL} alt='' />
       </button>
-      <div
-        ref={userDropdownRef}
-        className={`user-dropdown ${userDropdownOpen ? 'displayed' : ''}`}
-      >
-        <Link to={`/${user.username}`} onClick={() => window.scrollTo(0, 0)}>
-          <ProfileSvg className='user-dropdown-svg' />
-          Profile
-        </Link>
-        <Link to='/account/liked' onClick={() => window.scrollTo(0, 0)}>
-          <LikedSvg className='user-dropdown-svg' />
-          Liked
-        </Link>
-        <button
-          type='button'
-          onClick={() => {
-            const newTheme = theme === 'light' ? 'dark' : 'light';
-            setTheme(newTheme);
-            localStorage.setItem('theme', newTheme);
-          }}
-        >
-          <ThemeSvg className='user-dropdown-svg' />
-          Toggle Theme
-        </button>
-        <Link
-          to='/account/settings'
-          type='button'
-          onClick={() => window.scrollTo(0, 0)}
-        >
-          <SettingsSvg className='user-dropdown-svg' />
-          Settings
-        </Link>
-        <div className='sign-out'>
+      {userDropdownOpen && (
+        <div ref={userDropdownRef} className='user-dropdown'>
+          <Link to={`/${user.username}`} onClick={() => window.scrollTo(0, 0)}>
+            <ProfileSvg className='user-dropdown-svg' />
+            Profile
+          </Link>
+          <Link to='/account/liked' onClick={() => window.scrollTo(0, 0)}>
+            <LikedSvg className='user-dropdown-svg' />
+            Liked
+          </Link>
           <button
             type='button'
-            onClick={() => signOutUser().then(() => history.push('/'))}
+            onClick={() => {
+              const newTheme = theme === 'light' ? 'dark' : 'light';
+              setTheme(newTheme);
+              localStorage.setItem('theme', newTheme);
+            }}
           >
-            Sign Out
+            <ThemeSvg className='user-dropdown-svg' />
+            Toggle Theme
           </button>
+          <Link
+            to='/account/settings'
+            type='button'
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            <SettingsSvg className='user-dropdown-svg' />
+            Settings
+          </Link>
+          <div className='sign-out'>
+            <button
+              type='button'
+              onClick={() => signOutUser().then(() => history.push('/'))}
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
