@@ -1,53 +1,54 @@
-import { fireEvent, render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event/';
 import { HashRouter } from 'react-router-dom';
 import UserContext from '../../Context/UserContext';
 import SignIn from './SignIn';
 
-test('Sign in button stays disabled', () => {
-  const { queryByText, queryByPlaceholderText } = render(
+beforeEach(() => {
+  render(
     <HashRouter>
       <UserContext.Provider value='undefined'>
         <SignIn updateLoading={() => {}} signInGuest={() => {}} />
       </UserContext.Provider>
     </HashRouter>
   );
-  const button = queryByText('Log In');
-  const email = queryByPlaceholderText('Email');
-  const password = queryByPlaceholderText('Password');
+});
 
+test('Sign in button stays disabled', async () => {
+  const user = userEvent.setup();
+  const button = screen.getByText('Sign In');
+  const email = screen.getByPlaceholderText('Email');
+  const password = screen.getByPlaceholderText('Password');
   expect(button).toBeDisabled();
 
   // Missing '@' in email
-  fireEvent.change(email, { target: { value: 'emailemail.com' } });
-  fireEvent.change(password, { target: { value: 'password' } });
+  await user.type(email, 'emailemail.com');
+  await user.type(password, 'password');
   expect(button).toBeDisabled();
 
   // Missing start of email
-  fireEvent.change(email, { target: { value: '@email.com' } });
+  await user.clear(email);
+  await user.type(email, '@email.com');
   expect(button).toBeDisabled();
 
   // Password is less than 6 characters
-  fireEvent.change(email, { target: { value: 'email@email.com' } });
-  fireEvent.change(password, { target: { value: 'pass' } });
+  await user.clear(email);
+  await user.clear(password);
+  await user.type(email, 'email@email.com');
+  await user.type(password, 'pass');
   expect(button).toBeDisabled();
 });
 
-test('Sign in button becomes enabled', () => {
-  const { queryByText, queryByPlaceholderText } = render(
-    <HashRouter>
-      <UserContext.Provider value='undefined'>
-        <SignIn updateLoading={() => {}} signInGuest={() => {}} />
-      </UserContext.Provider>
-    </HashRouter>
-  );
-  const button = queryByText('Log In');
-  const email = queryByPlaceholderText('Email');
-  const password = queryByPlaceholderText('Password');
+test('Sign in button becomes enabled', async () => {
+  const user = userEvent.setup();
+  const button = screen.getByText('Sign In');
+  const email = screen.getByPlaceholderText('Email');
+  const password = screen.getByPlaceholderText('Password');
 
   expect(button).toBeDisabled();
 
-  fireEvent.change(email, { target: { value: 'email@email.com' } });
-  fireEvent.change(password, { target: { value: 'password' } });
+  await user.type(email, 'email@email.com');
+  await user.type(password, 'password');
 
   expect(button).toBeEnabled();
 });
