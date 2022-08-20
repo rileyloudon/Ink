@@ -2,7 +2,7 @@ import SignIn from '../fixtures/SignIn.json';
 
 describe('Both user and guest sign ins work', () => {
   before(() => {
-    cy.visit('http://localhost:3000/ink/');
+    cy.visit('/');
   });
 
   it('Guest sign in works', () => {
@@ -20,7 +20,7 @@ describe('Both user and guest sign ins work', () => {
 
   it('User sign in works', () => {
     // This test will fail without an account saved in fixtures
-    // create 'fixtures' folder -> create SignIn.json -> add email, password, and username of an account to test
+    // in 'cypress' folder, create 'fixtures' folder -> create SignIn.json -> add email, password, and username of an account to test
     cy.get('.username').type(SignIn.email);
     cy.get('[type="password"]').type(SignIn.password);
     cy.get('.sign-in-btn').click();
