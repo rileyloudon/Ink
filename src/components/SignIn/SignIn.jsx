@@ -23,7 +23,7 @@ const SignIn = ({ updateLoading, signInGuest }) => {
     e.preventDefault();
     setButtonLoading(true);
 
-    const res = signInUser(email, password);
+    const res = await signInUser(email, password);
 
     if (typeof res === 'string') {
       setSignInError(res);
