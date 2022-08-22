@@ -119,6 +119,8 @@ export const setupUser = async ({ tempUsername, fullName }) => {
 export const signInUser = async (email, password) => {
   const auth = getAuth();
 
+  if (!email || !password) return 'Make sure to enter both email and password';
+
   const signIn = await signInWithEmailAndPassword(auth, email, password).catch(
     (err) => {
       switch (err.code) {
@@ -534,7 +536,7 @@ export const uploadNewPost = async (image, caption, disableComments) => {
     const storage = getStorage();
     const storageRef = ref(
       storage,
-      `${auth.currentUser.displayName}/${image.properties.name}`
+      `${auth.currentUser.displayName}/${image.properties.name}-${uuidv4()}`
     );
 
     const upload = await uploadBytes(storageRef, image.properties);
