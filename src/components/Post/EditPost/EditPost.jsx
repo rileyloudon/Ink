@@ -125,8 +125,8 @@ const EditPost = () => {
           <label htmlFor='change-caption' className='input'>
             <p>Caption</p>
             <textarea
-              name='bio'
-              id='change-bio'
+              name='caption'
+              id='change-caption'
               value={caption}
               onClick={(e) => {
                 e.target.style.height = 'inherit';
