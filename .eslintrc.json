@@ -9,7 +9,8 @@
     "airbnb",
     "airbnb/hooks",
     "plugin:prettier/recommended",
-    "plugin:jest/recommended"
+    "plugin:jest/recommended",
+    "plugin:cypress/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -18,7 +19,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "prettier", "jest"],
+  "plugins": ["react", "prettier", "jest", "cypress"],
   "rules": {
     "no-console": "off",
     "jsx-quotes": ["error", "prefer-single"],
@@ -26,6 +27,13 @@
     "prettier/prettier": [
       "error",
       { "singleQuote": true, "jsxSingleQuote": true }
-    ]
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
+    "jest/expect-expect": "off"
   }
 }
