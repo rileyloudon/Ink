@@ -60,7 +60,8 @@
 }
 
 @media (max-width: 735px) {
-  .top button {
+  .top button,
+  .top .edit {
     margin-left: 0;
     width: 90%;
     max-width: 250px;
