@@ -3,7 +3,7 @@ import './Bar.css';
 
 const Bar = () => {
   return (
-    <div className='profile-tabs' role='tablist'>
+    <div className='profile-tabs'>
       <p>Posts</p>
     </div>
   );
