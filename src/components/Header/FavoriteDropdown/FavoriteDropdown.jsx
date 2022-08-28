@@ -32,7 +32,12 @@ const FavoriteDropdown = ({
 
   return (
     <div className='favorite-dropdown-container'>
-      <button type='button' onClick={handleClick} className='favorite-button'>
+      <button
+        type='button'
+        onClick={handleClick}
+        className='favorite-button'
+        aria-label='Account Dropdown'
+      >
         {favoriteDropdownOpen ? <FavoriteFilled /> : <FavoriteOutline />}
       </button>
       {favoriteDropdownOpen && (

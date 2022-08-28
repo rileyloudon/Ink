@@ -51,6 +51,7 @@ const Header = ({ updateAddModal, showAddModal }) => {
           <button
             type='button'
             className='add'
+            aria-label='Add Photo'
             onClick={() => updateAddModal(true)}
           >
             {showAddModal ? (

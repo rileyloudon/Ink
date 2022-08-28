@@ -34,7 +34,12 @@ const UserDropdown = () => {
 
   return (
     <div className='user-dropdown-container'>
-      <button type='button' className='profile-border' onClick={handleClick}>
+      <button
+        type='button'
+        className='profile-border'
+        aria-label='Profile Dropdown'
+        onClick={handleClick}
+      >
         <img className='profile-picture' src={user.photoURL} alt='' />
       </button>
       {userDropdownOpen && (
