@@ -6,11 +6,9 @@ import './AddPost.css';
 
 const AddPost = ({ updateAddModal }) => {
   const modal = useRef();
-  const [image, setImage] = useState({ properties: '', url: '' });
+  const [image, setImage] = useState({ blob: '', url: '' });
 
-  const updateImage = (properties, url) => {
-    setImage({ properties, url });
-  };
+  const updateImage = (blob, url) => setImage({ blob, url });
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -37,7 +35,7 @@ const AddPost = ({ updateAddModal }) => {
     <div className='dropzone-container'>
       <article ref={modal} className='modal'>
         <div className='top-bar'>
-          <h2>{!image.properties ? 'New Post' : 'Caption'}</h2>
+          <h2>{!image.blob ? 'New Post' : 'Caption'}</h2>
           <button
             className='close'
             aria-label='close'
@@ -47,7 +45,7 @@ const AddPost = ({ updateAddModal }) => {
             &#x2715;
           </button>
         </div>
-        {!image.properties ? (
+        {!image.blob ? (
           <DropImage updateImage={updateImage} />
         ) : (
           <SetCaption image={image} updateAddModal={updateAddModal} />
