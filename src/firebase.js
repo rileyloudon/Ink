@@ -536,10 +536,10 @@ export const uploadNewPost = async (image, caption, disableComments) => {
     const storage = getStorage();
     const storageRef = ref(
       storage,
-      `${auth.currentUser.displayName}/${image.properties.name}-${uuidv4()}`
+      `${auth.currentUser.displayName}/${uuidv4()}`
     );
 
-    const upload = await uploadBytes(storageRef, image.properties);
+    const upload = await uploadBytes(storageRef, image);
 
     const publicImageUrl = await getDownloadURL(storageRef);
 
