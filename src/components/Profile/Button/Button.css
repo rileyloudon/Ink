@@ -10,6 +10,13 @@
   width: max-content;
 }
 
+.top .edit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
 .top .follow {
   padding: 0 24px;
   color: var(--background);
@@ -55,15 +62,20 @@
   color: var(--text);
   background-color: transparent;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 3px;
   line-height: 18px;
 }
 
 @media (max-width: 735px) {
   .top button,
-  .top .edit {
+  .top .edit,
+  .top .requested {
     margin-left: 0;
     width: 90%;
     max-width: 250px;
+  }
+
+  .top .edit {
+    padding: 5px 0;
   }
 }
