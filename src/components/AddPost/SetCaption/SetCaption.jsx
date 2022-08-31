@@ -10,19 +10,19 @@ const SetCaption = ({ image, updateAddModal }) => {
 
   const [text, setText] = useState('');
   const [disableCommenting, setDisableCommenting] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [error, setError] = useState();
 
-  const [buttonLoading, setButtonLoading] = useState(false);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     setButtonLoading(true);
     e.preventDefault();
-    uploadNewPost(image, text, disableCommenting).then((res) => {
-      if (typeof res === 'string') {
-        setError(res);
-        setButtonLoading(false);
-      } else updateAddModal(false);
-    });
+
+    const res = await uploadNewPost(image.blob, text, disableCommenting);
+
+    if (typeof res === 'string') {
+      setError(res);
+      setButtonLoading(false);
+    } else updateAddModal(false);
   };
 
   return (
@@ -64,10 +64,8 @@ const SetCaption = ({ image, updateAddModal }) => {
 
 SetCaption.propTypes = {
   image: PropTypes.shape({
+    blob: PropTypes.shape({}).isRequired,
     url: PropTypes.string.isRequired,
-    properties: PropTypes.shape({
-      name: PropTypes.string,
-    }).isRequired,
   }).isRequired,
   updateAddModal: PropTypes.func.isRequired,
 };
