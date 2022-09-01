@@ -120,18 +120,6 @@ const Settings = () => {
               {user.followRequests === 1 ? '' : 's'}
             </Link>
           )}
-          <label htmlFor='allow-messages' className='allow-messages'>
-            <span>Allow Messages From</span>
-            <select
-              name='allow-messages'
-              defaultValue={user.allowMessages}
-              onChange={(e) => setAllowMessages(e.target.value)}
-            >
-              <option value='everyone'>Everyone</option>
-              <option value='followers'>Followers</option>
-              <option value='nobody'>Nobody</option>
-            </select>
-          </label>
           <label htmlFor='change-name' className='input'>
             <p>Name</p>
             <input
@@ -158,6 +146,18 @@ const Settings = () => {
                 setBio(e.target.value);
               }}
             />
+          </label>
+          <label htmlFor='allow-messages' className='allow-messages'>
+            <span>Allow Messages From</span>
+            <select
+              name='allow-messages'
+              defaultValue={user.allowMessages}
+              onChange={(e) => setAllowMessages(e.target.value)}
+            >
+              <option value='everyone'>Everyone</option>
+              <option value='followers'>Followers</option>
+              <option value='nobody'>Nobody</option>
+            </select>
           </label>
           {profileUpdated && <p className='profile-updated'>Profile Updated</p>}
           {error && <p className='error'>{error}</p>}
