@@ -24,6 +24,8 @@ const HorizontalPost = ({ modal }) => {
   const [postData, setPostData] = useState();
   const [loading, setLoading] = useState(true);
 
+  if (!modal) window.scrollTo(0, 0);
+
   const addNewComment = (comment) => {
     setPostData((prevState) => ({
       ...prevState,
