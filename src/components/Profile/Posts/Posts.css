@@ -60,9 +60,11 @@
   bottom: -9999px;
   left: -9999px;
   right: -9999px;
-  height: 100%;
   margin: auto;
   overflow: hidden;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
 }
 
 @media (max-width: 735px) {
