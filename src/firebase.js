@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import Resizer from 'react-image-file-resizer';
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -35,7 +36,6 @@ import {
   endAt,
   addDoc,
 } from 'firebase/firestore';
-
 import {
   getStorage,
   ref,
@@ -56,6 +56,24 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 const db = getFirestore();
 
+// Misc
+const resizeFile = (file, maxWidth, maxHeight) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      maxWidth,
+      maxHeight,
+      'WEBP',
+      100,
+      0,
+      (uri) => {
+        resolve(uri);
+      },
+      'blob'
+    );
+  });
+
+// Firebase
 export const registerUser = async (email, password, tempUsername) => {
   const username = tempUsername.toLowerCase();
   const docRef = doc(db, 'users', username);
@@ -393,7 +411,7 @@ export const denyFollowRequest = async (requestedUser) => {
 
 export const updateUserSettings = async (
   changed,
-  profilePcture,
+  profilePicture,
   name,
   bio,
   privateAccount,
@@ -445,7 +463,10 @@ export const updateUserSettings = async (
         storage,
         `${auth.currentUser.displayName}/profile-picture`
       );
-      await uploadBytes(storageRef, profilePcture.properties);
+
+      const compressedImage = await resizeFile(profilePicture.blob, 320, 320);
+
+      await uploadBytes(storageRef, compressedImage);
       const publicImageUrl = await getDownloadURL(storageRef);
       await updateDoc(docRef, {
         photoURL: publicImageUrl,
@@ -539,7 +560,9 @@ export const uploadNewPost = async (image, caption, disableComments) => {
       `${auth.currentUser.displayName}/${uuidv4()}`
     );
 
-    const upload = await uploadBytes(storageRef, image);
+    const compressedImage = await resizeFile(image, 960, 1000);
+
+    const upload = await uploadBytes(storageRef, compressedImage);
 
     const publicImageUrl = await getDownloadURL(storageRef);
 
