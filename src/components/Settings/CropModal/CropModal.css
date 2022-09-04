@@ -1,0 +1,84 @@
+.crop-modal {
+  background-color: var(--backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  z-index: 99;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.cropper {
+  position: relative;
+  max-height: 781px;
+  max-width: 781px;
+  width: 80vw;
+  height: 70vh;
+  background-color: var(--background);
+  border-radius: 12px;
+}
+
+.crop-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: var(--background);
+  border-radius: 12px;
+}
+
+.crop-container .crop-top {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+  z-index: 1;
+}
+
+.crop-container h2 {
+  width: 100%;
+  margin: 0;
+  padding: 12px 0;
+  text-align: center;
+  font-weight: 300;
+  background-color: var(--background);
+  color: var(--text);
+  border-radius: 12px;
+}
+
+.crop-container .close {
+  color: var(--text);
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  margin: 0 16px;
+  padding: 0;
+}
+
+.crop-container .save-crop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  margin: 16px 0;
+  border: 1px solid transparent;
+  color: var(--background);
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: var(--button);
+  cursor: pointer;
+}
+
+@media (max-width: 735px) {
+  .cropper {
+    height: 50vh;
+  }
+}
