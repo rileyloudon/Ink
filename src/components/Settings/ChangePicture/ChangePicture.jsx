@@ -2,21 +2,33 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import PropTypes from 'prop-types';
+import CropModal from '../CropModal/CropModal';
 import './ChangePicture.css';
 
 const ChangePicture = ({ updateNewProfilePicture }) => {
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [picture, setPicture] = useState();
   const [pictureRejected, setPictureRejected] = useState(false);
 
-  const onDropAccepted = useCallback(
-    (acceptedFiles) => {
-      updateNewProfilePicture({
-        properties: acceptedFiles[0],
-        url: URL.createObjectURL(acceptedFiles[0]),
-      });
-      setPictureRejected(false);
-    },
-    [updateNewProfilePicture]
-  );
+  const updatePicture = (value) => {
+    // updatePicture is called when crop is complete
+    updateNewProfilePicture({
+      blob: value,
+      url: URL.createObjectURL(value),
+    });
+    setShowCropModal(false);
+  };
+
+  const updateModal = (value) => setShowCropModal(value);
+
+  const onDropAccepted = useCallback((acceptedFiles) => {
+    // revokeObjectURL is run on imageUrl when closing modal
+    const imageUrl = URL.createObjectURL(acceptedFiles[0]);
+
+    setPicture(imageUrl);
+    setShowCropModal(true);
+    setPictureRejected(false);
+  }, []);
 
   const onDropRejected = useCallback((rejectedFile) => {
     if (rejectedFile[0].file.size > 5000000)
@@ -41,6 +53,13 @@ const ChangePicture = ({ updateNewProfilePicture }) => {
       <button className='change-profile-picture' type='button' onClick={open}>
         Change Profile Picture
       </button>
+      {showCropModal && (
+        <CropModal
+          picture={picture}
+          updatePicture={updatePicture}
+          updateModal={updateModal}
+        />
+      )}
       {pictureRejected && <p className='error'>{pictureRejected}</p>}
     </div>
   );
