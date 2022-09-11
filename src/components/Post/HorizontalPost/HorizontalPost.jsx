@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { fetchIndividualPost, toggleLikePost } from '../../../firebase';
 import Comment from '../Comment/Comment';
@@ -20,6 +20,7 @@ const HorizontalPost = ({ modal }) => {
 
   const { username, postId } = useParams();
   const history = useHistory();
+  const location = useLocation();
 
   const [postData, setPostData] = useState();
   const [loading, setLoading] = useState(true);
@@ -52,15 +53,29 @@ const HorizontalPost = ({ modal }) => {
   };
 
   const likePost = async () => {
+    const tempArray = [...postData.post.likes];
     if (postData.userLikes) {
+      const index = tempArray.indexOf(user.username);
+      tempArray.splice(index, 1);
+
       setPostData((prevState) => ({
         ...prevState,
+        post: {
+          ...prevState.post,
+          likes: tempArray,
+        },
         likeCount: prevState.likeCount - 1,
         userLikes: false,
       }));
     } else {
+      tempArray.push(user.username);
+
       setPostData((prevState) => ({
         ...prevState,
+        post: {
+          ...prevState.post,
+          likes: tempArray,
+        },
         likeCount: prevState.likeCount + 1,
         userLikes: true,
       }));
@@ -81,28 +96,41 @@ const HorizontalPost = ({ modal }) => {
 
     if (user)
       (async () => {
-        const res = await fetchIndividualPost(username, postId);
-        if (isSubscribed) {
-          setPostData(res);
+        if (location.state) {
+          setPostData({
+            photoURL: location.state.photoURL,
+            post: location.state.post,
+            likeCount: location.state.post.likes.length,
+            userLikes: location.state.post.likes.includes(user.username),
+          });
           setLoading(false);
+        } else {
+          const res = await fetchIndividualPost(username, postId);
+          if (isSubscribed) {
+            setPostData(res);
+            setLoading(false);
+          }
         }
       })();
 
     return () => {
       isSubscribed = false;
     };
-  }, [username, postId, user]);
+  }, [username, postId, user, location]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (modalRef.current && !modalRef.current.contains(e.target))
-        history.goBack();
+        history.push({
+          pathname: `/${postData.post.owner}`,
+          state: postData.post,
+        });
     };
 
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [history]);
+  }, [history, postData]);
 
   const renderPost = () => {
     return postData === 'Post not found' || postData === 'User not found' ? (
@@ -164,7 +192,7 @@ const HorizontalPost = ({ modal }) => {
     );
   };
 
-  return loading ? <Loading /> : renderPost();
+  return loading ? <Loading modal={modal} /> : renderPost();
 };
 
 HorizontalPost.defaultProps = {
