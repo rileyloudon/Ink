@@ -6,7 +6,7 @@ import { ReactComponent as FavoriteFilled } from '../../../img/shared/favorite-f
 import { ReactComponent as CommentFilled } from '../../../img/Profile/comment-filled.svg';
 import './Posts.css';
 
-const Posts = ({ username, initialPosts, updateScrollPosition }) => {
+const Posts = ({ username, photoURL, initialPosts, updateScrollPosition }) => {
   const location = useLocation();
 
   const [displayedPosts, setDisplayedPosts] = useState();
@@ -20,7 +20,11 @@ const Posts = ({ username, initialPosts, updateScrollPosition }) => {
         key={post.imageUrl}
         to={{
           pathname: `/${username}/${post.id}`,
-          state: { background: window.innerWidth > 735 ? location : null },
+          state: {
+            background: window.innerWidth > 735 ? location : null,
+            post,
+            photoURL,
+          },
         }}
         onClick={() => updateScrollPosition(window.scrollY)}
       >
@@ -49,6 +53,18 @@ const Posts = ({ username, initialPosts, updateScrollPosition }) => {
       </Link>
     );
   };
+
+  useEffect(() => {
+    if (location.state) {
+      const newDisplayedPosts = displayedPosts.map((post) => {
+        if (post.storageUrl === location.state.storageUrl)
+          return location.state;
+        return post;
+      });
+      setDisplayedPosts(newDisplayedPosts);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   useEffect(() => {
     setDisplayedPosts(initialPosts.slice(0, 6));
@@ -101,6 +117,7 @@ Posts.defaultProps = {
 
 Posts.propTypes = {
   username: PropTypes.string.isRequired,
+  photoURL: PropTypes.string.isRequired,
   initialPosts: PropTypes.arrayOf(PropTypes.shape({})),
   updateScrollPosition: PropTypes.func.isRequired,
 };

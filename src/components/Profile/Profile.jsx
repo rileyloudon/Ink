@@ -80,6 +80,7 @@ const Profile = ({ scrollPosition, updateScrollPosition }) => {
             <Bar />
             <Posts
               username={profile.header.username}
+              photoURL={profile.header.photoURL}
               initialPosts={profile.initialPosts}
               updateScrollPosition={updateScrollPosition}
             />
