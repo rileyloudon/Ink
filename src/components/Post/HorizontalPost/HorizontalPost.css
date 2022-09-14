@@ -30,6 +30,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  border: none;
 }
 
 .horizontal-view .post-image,
@@ -78,6 +79,14 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  height: 100px;
+  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.horizontal-view .side-bar .comments::-webkit-scrollbar {
+  display: none;
 }
 
 .horizontal-view .icons,
