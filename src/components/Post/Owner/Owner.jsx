@@ -5,7 +5,7 @@ import UserContext from '../../../Context/UserContext';
 import PostDropdown from '../PostDropdown/PostDropdown';
 import './Owner.css';
 
-const Owner = ({ owner, profilePicture, id }) => {
+const Owner = ({ owner, profilePicture, id, linkObject }) => {
   const location = useLocation();
   const { user } = useContext(UserContext);
 
@@ -16,7 +16,7 @@ const Owner = ({ owner, profilePicture, id }) => {
         <span>{owner}</span>
       </Link>
       {(location.pathname === '/' || owner === user.username) && (
-        <PostDropdown owner={owner} id={id} />
+        <PostDropdown owner={owner} id={id} linkObject={linkObject} />
       )}
     </section>
   );
@@ -24,12 +24,14 @@ const Owner = ({ owner, profilePicture, id }) => {
 
 Owner.defaultProps = {
   profilePicture: null,
+  linkObject: null,
 };
 
 Owner.propTypes = {
   owner: PropTypes.string.isRequired,
   profilePicture: PropTypes.string,
   id: PropTypes.string.isRequired,
+  linkObject: PropTypes.shape({}),
 };
 
 export default Owner;

@@ -30,6 +30,14 @@ const VerticalPost = ({ post }) => {
       : null
   );
 
+  const linkObject = {
+    pathname: `/${post.owner}/${post.id}`,
+    state: {
+      post,
+      photoURL: profilePicture,
+    },
+  };
+
   const addNewComment = (comment) =>
     setDisplayedPostComments((prevState) => [...prevState, comment]);
 
@@ -112,7 +120,12 @@ const VerticalPost = ({ post }) => {
 
   return (
     <article className='vertical-view'>
-      <Owner owner={post.owner} profilePicture={profilePicture} id={post.id} />
+      <Owner
+        owner={post.owner}
+        profilePicture={profilePicture}
+        id={post.id}
+        linkObject={linkObject}
+      />
       <figure className='post-image' onDoubleClick={likePost}>
         <img src={post.imageUrl} alt='' loading='eager' />
       </figure>

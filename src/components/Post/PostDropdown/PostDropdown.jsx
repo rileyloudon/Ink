@@ -5,7 +5,7 @@ import UserContext from '../../../Context/UserContext';
 import { ReactComponent as Dots } from '../../../img/dots/dots.svg';
 import './PostDropdown.css';
 
-const PostDropdown = ({ owner, id }) => {
+const PostDropdown = ({ owner, id, linkObject }) => {
   const { user } = useContext(UserContext);
   const location = useLocation();
   const postDropDownRef = useRef(null);
@@ -34,11 +34,7 @@ const PostDropdown = ({ owner, id }) => {
       </button>
       {postDropdownOpen && (
         <div ref={postDropDownRef} className='post-dropdown'>
-          {location.pathname === '/' && (
-            <Link to={`/${owner}/${id}`} onClick={() => window.scrollTo(0, 0)}>
-              View Post
-            </Link>
-          )}
+          {location.pathname === '/' && <Link to={linkObject}>View Post</Link>}
           {owner === user.username && (
             <Link to={`/account/${id}/edit`}>Edit Post</Link>
           )}
@@ -48,9 +44,14 @@ const PostDropdown = ({ owner, id }) => {
   );
 };
 
+PostDropdown.defaultProps = {
+  linkObject: null,
+};
+
 PostDropdown.propTypes = {
   owner: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  linkObject: PropTypes.shape({}),
 };
 
 export default PostDropdown;
