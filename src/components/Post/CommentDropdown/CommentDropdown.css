@@ -10,7 +10,6 @@
   border-radius: 6px;
   box-shadow: 0 0 4px 1px var(--shadow);
   width: 200px;
-  z-index: 1;
   right: 0;
 }
 
@@ -44,7 +43,7 @@
 
 .comment-dropdown-container .dots {
   width: 22px;
-  height: 22px;
+  height: 19px;
   cursor: pointer;
   fill: var(--text);
   margin-left: auto;
