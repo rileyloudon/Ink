@@ -6,14 +6,14 @@ describe('Users and guests can sign in', () => {
     cy.visit('/');
   });
 
-  it('allows guests to sign in', () => {
+  it('allows guests to sign in and redirects to sign in page on logout', () => {
+    // Guest log in
     cy.get('.guest-btn').click();
     cy.get('.profile-picture').click();
     cy.get('.user-dropdown > [href="#/guest"]').click();
     cy.get('.username').should('contain.text', 'guest');
-  });
 
-  it('redirects to sign in page when logged out', () => {
+    // Log out - test redirect
     cy.get('.profile-picture').click();
     cy.get('.sign-out > button').click();
     cy.location('hash').should('eq', '#/');
