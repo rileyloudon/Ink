@@ -1,14 +1,6 @@
 .post-dropdown-container {
   position: relative;
   margin-left: auto;
-  float: right;
-}
-
-.post-dropdown-container .post-dots {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
 }
 
 .post-dropdown {
@@ -39,9 +31,19 @@
   border-radius: 6px;
 }
 
+.post-dropdown-container .post-dots {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .post-dropdown-container .dots {
   cursor: pointer;
-  padding-right: 15px;
   fill: var(--text);
   margin-left: auto;
   pointer-events: none;
