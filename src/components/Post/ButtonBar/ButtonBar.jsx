@@ -7,7 +7,11 @@ import './ButtonBar.css';
 const ButtonBar = ({ userLikes, likePost, disableComments, postId }) => {
   return (
     <section className='icons'>
-      <button type='button' onClick={likePost}>
+      <button
+        type='button'
+        className={userLikes ? 'post-liked' : 'post-not-liked'}
+        onClick={likePost}
+      >
         {userLikes ? <FavoriteLiked /> : <FavoriteNotLiked />}
       </button>
       {!disableComments && (
